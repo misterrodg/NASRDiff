@@ -11,12 +11,14 @@ class Diff:
     filters: Filters | None
     file_paths: list[str]
     apt_att: APT_ATT_File | None
+    apt_base: APT_BASE_File | None
 
     def __init__(self, format: str, should_show: bool, use_filters: bool) -> None:
         self.format = format
         self.filters = None
         self.file_paths = get_csv_files()
         self.apt_att = None
+        self.apt_base = None
 
         if use_filters:
             self.__process_filtered_file_list(should_show)
