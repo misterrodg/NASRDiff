@@ -3,6 +3,19 @@ from typing import Self
 
 
 class FAA_Record_Base(ABC):
+    def get_mod_string(self, last_record: Self) -> str:
+        modifications = []
+        modification_list = self.mods.split(" ")
+        for mod in modification_list:
+            mod_lower = mod.lower()
+            last = getattr(last_record, mod_lower)
+            this = getattr(self, mod_lower)
+            mod_string = f"{mod} Change: "
+            mod_string += f"{last} -> "
+            mod_string += f"{this}"
+            modifications.append(mod_string)
+        return " // ".join(modifications)
+
     @abstractmethod
     def to_string(self, last_record: Self | None = None) -> str:
         pass

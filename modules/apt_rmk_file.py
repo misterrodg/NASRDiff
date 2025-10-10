@@ -63,17 +63,7 @@ class APT_RMK(FAA_Record_Base):
 
     def to_string(self, last_record: Self | None = None) -> str:
         if last_record:
-            modifications = []
-            modification_list = self.mods.split(" ")
-            for mod in modification_list:
-                mod_lower = mod.lower()
-                last = getattr(last_record, mod_lower)
-                this = getattr(self, mod_lower)
-                mod_string = f"{mod} Change: "
-                mod_string += f"{last} -> "
-                mod_string += f"{this}"
-                modifications.append(mod_string)
-            modification_string = " // ".join(modifications)
+            modification_string = self.get_mod_string(last_record)
             return f"{self.arpt_id} :: {self.ref_col_seq_no} :: {modification_string}"
         return (
             f"{self.arpt_id} :: {self.ref_col_seq_no} :: "
