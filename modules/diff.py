@@ -47,6 +47,7 @@ class Diff:
 
     def __process_filtered_file_list(self, should_show: bool) -> None:
         self.filters = Filters(should_show)
+        airports = self.filters.airports if len(self.filters.airports) > 0 else None
 
         for fp in self.file_paths:
             if len(self.filters.files) > 0:
@@ -54,61 +55,31 @@ class Diff:
                     fp.endswith(f"APT_ATT_{FILE_SUFFIX}")
                     and "APT_ATT" in self.filters.files
                 ):
-                    airports = (
-                        self.filters.airports
-                        if len(self.filters.airports) > 0
-                        else None
-                    )
                     self.apt_att = APT_ATT_File(fp, airports)
                 if (
                     fp.endswith(f"APT_BASE_{FILE_SUFFIX}")
                     and "APT_BASE" in self.filters.files
                 ):
-                    airports = (
-                        self.filters.airports
-                        if len(self.filters.airports) > 0
-                        else None
-                    )
                     self.apt_base = APT_BASE_File(fp, airports)
                 if (
                     fp.endswith(f"APT_CON_{FILE_SUFFIX}")
                     and "APT_CON" in self.filters.files
                 ):
-                    airports = (
-                        self.filters.airports
-                        if len(self.filters.airports) > 0
-                        else None
-                    )
                     self.apt_con = APT_CON_File(fp, airports)
                 if (
                     fp.endswith(f"APT_RMK_{FILE_SUFFIX}")
                     and "APT_RMK" in self.filters.files
                 ):
-                    airports = (
-                        self.filters.airports
-                        if len(self.filters.airports) > 0
-                        else None
-                    )
                     self.apt_rmk = APT_RMK_File(fp, airports)
                 if (
                     fp.endswith(f"APT_RWY_{FILE_SUFFIX}")
                     and "APT_RWY" in self.filters.files
                 ):
-                    airports = (
-                        self.filters.airports
-                        if len(self.filters.airports) > 0
-                        else None
-                    )
                     self.apt_rwy = APT_RWY_File(fp, airports)
                 if (
                     fp.endswith(f"APT_RWY_END_{FILE_SUFFIX}")
                     and "APT_RWY_END" in self.filters.files
                 ):
-                    airports = (
-                        self.filters.airports
-                        if len(self.filters.airports) > 0
-                        else None
-                    )
                     self.apt_rwy_end = APT_RWY_END_File(fp, airports)
 
     def __process_file_list(self) -> None:
