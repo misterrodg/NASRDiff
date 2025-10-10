@@ -67,8 +67,8 @@ The example provided in `example_filters.json` sets filters for:
 - `files`: `"APT_BASE"`, `"FIX_BASE"` and `"NAV_BASE"`. This selects only these 
 three files. The rest are ignored.
 - `bounds`: `"n_lat": 40.1`, `"s_lat": 32.9`, `"w_lon": -80.8`, and `"e_lon": -72.5`. 
-This selects anything defined by a lat/lon position. The area is shown in the 
-image below.
+This selects anything defined by a lat/lon position in the area that is shown 
+in the image below.
 - `airports`: `"ADW"`, `"BWI"`, `"DCA"`, and `"IAD"`. This selects only these 
 airports. The rest are ignored.
 
