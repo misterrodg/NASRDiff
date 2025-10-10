@@ -1,4 +1,5 @@
 from modules.action import Action
+from modules.faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.record_helpers import replace_empty_string
 
 from typing import Self
@@ -6,7 +7,7 @@ from typing import Self
 import csv
 
 
-class APT_RMK:
+class APT_RMK(FAA_Record_Base):
     eff_date: str
     site_no: str
     site_type_code: str
@@ -91,49 +92,13 @@ class APT_RMK:
         )
 
 
-class APT_RMK_File:
-    file_path: str
-    adds: list[APT_RMK]
-    mods: list[APT_RMK]
-    dels: list[APT_RMK]
-    filter_airports: list[str]
-
+class APT_RMK_File(FAA_File_Base):
     def __init__(
         self, file_path: str, filter_airports: list[str] | None = None
     ) -> None:
-        self.file_path = file_path
-        self.adds = []
-        self.mods = []
-        self.dels = []
-        self.filter_airports = filter_airports if filter_airports else []
+        super().__init__(file_path, "Airport Remark", filter_airports)
 
         self.__load_from_csv()
-
-    def get_text_report(self) -> str:
-        result = ""
-        result = "Airport Remark:\n"
-
-        if len(self.adds) > 0:
-            result += "  Additions:\n"
-            for r in self.adds:
-                result += f"    {r.to_string()}\n"
-
-        if len(self.mods) > 0:
-            result += "  Modifications:\n"
-            last_record = None
-            for r in self.mods:
-                if r.file == "1":
-                    last_record = r
-                else:
-                    result += f"    {r.to_string(last_record)}\n"
-                    last_record = None
-
-        if len(self.dels) > 0:
-            result += "  Deletions:\n"
-            for r in self.dels:
-                result += f"    {r.to_string()}\n"
-
-        return result
 
     def __load_from_csv(self) -> None:
         with open(self.file_path, "r") as f:
