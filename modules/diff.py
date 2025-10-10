@@ -4,6 +4,7 @@ from modules.apt_base_file import APT_BASE_File
 from modules.apt_con_file import APT_CON_File
 from modules.apt_rmk_file import APT_RMK_File
 from modules.apt_rwy_file import APT_RWY_File
+from modules.apt_rwy_end_file import APT_RWY_END_File
 from modules.filters import Filters
 from modules.navdata_handler import get_csv_files
 from modules.reports_handler import REPORTS_DIR
@@ -20,6 +21,7 @@ class Diff:
     apt_con: APT_CON_File | None
     apt_rmk: APT_RMK_File | None
     apt_rwy: APT_RWY_File | None
+    apt_rwy_end: APT_RWY_END_File | None
 
     def __init__(self, format: str, should_show: bool, use_filters: bool) -> None:
         self.format = format
@@ -30,6 +32,7 @@ class Diff:
         self.apt_con = None
         self.apt_rmk = None
         self.apt_rwy = None
+        self.apt_rwy_end = None
 
         if use_filters:
             self.__process_filtered_file_list(should_show)
@@ -97,6 +100,16 @@ class Diff:
                         else None
                     )
                     self.apt_rwy = APT_RWY_File(fp, airports)
+                if (
+                    fp.endswith(f"APT_RWY_END_{FILE_SUFFIX}")
+                    and "APT_RWY_END" in self.filters.files
+                ):
+                    airports = (
+                        self.filters.airports
+                        if len(self.filters.airports) > 0
+                        else None
+                    )
+                    self.apt_rwy_end = APT_RWY_END_File(fp, airports)
 
     def __process_file_list(self) -> None:
         for fp in self.file_paths:
@@ -110,6 +123,8 @@ class Diff:
                 self.apt_rmk = APT_RMK_File(fp)
             if fp.endswith(f"APT_RWY_{FILE_SUFFIX}"):
                 self.apt_rwy = APT_RWY_File(fp)
+            if fp.endswith(f"APT_RWY_END_{FILE_SUFFIX}"):
+                self.apt_rwy_end = APT_RWY_END_File(fp)
 
     def __get_text_report(self) -> None:
         if self.apt_att is not None:
@@ -122,6 +137,8 @@ class Diff:
             print(self.apt_rmk.get_text_report())
         if self.apt_rwy is not None:
             print(self.apt_rwy.get_text_report())
+        if self.apt_rwy_end is not None:
+            print(self.apt_rwy_end.get_text_report())
 
     def __to_text_report(self) -> None:
         if self.apt_att is not None:
@@ -144,3 +161,7 @@ class Diff:
             full_path = os.path.join(REPORTS_DIR, "APT_RWY.txt")
             with open(full_path, "w") as f:
                 f.writelines(self.apt_rwy.get_text_report())
+        if self.apt_rwy_end is not None:
+            full_path = os.path.join(REPORTS_DIR, "APT_RWY_END.txt")
+            with open(full_path, "w") as f:
+                f.writelines(self.apt_rwy_end.get_text_report())
