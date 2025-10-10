@@ -1,0 +1,17 @@
+{
+    "files": [
+        "APT_BASE"
+    ],
+    "bounds": {
+        "n_lat": 40.1,
+        "s_lat": 32.9,
+        "w_lon": -80.8,
+        "e_lon": -72.5
+    },
+    "airports": [
+        "ADW",
+        "BWI",
+        "DCA",
+        "IAD"
+    ]
+}
