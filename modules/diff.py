@@ -7,6 +7,8 @@ from modules.filters import Filters
 from modules.navdata_handler import get_csv_files
 from modules.reports_handler import REPORTS_DIR
 
+FILE_SUFFIX = "CHG_RPT.csv"
+
 
 class Diff:
     format: str
@@ -42,28 +44,40 @@ class Diff:
 
         for fp in self.file_paths:
             if len(self.filters.files) > 0:
-                if "APT_ATT" in fp and "APT_ATT" in self.filters.files:
+                if (
+                    fp.endswith(f"APT_ATT_{FILE_SUFFIX}")
+                    and "APT_ATT" in self.filters.files
+                ):
                     airports = (
                         self.filters.airports
                         if len(self.filters.airports) > 0
                         else None
                     )
                     self.apt_att = APT_ATT_File(fp, airports)
-                if "APT_BASE" in fp and "APT_BASE" in self.filters.files:
+                if (
+                    fp.endswith(f"APT_BASE_{FILE_SUFFIX}")
+                    and "APT_BASE" in self.filters.files
+                ):
                     airports = (
                         self.filters.airports
                         if len(self.filters.airports) > 0
                         else None
                     )
                     self.apt_base = APT_BASE_File(fp, airports)
-                if "APT_CON" in fp and "APT_CON" in self.filters.files:
+                if (
+                    fp.endswith(f"APT_CON_{FILE_SUFFIX}")
+                    and "APT_CON" in self.filters.files
+                ):
                     airports = (
                         self.filters.airports
                         if len(self.filters.airports) > 0
                         else None
                     )
                     self.apt_con = APT_CON_File(fp, airports)
-                if "APT_RMK" in fp and "APT_RMK" in self.filters.files:
+                if (
+                    fp.endswith(f"APT_RMK_{FILE_SUFFIX}")
+                    and "APT_RMK" in self.filters.files
+                ):
                     airports = (
                         self.filters.airports
                         if len(self.filters.airports) > 0
@@ -73,13 +87,13 @@ class Diff:
 
     def __process_file_list(self) -> None:
         for fp in self.file_paths:
-            if "APT_ATT" in fp:
+            if fp.endswith(f"APT_ATT_{FILE_SUFFIX}"):
                 self.apt_att = APT_ATT_File(fp)
-            if "APT_BASE" in fp:
+            if fp.endswith(f"APT_BASE_{FILE_SUFFIX}"):
                 self.apt_base = APT_BASE_File(fp)
-            if "APT_CON" in fp:
+            if fp.endswith(f"APT_CON_{FILE_SUFFIX}"):
                 self.apt_con = APT_CON_File(fp)
-            if "APT_RMK" in fp:
+            if fp.endswith(f"APT_RMK_{FILE_SUFFIX}"):
                 self.apt_rmk = APT_RMK_File(fp)
 
     def __get_text_report(self) -> None:
