@@ -1,7 +1,7 @@
 # NASRDiff
 
 A diff report generator for the [FAA NASR](https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/NASR_Subscription/).
-NASRDiff parses the files in the "28 Day Cycle CSV Change Report Files" product, 
+NASRDiff parses the files in the `28 Day Cycle CSV Change Report Files` product, 
 generating a report for any additions, modifications, and deletions.
 
 By adding a `filters.json` in the project root, the parser will filter the 
@@ -15,9 +15,19 @@ An `example_filters.json` is present in the project root as a template.
 
 ## Use
 
+To find the NASR Change Report, go to the [FAA NASR](https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/NASR_Subscription/) page, 
+select the `Current` or `Preview` page, search for `28 Day Cycle CSV Change Report Files`, 
+and download the ZIP file. Since the `Current` and `Preview` pages have dates in 
+the URL, it cannot be linked directly.
+
+- Unzip the `28 Day Cycle CSV Change Report Files` and copy the `.csv` files into 
+the `navdata` directory.
 - Copy the `example_filters.json` as `filters.json`.
 - Edit the `filters.json` to include the files, airports, and bounds of your choice.
-- Run with `python3 main.py [args]`
+- Run with `python3 main.py [args]` (see [Arguments](#arguments), below).
+
+By default, a summary will be printed to the console. If a format is specified 
+as an argument, the resulting reports will be in the `reports` directory.
 
 ### Arguments
 
