@@ -45,16 +45,13 @@ as an argument, the resulting reports will be in the `reports` directory.
 
 | Field | Description |
 | - | - |
-| `files` | An array of strings representing the initial part of a change report 
-filename (everything up to `_CHG_RPT.csv`). Set this to select the files that 
-contain data that you are interested in. |
+| `files` | An array of strings representing the initial part of a change report filename (everything up to `_CHG_RPT.csv`). Set this to select the files that contain data that you are interested in. |
 | `bounds` | An object with the next four fields. |
 | `n_lat` | The northernmost latitude boundary in decimal form. |
 | `s_lat` | The southernmost latitude boundary in decimal form. |
 | `w_lon` | The westernmost longitude boundary in decimal form. |
 | `e_lon` | The easternmost longitude boundary in decimal form. |
-| `airports` | An array of strings representing the FAA code* of the airports 
-(and heliports) that you are interested in. |
+| `airports` | An array of strings representing the FAA code* of the airports (and heliports) that you are interested in. |
 
 \* The FAA Code is a three-letter identifier, commonly mistaken for an IATA 
 code since they are usually the same. Generally, it is the ICAO code without the 
