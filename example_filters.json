@@ -1,6 +1,8 @@
 {
     "files": [
-        "APT_BASE"
+        "APT_BASE",
+        "FIX_BASE",
+        "NAV_BASE"
     ],
     "bounds": {
         "n_lat": 40.1,
