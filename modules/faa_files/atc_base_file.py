@@ -119,7 +119,7 @@ class ATC_BASE(FAA_Record_Base):
             modification_string = self.get_mod_string(last_record)
             return f"{self.facility_id} :: {modification_string}"
         return (
-            f"{self.arpt_id} :: "
+            f"{self.facility_id} :: "
             f"EFF_DATE: {self.eff_date}, "
             f"SITE_NO: {self.site_no}, "
             f"SITE_TYPE_CODE: {self.site_type_code}, "
