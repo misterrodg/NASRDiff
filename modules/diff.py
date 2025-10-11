@@ -8,6 +8,7 @@ from modules.apt_rwy_file import APT_RWY_File
 from modules.apt_rwy_end_file import APT_RWY_END_File
 from modules.atc_atis_file import ATC_ATIS_File
 from modules.atc_base_file import ATC_BASE_File
+from modules.atc_rmk_file import ATC_RMK_File
 from modules.faa_file_base import FAA_File_Base
 from modules.filters import Filters
 from modules.navdata_handler import get_csv_files
@@ -24,6 +25,7 @@ FILE_TYPES = {
     "APT_RWY_END": APT_RWY_END_File,
     "ATC_ATIS": ATC_ATIS_File,
     "ATC_BASE": ATC_BASE_File,
+    "ATC_RMK": ATC_RMK_File,
 }
 
 OUTPUT_NAMES = {
@@ -35,6 +37,7 @@ OUTPUT_NAMES = {
     "APT_RWY_END": "APT_RWY_END.txt",
     "ATC_ATIS": "ATC_ATIS.txt",
     "ATC_BASE": "ATC_BASE.txt",
+    "ATC_RMK": "ATC_RMK.txt",
 }
 
 
