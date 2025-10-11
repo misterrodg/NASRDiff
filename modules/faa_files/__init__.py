@@ -14,6 +14,7 @@ from .awy_base_file import AWY_BASE_File
 from .awy_seg_alt_file import AWY_SEG_ALT_File
 from .cls_arsp_file import CLS_ARSP_File
 from .fix_base_file import FIX_BASE_File
+from .cdr_file import CDR_File
 from .fix_chrt_file import FIX_CHRT_File
 from .fix_nav_file import FIX_NAV_File
 from .frq_file import FRQ_File
@@ -35,6 +36,7 @@ __all__ = [
     "AWOS_File",
     "AWY_BASE_File",
     "AWY_SEG_ALT_File",
+    "CDR_File",
     "CLS_ARSP_File",
     "FIX_BASE_File",
     "FIX_CHRT_File",
