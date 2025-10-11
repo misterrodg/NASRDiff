@@ -41,7 +41,7 @@ class ATC_RMK(FAA_Record_Base):
         remark_no: str,
         remark: str,
         file: str,
-        action: str,
+        action: Action,
         mods: str,
     ) -> None:
         self.eff_date = replace_empty_string(eff_date)
@@ -109,7 +109,7 @@ class ATC_RMK_File(FAA_File_Base):
                     remark_no=row["REMARK_NO"],
                     remark=row["REMARK"],
                     file=row["File"],
-                    action=row["Action"],
+                    action=Action(row["Action"]),
                     mods=row["Mods"],
                 )
 

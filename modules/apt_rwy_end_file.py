@@ -175,7 +175,7 @@ class APT_RWY_END(FAA_Record_Base):
         lahso_psn_source: str,
         rwy_end_lahso_psn_date: str,
         file: str,
-        action: str,
+        action: Action,
         mods: str,
     ) -> None:
         self.eff_date = replace_empty_string(eff_date)
