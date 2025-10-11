@@ -11,6 +11,7 @@ from .atc_rmk_file import ATC_RMK_File
 from .atc_svc_file import ATC_SVC_File
 from .awos_file import AWOS_File
 from .awy_base_file import AWY_BASE_File
+from .awy_seg_alt_file import AWY_SEG_ALT_File
 from .cls_arsp_file import CLS_ARSP_File
 from .fix_base_file import FIX_BASE_File
 from .fix_chrt_file import FIX_CHRT_File
@@ -33,6 +34,7 @@ __all__ = [
     "ATC_SVC_File",
     "AWOS_File",
     "AWY_BASE_File",
+    "AWY_SEG_ALT_File",
     "CLS_ARSP_File",
     "FIX_BASE_File",
     "FIX_CHRT_File",
