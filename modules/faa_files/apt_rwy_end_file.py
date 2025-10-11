@@ -1,6 +1,7 @@
+from .faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.action import Action
-from modules.faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.record_helpers import replace_empty_string
+from modules.registry import register_faa_file
 
 from typing import Self
 
@@ -358,6 +359,7 @@ class APT_RWY_END(FAA_Record_Base):
         )
 
 
+@register_faa_file("APT_RWY_END")
 class APT_RWY_END_File(FAA_File_Base):
     def __init__(
         self, file_path: str, filter_airports: list[str] | None = None
