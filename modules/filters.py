@@ -7,6 +7,7 @@ FILTER_FILE = "filters.json"
 
 
 class FilterObject:
+    artccs: list[str]
     airports: list[str]
     airways: list[str]
     n_lat: float
@@ -15,12 +16,20 @@ class FilterObject:
     e_lon: float
 
     def __init__(self) -> None:
+        self.artccs = []
         self.airports = []
         self.airways = []
         self.n_lat = 0.0
         self.s_lat = 0.0
         self.w_lon = 0.0
         self.e_lon = 0.0
+
+    def is_in_artccs(self, artcc_id: str) -> bool:
+        if len(self.artccs) == 0:
+            return False
+        if artcc_id in self.artccs:
+            return True
+        return False
 
     def is_in_airports(self, airport_id: str) -> bool:
         if len(self.airports) == 0:
@@ -78,6 +87,8 @@ class Filters:
             print("Filtering on:")
             if self.files:
                 print(f"  Files: {", ".join(self.files)}")
+            if self.filter_object.artccs:
+                print(f"  ARTCCs: {", ".join(self.filter_object.artccs)}")
             if self.filter_object.airports:
                 print(f"  Airports: {", ".join(self.filter_object.airports)}")
             if self.filter_object.airways:
@@ -99,6 +110,7 @@ class Filters:
                 data = json.load(f)
 
                 self.files = data.get("files", [])
+                self.filter_object.artccs = data.get("artccs", [])
                 self.filter_object.airports = data.get("airports", [])
                 self.filter_object.airways = data.get("airways", [])
 

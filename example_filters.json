@@ -10,6 +10,7 @@
         "w_lon": -80.8,
         "e_lon": -72.5
     },
+    "artccs": ["ZDC"],
     "airports": [
         "ADW",
         "BWI",
