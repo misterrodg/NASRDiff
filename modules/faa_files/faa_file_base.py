@@ -1,3 +1,5 @@
+from modules.filters import FilterObject
+
 from abc import ABC, abstractmethod
 from typing import Self
 
@@ -27,17 +29,20 @@ class FAA_File_Base:
     adds: list[FAA_Record_Base]
     mods: list[FAA_Record_Base]
     dels: list[FAA_Record_Base]
-    filter_airports: list[str]
+    filter_object: FilterObject | None
 
     def __init__(
-        self, file_path: str, report_name: str, filter_airports: list[str] | None = None
+        self,
+        file_path: str,
+        report_name: str,
+        filter_object: FilterObject | None = None,
     ) -> None:
         self.file_path = file_path
         self.report_name = report_name
         self.adds = []
         self.mods = []
         self.dels = []
-        self.filter_airports = filter_airports if filter_airports else []
+        self.filter_object = filter_object
 
     def get_text_report(self) -> str:
         result = f"{self.report_name}:\n"
