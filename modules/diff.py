@@ -59,7 +59,7 @@ class Diff:
 
     def __to_text_report(self) -> None:
         def writer(key: str, faa_file: faa.FAA_File_Base):
-            file_name = FILE_REGISTRY.get(key, f"{key}.txt")
+            file_name = f"{key}.txt"
             full_path = os.path.join(REPORTS_DIR, file_name)
             with open(full_path, "w") as f:
                 f.writelines(faa_file.get_text_report())
