@@ -17,6 +17,7 @@ from .fix_base_file import FIX_BASE_File
 from .cdr_file import CDR_File
 from .com_file import COM_File
 from .dp_apt_file import DP_APT_File
+from .dp_base_file import DP_BASE_File
 from .fix_chrt_file import FIX_CHRT_File
 from .fix_nav_file import FIX_NAV_File
 from .frq_file import FRQ_File
@@ -42,6 +43,7 @@ __all__ = [
     "CLS_ARSP_File",
     "COM_File",
     "DP_APT_File",
+    "DP_BASE_File",
     "FIX_BASE_File",
     "FIX_CHRT_File",
     "FIX_NAV_File",
