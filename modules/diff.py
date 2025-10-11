@@ -31,20 +31,20 @@ class Diff:
             self.__to_text_report()
 
     def __process_file_list(self, should_show: bool, use_filters: bool) -> None:
-        airports = None
+        filter_object = None
         allowed = set(FILE_REGISTRY.keys())
 
         if use_filters:
             self.filters = Filters(should_show)
-            airports = self.filters.airports or None
+            filter_object = self.filters.filter_object
             if self.filters.files:
                 allowed = set(self.filters.files)
 
         for fp in self.file_paths:
             for key, rpt in FILE_REGISTRY.items():
                 if key in allowed and fp.endswith(f"{key}_{FILE_SUFFIX}"):
-                    if airports is not None:
-                        self.files_map[key] = rpt(fp, airports)
+                    if filter_object is not None:
+                        self.files_map[key] = rpt(fp, filter_object)
                     else:
                         self.files_map[key] = rpt(fp)
                     break

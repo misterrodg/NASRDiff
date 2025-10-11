@@ -1,5 +1,6 @@
 from .faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.action import Action
+from modules.filters import FilterObject
 from modules.record_helpers import replace_empty_string
 from modules.registry import register_faa_file
 
@@ -98,9 +99,9 @@ class APT_CON(FAA_Record_Base):
 @register_faa_file("APT_CON")
 class APT_CON_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_airports: list[str] | None = None
+        self, file_path: str, filter_object: FilterObject | None = None
     ) -> None:
-        super().__init__(file_path, "Airport Continuation", filter_airports)
+        super().__init__(file_path, "Airport Continuation", filter_object)
 
         self.__load_from_csv()
 
@@ -131,10 +132,12 @@ class APT_CON_File(FAA_File_Base):
                     mods=row["Mods"],
                 )
 
-                use_filters = True if self.filter_airports else False
+                use_filters = True if self.filter_object else False
                 is_in_filters = False
-                if use_filters and record.arpt_id.strip() in self.filter_airports:
-                    is_in_filters = True
+                if use_filters and self.filter_object is not None:
+                    is_in_filters = self.filter_object.is_in_airports(
+                        record.arpt_id.strip()
+                    )
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:
