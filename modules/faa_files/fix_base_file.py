@@ -147,7 +147,6 @@ class FIX_BASE_File(FAA_File_Base):
 
     def __load_from_csv(self) -> None:
         with open(self.file_path, "r") as f:
-            print(f"Opening {self.file_path}")
             reader = csv.DictReader(f)
 
             for row in reader:
@@ -184,7 +183,6 @@ class FIX_BASE_File(FAA_File_Base):
                 )
 
                 use_filters = True if self.filter_object else False
-                print(f"use_filters is {use_filters}")
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
                     is_in_filters = self.filter_object.is_in_bounds(
