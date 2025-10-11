@@ -10,6 +10,7 @@ from modules.atc_atis_file import ATC_ATIS_File
 from modules.atc_base_file import ATC_BASE_File
 from modules.atc_rmk_file import ATC_RMK_File
 from modules.atc_svc_file import ATC_SVC_File
+from modules.awos_file import AWOS_File
 from modules.faa_file_base import FAA_File_Base
 from modules.filters import Filters
 from modules.navdata_handler import get_csv_files
@@ -28,6 +29,7 @@ FILE_TYPES = {
     "ATC_BASE": ATC_BASE_File,
     "ATC_RMK": ATC_RMK_File,
     "ATC_SVC": ATC_SVC_File,
+    "AWOS": AWOS_File,
 }
 
 OUTPUT_NAMES = {
@@ -41,6 +43,7 @@ OUTPUT_NAMES = {
     "ATC_BASE": "ATC_BASE.txt",
     "ATC_RMK": "ATC_RMK.txt",
     "ATC_SVC": "ATC_SVC.txt",
+    "AWOS": "AWOS.txt",
 }
 
 
