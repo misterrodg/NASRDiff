@@ -1,13 +1,14 @@
+from .faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.action import Action
-from modules.faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.record_helpers import replace_empty_string
+from modules.registry import register_faa_file
 
 from typing import Self
 
 import csv
 
 
-class APT_CON(FAA_Record_Base):
+class APT_RMK(FAA_Record_Base):
     eff_date: str
     site_no: str
     site_type_code: str
@@ -15,15 +16,12 @@ class APT_CON(FAA_Record_Base):
     arpt_id: str
     city: str
     country_code: str
-    title: str
-    name: str
-    address1: str
-    address2: str
-    title_city: str
-    state: str
-    zip_code: str
-    zip_plus_four: str
-    phone_no: str
+    legacy_element_number: str
+    tab_name: str
+    ref_col_name: str
+    element: str
+    ref_col_seq_no: str
+    remark: str
     file: str
     action: Action
     mods: str
@@ -37,15 +35,12 @@ class APT_CON(FAA_Record_Base):
         arpt_id: str,
         city: str,
         country_code: str,
-        title: str,
-        name: str,
-        address1: str,
-        address2: str,
-        title_city: str,
-        state: str,
-        zip_code: str,
-        zip_plus_four: str,
-        phone_no: str,
+        legacy_element_number: str,
+        tab_name: str,
+        ref_col_name: str,
+        element: str,
+        ref_col_seq_no: str,
+        remark: str,
         file: str,
         action: Action,
         mods: str,
@@ -57,15 +52,12 @@ class APT_CON(FAA_Record_Base):
         self.arpt_id = replace_empty_string(arpt_id)
         self.city = replace_empty_string(city)
         self.country_code = replace_empty_string(country_code)
-        self.title = replace_empty_string(title)
-        self.name = replace_empty_string(name)
-        self.address1 = replace_empty_string(address1)
-        self.address2 = replace_empty_string(address2)
-        self.title_city = replace_empty_string(title_city)
-        self.state = replace_empty_string(state)
-        self.zip_code = replace_empty_string(zip_code)
-        self.zip_plus_four = replace_empty_string(zip_plus_four)
-        self.phone_no = replace_empty_string(phone_no)
+        self.legacy_element_number = replace_empty_string(legacy_element_number)
+        self.tab_name = replace_empty_string(tab_name)
+        self.ref_col_name = replace_empty_string(ref_col_name)
+        self.element = replace_empty_string(element)
+        self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
+        self.remark = replace_empty_string(remark)
         self.file = file
         self.action = action
         self.mods = mods
@@ -73,32 +65,30 @@ class APT_CON(FAA_Record_Base):
     def to_string(self, last_record: Self | None = None) -> str:
         if last_record:
             modification_string = self.get_mod_string(last_record)
-            return f"{self.arpt_id} :: {modification_string}"
+            return f"{self.arpt_id} :: {self.ref_col_seq_no} :: {modification_string}"
         return (
-            f"{self.arpt_id} :: "
+            f"{self.arpt_id} :: {self.ref_col_seq_no} :: "
             f"EFF_DATE: {self.eff_date}, "
             f"SITE_NO: {self.site_no}, "
             f"SITE_TYPE_CODE: {self.site_type_code}, "
             f"STATE_CODE: {self.state_code}, "
             f"CITY: {self.city}, "
             f"COUNTRY_CODE: {self.country_code}, "
-            f"TITLE: {self.title}, "
-            f"NAME: {self.name}, "
-            f"ADDRESS1: {self.address1}, "
-            f"ADDRESS2: {self.address2}, "
-            f"TITLE_CITY: {self.title_city}, "
-            f"STATE: {self.state}, "
-            f"ZIP_CODE: {self.zip_code}, "
-            f"ZIP_PLUS_FOUR: {self.zip_plus_four}, "
-            f"PHONE_NO: {self.phone_no}"
+            f"LEGACY_ELEMENT_NUMBER: {self.legacy_element_number}, "
+            f"TAB_NAME: {self.tab_name}, "
+            f"REF_COL_NAME: {self.ref_col_name}, "
+            f"ELEMENT: {self.element}, "
+            f"REF_COL_SEQ_NO: {self.ref_col_seq_no}, "
+            f"REMARK: {self.remark}"
         )
 
 
-class APT_CON_File(FAA_File_Base):
+@register_faa_file("APT_RMK")
+class APT_RMK_File(FAA_File_Base):
     def __init__(
         self, file_path: str, filter_airports: list[str] | None = None
     ) -> None:
-        super().__init__(file_path, "Airport Continuation", filter_airports)
+        super().__init__(file_path, "Airport Remark", filter_airports)
 
         self.__load_from_csv()
 
@@ -107,7 +97,7 @@ class APT_CON_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = APT_CON(
+                record = APT_RMK(
                     eff_date=row["EFF_DATE"],
                     site_no=row["SITE_NO"],
                     site_type_code=row["SITE_TYPE_CODE"],
@@ -115,15 +105,12 @@ class APT_CON_File(FAA_File_Base):
                     arpt_id=row["ARPT_ID"],
                     city=row["CITY"],
                     country_code=row["COUNTRY_CODE"],
-                    title=row["TITLE"],
-                    name=row["NAME"],
-                    address1=row["ADDRESS1"],
-                    address2=row["ADDRESS2"],
-                    title_city=row["TITLE_CITY"],
-                    state=row["STATE"],
-                    zip_code=row["ZIP_CODE"],
-                    zip_plus_four=row["ZIP_PLUS_FOUR"],
-                    phone_no=row["PHONE_NO"],
+                    legacy_element_number=row["LEGACY_ELEMENT_NUMBER"],
+                    tab_name=row["TAB_NAME"],
+                    ref_col_name=row["REF_COL_NAME"],
+                    element=row["ELEMENT"],
+                    ref_col_seq_no=row["REF_COL_SEQ_NO"],
+                    remark=row["REMARK"],
                     file=row["File"],
                     action=Action(row["Action"]),
                     mods=row["Mods"],

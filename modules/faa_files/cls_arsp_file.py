@@ -1,25 +1,27 @@
 from modules.action import Action
-from modules.faa_file_base import FAA_Record_Base, FAA_File_Base
+from .faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.record_helpers import replace_empty_string
+from modules.registry import register_faa_file
 
 from typing import Self
 
 import csv
 
 
-class ATC_ATIS(FAA_Record_Base):
+class CLS_ARSP(FAA_Record_Base):
     eff_date: str
     site_no: str
     site_type_code: str
-    facility_type: str
     state_code: str
-    facility_id: str
+    arpt_id: str
     city: str
     country_code: str
-    atis_no: str
-    description: str
-    atis_hrs: str
-    atis_phone_no: str
+    class_b_airspace: str
+    class_c_airspace: str
+    class_d_airspace: str
+    class_e_airspace: str
+    airspace_hrs: str
+    remark: str
     file: str
     action: Action
     mods: str
@@ -29,15 +31,16 @@ class ATC_ATIS(FAA_Record_Base):
         eff_date: str,
         site_no: str,
         site_type_code: str,
-        facility_type: str,
         state_code: str,
-        facility_id: str,
+        arpt_id: str,
         city: str,
         country_code: str,
-        atis_no: str,
-        description: str,
-        atis_hrs: str,
-        atis_phone_no: str,
+        class_b_airspace: str,
+        class_c_airspace: str,
+        class_d_airspace: str,
+        class_e_airspace: str,
+        airspace_hrs: str,
+        remark: str,
         file: str,
         action: Action,
         mods: str,
@@ -45,15 +48,16 @@ class ATC_ATIS(FAA_Record_Base):
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
-        self.facility_type = replace_empty_string(facility_type)
         self.state_code = replace_empty_string(state_code)
-        self.facility_id = replace_empty_string(facility_id)
+        self.arpt_id = replace_empty_string(arpt_id)
         self.city = replace_empty_string(city)
         self.country_code = replace_empty_string(country_code)
-        self.atis_no = replace_empty_string(atis_no)
-        self.description = replace_empty_string(description)
-        self.atis_hrs = replace_empty_string(atis_hrs)
-        self.atis_phone_no = replace_empty_string(atis_phone_no)
+        self.class_b_airspace = replace_empty_string(class_b_airspace)
+        self.class_c_airspace = replace_empty_string(class_c_airspace)
+        self.class_d_airspace = replace_empty_string(class_d_airspace)
+        self.class_e_airspace = replace_empty_string(class_e_airspace)
+        self.airspace_hrs = replace_empty_string(airspace_hrs)
+        self.remark = replace_empty_string(remark)
         self.file = file
         self.action = action
         self.mods = mods
@@ -61,27 +65,30 @@ class ATC_ATIS(FAA_Record_Base):
     def to_string(self, last_record: Self | None = None) -> str:
         if last_record:
             modification_string = self.get_mod_string(last_record)
-            return f"{self.facility_id} :: {self.atis_no} :: {modification_string}"
+            return f"{self.arpt_id} :: {modification_string}"
         return (
-            f"{self.facility_id} :: {self.atis_no} :: "
+            f"{self.arpt_id} :: "
             f"EFF_DATE: {self.eff_date}, "
             f"SITE_NO: {self.site_no}, "
             f"SITE_TYPE_CODE: {self.site_type_code}, "
-            f"FACILITY_TYPE: {self.facility_type}, "
             f"STATE_CODE: {self.state_code}, "
             f"CITY: {self.city}, "
             f"COUNTRY_CODE: {self.country_code}, "
-            f"DESCRIPTION: {self.description}, "
-            f"ATIS_HRS: {self.atis_hrs}, "
-            f"ATIS_PHONE_NO: {self.atis_phone_no}, "
+            f"CLASS_B_AIRSPACE: {self.class_b_airspace}, "
+            f"CLASS_C_AIRSPACE: {self.class_c_airspace}, "
+            f"CLASS_D_AIRSPACE: {self.class_d_airspace}, "
+            f"CLASS_E_AIRSPACE: {self.class_e_airspace}, "
+            f"AIRSPACE_HRS: {self.airspace_hrs}, "
+            f"REMARK: {self.remark}"
         )
 
 
-class ATC_ATIS_File(FAA_File_Base):
+@register_faa_file("CLS_ARSP")
+class CLS_ARSP_File(FAA_File_Base):
     def __init__(
         self, file_path: str, filter_airports: list[str] | None = None
     ) -> None:
-        super().__init__(file_path, "ATC ATIS", filter_airports)
+        super().__init__(file_path, "Class Airspace", filter_airports)
 
         self.__load_from_csv()
 
@@ -90,19 +97,20 @@ class ATC_ATIS_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = ATC_ATIS(
+                record = CLS_ARSP(
                     eff_date=row["EFF_DATE"],
                     site_no=row["SITE_NO"],
                     site_type_code=row["SITE_TYPE_CODE"],
-                    facility_type=row["FACILITY_TYPE"],
                     state_code=row["STATE_CODE"],
-                    facility_id=row["FACILITY_ID"],
+                    arpt_id=row["ARPT_ID"],
                     city=row["CITY"],
                     country_code=row["COUNTRY_CODE"],
-                    atis_no=row["ATIS_NO"],
-                    description=row["DESCRIPTION"],
-                    atis_hrs=row["ATIS_HRS"],
-                    atis_phone_no=row["ATIS_PHONE_NO"],
+                    class_b_airspace=row["CLASS_B_AIRSPACE"],
+                    class_c_airspace=row["CLASS_C_AIRSPACE"],
+                    class_d_airspace=row["CLASS_D_AIRSPACE"],
+                    class_e_airspace=row["CLASS_E_AIRSPACE"],
+                    airspace_hrs=row["AIRSPACE_HRS"],
+                    remark=row["REMARK"],
                     file=row["File"],
                     action=Action(row["Action"]),
                     mods=row["Mods"],
@@ -110,7 +118,7 @@ class ATC_ATIS_File(FAA_File_Base):
 
                 use_filters = True if self.filter_airports else False
                 is_in_filters = False
-                if use_filters and record.facility_id.strip() in self.filter_airports:
+                if use_filters and record.arpt_id.strip() in self.filter_airports:
                     is_in_filters = True
 
                 if not use_filters or is_in_filters:

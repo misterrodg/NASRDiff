@@ -1,13 +1,14 @@
+from .faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.action import Action
-from modules.faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.record_helpers import replace_empty_string
+from modules.registry import register_faa_file
 
 from typing import Self
 
 import csv
 
 
-class APT_ATT(FAA_Record_Base):
+class APT_CON(FAA_Record_Base):
     eff_date: str
     site_no: str
     site_type_code: str
@@ -15,10 +16,15 @@ class APT_ATT(FAA_Record_Base):
     arpt_id: str
     city: str
     country_code: str
-    sked_seq_no: str
-    month: str
-    day: str
-    hour: str
+    title: str
+    name: str
+    address1: str
+    address2: str
+    title_city: str
+    state: str
+    zip_code: str
+    zip_plus_four: str
+    phone_no: str
     file: str
     action: Action
     mods: str
@@ -32,10 +38,15 @@ class APT_ATT(FAA_Record_Base):
         arpt_id: str,
         city: str,
         country_code: str,
-        sked_seq_no: str,
-        month: str,
-        day: str,
-        hour: str,
+        title: str,
+        name: str,
+        address1: str,
+        address2: str,
+        title_city: str,
+        state: str,
+        zip_code: str,
+        zip_plus_four: str,
+        phone_no: str,
         file: str,
         action: Action,
         mods: str,
@@ -47,10 +58,15 @@ class APT_ATT(FAA_Record_Base):
         self.arpt_id = replace_empty_string(arpt_id)
         self.city = replace_empty_string(city)
         self.country_code = replace_empty_string(country_code)
-        self.sked_seq_no = replace_empty_string(sked_seq_no)
-        self.month = replace_empty_string(month)
-        self.day = replace_empty_string(day)
-        self.hour = replace_empty_string(hour)
+        self.title = replace_empty_string(title)
+        self.name = replace_empty_string(name)
+        self.address1 = replace_empty_string(address1)
+        self.address2 = replace_empty_string(address2)
+        self.title_city = replace_empty_string(title_city)
+        self.state = replace_empty_string(state)
+        self.zip_code = replace_empty_string(zip_code)
+        self.zip_plus_four = replace_empty_string(zip_plus_four)
+        self.phone_no = replace_empty_string(phone_no)
         self.file = file
         self.action = action
         self.mods = mods
@@ -58,26 +74,33 @@ class APT_ATT(FAA_Record_Base):
     def to_string(self, last_record: Self | None = None) -> str:
         if last_record:
             modification_string = self.get_mod_string(last_record)
-            return f"{self.arpt_id} :: {self.sked_seq_no} :: {modification_string}"
+            return f"{self.arpt_id} :: {modification_string}"
         return (
-            f"{self.arpt_id} :: {self.sked_seq_no} :: "
+            f"{self.arpt_id} :: "
             f"EFF_DATE: {self.eff_date}, "
             f"SITE_NO: {self.site_no}, "
             f"SITE_TYPE_CODE: {self.site_type_code}, "
             f"STATE_CODE: {self.state_code}, "
             f"CITY: {self.city}, "
             f"COUNTRY_CODE: {self.country_code}, "
-            f"MONTH: {self.month}, "
-            f"DAY: {self.day}, "
-            f"HOUR: {self.hour}"
+            f"TITLE: {self.title}, "
+            f"NAME: {self.name}, "
+            f"ADDRESS1: {self.address1}, "
+            f"ADDRESS2: {self.address2}, "
+            f"TITLE_CITY: {self.title_city}, "
+            f"STATE: {self.state}, "
+            f"ZIP_CODE: {self.zip_code}, "
+            f"ZIP_PLUS_FOUR: {self.zip_plus_four}, "
+            f"PHONE_NO: {self.phone_no}"
         )
 
 
-class APT_ATT_File(FAA_File_Base):
+@register_faa_file("APT_CON")
+class APT_CON_File(FAA_File_Base):
     def __init__(
         self, file_path: str, filter_airports: list[str] | None = None
     ) -> None:
-        super().__init__(file_path, "Airport Attendance", filter_airports)
+        super().__init__(file_path, "Airport Continuation", filter_airports)
 
         self.__load_from_csv()
 
@@ -86,7 +109,7 @@ class APT_ATT_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = APT_ATT(
+                record = APT_CON(
                     eff_date=row["EFF_DATE"],
                     site_no=row["SITE_NO"],
                     site_type_code=row["SITE_TYPE_CODE"],
@@ -94,10 +117,15 @@ class APT_ATT_File(FAA_File_Base):
                     arpt_id=row["ARPT_ID"],
                     city=row["CITY"],
                     country_code=row["COUNTRY_CODE"],
-                    sked_seq_no=row["SKED_SEQ_NO"],
-                    month=row["MONTH"],
-                    day=row["DAY"],
-                    hour=row["HOUR"],
+                    title=row["TITLE"],
+                    name=row["NAME"],
+                    address1=row["ADDRESS1"],
+                    address2=row["ADDRESS2"],
+                    title_city=row["TITLE_CITY"],
+                    state=row["STATE"],
+                    zip_code=row["ZIP_CODE"],
+                    zip_plus_four=row["ZIP_PLUS_FOUR"],
+                    phone_no=row["PHONE_NO"],
                     file=row["File"],
                     action=Action(row["Action"]),
                     mods=row["Mods"],
