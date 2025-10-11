@@ -11,6 +11,7 @@ from .atc_svc_file import ATC_SVC_File
 from .awos_file import AWOS_File
 from .cls_arsp_file import CLS_ARSP_File
 from .fix_base_file import FIX_BASE_File
+from .fix_chrt_file import FIX_CHRT_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -27,5 +28,6 @@ __all__ = [
     "AWOS_File",
     "CLS_ARSP_File",
     "FIX_BASE_File",
+    "FIX_CHRT_File",
     "FAA_File_Base",
 ]
