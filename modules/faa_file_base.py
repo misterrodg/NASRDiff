@@ -41,6 +41,10 @@ class FAA_File_Base:
 
     def get_text_report(self) -> str:
         result = f"{self.report_name}:\n"
+        if len(self.adds) == 0 and len(self.mods) == 0 and len(self.dels) == 0:
+            result += "  No changes\n"
+            return result
+
         if len(self.adds) > 0:
             result += "  Additions:\n"
             for r in self.adds:
