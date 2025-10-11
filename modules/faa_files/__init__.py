@@ -1,3 +1,4 @@
+from .apt_ars_file import APT_ARS_File
 from .apt_att_file import APT_ATT_File
 from .apt_base_file import APT_BASE_File
 from .apt_con_file import APT_CON_File
@@ -18,6 +19,7 @@ from .fss_base_file import FSS_BASE_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
+    "APT_ARS_File",
     "APT_ATT_File",
     "APT_BASE_File",
     "APT_CON_File",
