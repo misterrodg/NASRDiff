@@ -52,7 +52,9 @@ as an argument, the resulting reports will be in the `reports` directory.
 | `s_lat` | The southernmost latitude boundary in decimal form. |
 | `w_lon` | The westernmost longitude boundary in decimal form. |
 | `e_lon` | The easternmost longitude boundary in decimal form. |
+| `artccs` | An array of strings representing the ARTCC code of the ARTCCs that you are interested in. |
 | `airports` | An array of strings representing the FAA code* of the airports (and heliports) that you are interested in. |
+| `airways` | An array of strings representing the Airway ID of the airways that you are interested in. |
 
 \* The FAA Code is a three-letter identifier, commonly mistaken for an IATA 
 code since they are usually the same. Generally, it is the ICAO code without the 
@@ -70,7 +72,10 @@ three files. The rest are ignored.
 - `bounds`: `"n_lat": 40.1`, `"s_lat": 32.9`, `"w_lon": -80.8`, and `"e_lon": -72.5`. 
 This selects anything defined by a lat/lon position in the area that is shown 
 in the image below.
+- `artccs`: `"ZDC"`. This selects only this ARTCC. The rest are ignored.
 - `airports`: `"ADW"`, `"BWI"`, `"DCA"`, and `"IAD"`. This selects only these 
 airports. The rest are ignored.
+- `airways`: `"J110"`, `"J149"`, `"J162"`, `"J211"`. This selects only these 
+airways. The rest are ignored.
 
 ![Example Boundaries](./docs/images/example.png)
