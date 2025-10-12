@@ -23,6 +23,7 @@ from .fix_chrt_file import FIX_CHRT_File
 from .fix_nav_file import FIX_NAV_File
 from .frq_file import FRQ_File
 from .fss_base_file import FSS_BASE_File
+from .fss_rmk_file import FSS_RMK_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -51,5 +52,6 @@ __all__ = [
     "FIX_NAV_File",
     "FRQ_File",
     "FSS_BASE_File",
+    "FSS_RMK_File",
     "FAA_File_Base",
 ]
