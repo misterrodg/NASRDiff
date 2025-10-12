@@ -62,33 +62,43 @@ class CDR(FAA_Record_Base):
 
         self.mods = self.mods.replace("Route String", "Route_String")
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.orig}-{self.dest} :: {self.rcode} :: {self.depfix}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.orig}-{self.dest} :: {self.depfix} :: {modification_string}"
-        return (
-            f"{self.orig}-{self.dest} :: {self.depfix} :: "
-            f"RCODE: {self.rcode}, "
-            f"ORIG: {self.orig}, "
-            f"DEST: {self.dest}, "
-            f"DEPFIX: {self.depfix}, "
-            f"ROUTE STRING: {self.route_string}, "
-            f"DCNTR: {self.dcntr}, "
-            f"ACNTR: {self.acntr}, "
-            f"TCNTRS: {self.tcntrs}, "
-            f"COORDREQ: {self.coordreq}, "
-            f"PLAY: {self.play}, "
-            f"NAVEQP: {self.naveqp}, "
-            f"LENGTH: {self.length}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"ORIG: {self.orig}, "
+                f"DEST: {self.dest}, "
+                f"DEPFIX: {self.depfix}, "
+                f"ROUTE STRING: {self.route_string}, "
+                f"DCNTR: {self.dcntr}, "
+                f"ACNTR: {self.acntr}, "
+                f"TCNTRS: {self.tcntrs}, "
+                f"COORDREQ: {self.coordreq}, "
+                f"PLAY: {self.play}, "
+                f"NAVEQP: {self.naveqp}, "
+                f"LENGTH: {self.length}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("CDR")
 class CDR_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Coded Departure Route", filter_object)
+        super().__init__(file_path, "Coded Departure Route", use_verbose, filter_object)
 
         self.__load_from_csv()
 

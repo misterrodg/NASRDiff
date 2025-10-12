@@ -19,7 +19,7 @@ class FAA_Record_Base(ABC):
         return " // ".join(modifications)
 
     @abstractmethod
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         pass
 
 
@@ -35,10 +35,12 @@ class FAA_File_Base:
         self,
         file_path: str,
         report_name: str,
+        use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
         self.file_path = file_path
         self.report_name = report_name
+        self.use_verbose = use_verbose
         self.adds = []
         self.mods = []
         self.dels = []
@@ -53,7 +55,7 @@ class FAA_File_Base:
         if len(self.adds) > 0:
             result += "  Additions:\n"
             for r in self.adds:
-                result += f"    {r.to_string()}\n"
+                result += f"    {r.to_string(self.use_verbose)}\n"
 
         if len(self.mods) > 0:
             result += "  Modifications:\n"
@@ -62,12 +64,12 @@ class FAA_File_Base:
                 if r.file == "1":
                     last_record = r
                 else:
-                    result += f"    {r.to_string(last_record)}\n"
+                    result += f"    {r.to_string(self.use_verbose, last_record)}\n"
                     last_record = None
 
         if len(self.dels) > 0:
             result += "  Deletions:\n"
             for r in self.dels:
-                result += f"    {r.to_string()}\n"
+                result += f"    {r.to_string(self.use_verbose)}\n"
 
         return result

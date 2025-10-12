@@ -54,30 +54,41 @@ class APT_ARS(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
-        if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.arpt_id} :: {modification_string}"
-        return (
-            f"{self.arpt_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"SITE_NO: {self.site_no}, "
-            f"SITE_TYPE_CODE: {self.site_type_code}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"CITY: {self.city}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"RWY_ID: {self.rwy_id}, "
-            f"RWY_END_ID: {self.rwy_end_id}, "
-            f"ARREST_DEVICE_CODE: {self.arrest_device_code}"
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = (
+            f"{self.arpt_id} :: {self.rwy_end_id} :: {self.arrest_device_code}"
         )
+
+        modification_string = ""
+        if last_record:
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"SITE_NO: {self.site_no}, "
+                f"SITE_TYPE_CODE: {self.site_type_code}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"CITY: {self.city}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"RWY_ID: {self.rwy_id}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("APT_ARS")
 class APT_ARS_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Airport Arresting", filter_object)
+        super().__init__(file_path, "Airport Arresting", use_verbose, filter_object)
 
         self.__load_from_csv()
 

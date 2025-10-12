@@ -1,7 +1,7 @@
 from .faa_file_base import FAA_Record_Base, FAA_File_Base
 from modules.action import Action
 from modules.filters import FilterObject
-from modules.record_helpers import replace_empty_string
+from modules.record_helpers import replace_empty_string, EMPTY_VALUE
 from modules.registry import register_faa_file
 
 from typing import Self
@@ -66,33 +66,47 @@ class DP_RTE(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        comp_code = self.transition_computer_code
+        if comp_code == EMPTY_VALUE:
+            comp_code = self.dp_computer_code
+        base_string = f"{self.artcc} :: {comp_code} :: {self.point} :: {self.point_seq}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.artcc} :: {self.point_seq} :: {modification_string}"
-        return (
-            f"{self.artcc} :: {self.point_seq} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"DP_NAME: {self.dp_name}, "
-            f"DP_COMPUTER_CODE: {self.dp_computer_code}, "
-            f"ROUTE_PORTION_TYPE: {self.route_portion_type}, "
-            f"ROUTE_NAME: {self.route_name}, "
-            f"BODY_SEQ: {self.body_seq}, "
-            f"TRANSITION_COMPUTER_CODE: {self.transition_computer_code}, "
-            f"POINT: {self.point}, "
-            f"ICAO_REGION_CODE: {self.icao_region_code}, "
-            f"POINT_TYPE: {self.point_type}, "
-            f"NEXT_POINT: {self.next_point}, "
-            f"ARPT_RWY_ASSOC: {self.arpt_rwy_assoc}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"DP_NAME: {self.dp_name}, "
+                f"DP_COMPUTER_CODE: {self.dp_computer_code}, "
+                f"ROUTE_PORTION_TYPE: {self.route_portion_type}, "
+                f"ROUTE_NAME: {self.route_name}, "
+                f"BODY_SEQ: {self.body_seq}, "
+                f"ICAO_REGION_CODE: {self.icao_region_code}, "
+                f"POINT_TYPE: {self.point_type}, "
+                f"NEXT_POINT: {self.next_point}, "
+                f"ARPT_RWY_ASSOC: {self.arpt_rwy_assoc}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("DP_RTE")
 class DP_RTE_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Departure Procedure Route", filter_object)
+        super().__init__(
+            file_path, "Departure Procedure Route", use_verbose, filter_object
+        )
 
         self.__load_from_csv()
 

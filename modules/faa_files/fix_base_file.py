@@ -102,46 +102,56 @@ class FIX_BASE(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.fix_id} :: {self.charts}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.fix_id} :: {modification_string}"
-        return (
-            f"{self.fix_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"ICAO_REGION_CODE: {self.icao_region_code}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"LAT_DEG: {self.lat_deg}, "
-            f"LAT_MIN: {self.lat_min}, "
-            f"LAT_SEC: {self.lat_sec}, "
-            f"LAT_HEMIS: {self.lat_hemis}, "
-            f"LAT_DECIMAL: {self.lat_decimal}, "
-            f"LONG_DEG: {self.long_deg}, "
-            f"LONG_MIN: {self.long_min}, "
-            f"LONG_SEC: {self.long_sec}, "
-            f"LONG_HEMIS: {self.long_hemis}, "
-            f"LONG_DECIMAL: {self.long_decimal}, "
-            f"FIX_ID_OLD: {self.fix_id_old}, "
-            f"CHARTING_REMARK: {self.charting_remark}, "
-            f"FIX_USE_CODE: {self.fix_use_code}, "
-            f"ARTCC_ID_HIGH: {self.artcc_id_high}, "
-            f"ARTCC_ID_LOW: {self.artcc_id_low}, "
-            f"PITCH_FLAG: {self.pitch_flag}, "
-            f"CATCH_FLAG: {self.catch_flag}, "
-            f"SUA_ATCAA_FLAG: {self.sua_atcaa_flag}, "
-            f"MIN_RECEP_ALT: {self.min_recep_alt}, "
-            f"COMPULSORY: {self.compulsory}, "
-            f"CHARTS: {self.charts}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"ICAO_REGION_CODE: {self.icao_region_code}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"LAT_DEG: {self.lat_deg}, "
+                f"LAT_MIN: {self.lat_min}, "
+                f"LAT_SEC: {self.lat_sec}, "
+                f"LAT_HEMIS: {self.lat_hemis}, "
+                f"LAT_DECIMAL: {self.lat_decimal}, "
+                f"LONG_DEG: {self.long_deg}, "
+                f"LONG_MIN: {self.long_min}, "
+                f"LONG_SEC: {self.long_sec}, "
+                f"LONG_HEMIS: {self.long_hemis}, "
+                f"LONG_DECIMAL: {self.long_decimal}, "
+                f"FIX_ID_OLD: {self.fix_id_old}, "
+                f"CHARTING_REMARK: {self.charting_remark}, "
+                f"FIX_USE_CODE: {self.fix_use_code}, "
+                f"ARTCC_ID_HIGH: {self.artcc_id_high}, "
+                f"ARTCC_ID_LOW: {self.artcc_id_low}, "
+                f"PITCH_FLAG: {self.pitch_flag}, "
+                f"CATCH_FLAG: {self.catch_flag}, "
+                f"SUA_ATCAA_FLAG: {self.sua_atcaa_flag}, "
+                f"MIN_RECEP_ALT: {self.min_recep_alt}, "
+                f"COMPULSORY: {self.compulsory}, "
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("FIX_BASE")
 class FIX_BASE_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Fix Base", filter_object)
+        super().__init__(file_path, "Fix Base", use_verbose, filter_object)
 
         self.__load_from_csv()
 

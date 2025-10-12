@@ -51,29 +51,40 @@ class DP_BASE(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.served_arpt} :: {self.dp_name} {self.amendment_no}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.served_arpt} :: {modification_string}"
-        return (
-            f"{self.served_arpt} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"DP_NAME: {self.dp_name}, "
-            f"AMENDMENT_NO: {self.amendment_no}, "
-            f"ARTCC: {self.artcc}, "
-            f"DP_AMEND_EFF_DATE: {self.dp_amend_eff_date}, "
-            f"RNAV_FLAG: {self.rnav_flag}, "
-            f"DP_COMPUTER_CODE: {self.dp_computer_code}, "
-            f"GRAPHICAL_DP_TYPE: {self.graphical_dp_type}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"ARTCC: {self.artcc}, "
+                f"DP_AMEND_EFF_DATE: {self.dp_amend_eff_date}, "
+                f"RNAV_FLAG: {self.rnav_flag}, "
+                f"DP_COMPUTER_CODE: {self.dp_computer_code}, "
+                f"GRAPHICAL_DP_TYPE: {self.graphical_dp_type}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("DP_BASE")
 class DP_BASE_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Departure Procedure Base", filter_object)
+        super().__init__(
+            file_path, "Departure Procedure Base", use_verbose, filter_object
+        )
 
         self.__load_from_csv()
 

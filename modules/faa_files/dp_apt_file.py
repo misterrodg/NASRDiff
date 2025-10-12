@@ -48,28 +48,39 @@ class DP_APT(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.arpt_id} :: {self.dp_computer_code} :: {self.body_name}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.arpt_id} :: {modification_string}"
-        return (
-            f"{self.arpt_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"DP_NAME: {self.dp_name}, "
-            f"ARTCC: {self.artcc}, "
-            f"DP_COMPUTER_CODE: {self.dp_computer_code}, "
-            f"BODY_NAME: {self.body_name}, "
-            f"BODY_SEQ: {self.body_seq}, "
-            f"RWY_END_ID: {self.rwy_end_id}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"DP_NAME: {self.dp_name}"
+                f"ARTCC: {self.artcc}, "
+                f"BODY_SEQ: {self.body_seq}, "
+                f"RWY_END_ID: {self.rwy_end_id}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("DP_APT")
 class DP_APT_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Departure Procedure Airport", filter_object)
+        super().__init__(
+            file_path, "Departure Procedure Airport", use_verbose, filter_object
+        )
 
         self.__load_from_csv()
 

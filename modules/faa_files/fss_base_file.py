@@ -99,45 +99,56 @@ class FSS_BASE(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.fss_id} :: {self.name}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.fss_id} :: {modification_string}"
-        return (
-            f"{self.fss_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"NAME: {self.name}, "
-            f"UPDATE_DATE: {self.update_date}, "
-            f"FSS_FAC_TYPE: {self.fss_fac_type}, "
-            f"VOICE_CALL: {self.voice_call}, "
-            f"CITY: {self.city}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"LAT_DEG: {self.lat_deg}, "
-            f"LAT_MIN: {self.lat_min}, "
-            f"LAT_SEC: {self.lat_sec}, "
-            f"LAT_HEMIS: {self.lat_hemis}, "
-            f"LAT_DECIMAL: {self.lat_decimal}, "
-            f"LONG_DEG: {self.long_deg}, "
-            f"LONG_MIN: {self.long_min}, "
-            f"LONG_SEC: {self.long_sec}, "
-            f"LONG_HEMIS: {self.long_hemis}, "
-            f"LONG_DECIMAL: {self.long_decimal}, "
-            f"OPR_HOURS: {self.opr_hours}, "
-            f"FAC_STATUS: {self.fac_status}, "
-            f"ALTERNATE_FSS: {self.alternate_fss}, "
-            f"WEA_RADAR_FLAG: {self.wea_radar_flag}, "
-            f"PHONE_NO: {self.phone_no}, "
-            f"TOLL_FREE_NO: {self.toll_free_no}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"NAME: {self.name}, "
+                f"UPDATE_DATE: {self.update_date}, "
+                f"FSS_FAC_TYPE: {self.fss_fac_type}, "
+                f"VOICE_CALL: {self.voice_call}, "
+                f"CITY: {self.city}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"LAT_DEG: {self.lat_deg}, "
+                f"LAT_MIN: {self.lat_min}, "
+                f"LAT_SEC: {self.lat_sec}, "
+                f"LAT_HEMIS: {self.lat_hemis}, "
+                f"LAT_DECIMAL: {self.lat_decimal}, "
+                f"LONG_DEG: {self.long_deg}, "
+                f"LONG_MIN: {self.long_min}, "
+                f"LONG_SEC: {self.long_sec}, "
+                f"LONG_HEMIS: {self.long_hemis}, "
+                f"LONG_DECIMAL: {self.long_decimal}, "
+                f"OPR_HOURS: {self.opr_hours}, "
+                f"FAC_STATUS: {self.fac_status}, "
+                f"ALTERNATE_FSS: {self.alternate_fss}, "
+                f"WEA_RADAR_FLAG: {self.wea_radar_flag}, "
+                f"PHONE_NO: {self.phone_no}, "
+                f"TOLL_FREE_NO: {self.toll_free_no}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("FSS_BASE")
 class FSS_BASE_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "FSS Base", filter_object)
+        super().__init__(file_path, "FSS Base", use_verbose, filter_object)
 
         self.__load_from_csv()
 

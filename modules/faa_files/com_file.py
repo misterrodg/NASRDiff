@@ -108,48 +108,59 @@ class COM(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
-        if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.facility_id} :: {modification_string}"
-        return (
-            f"{self.facility_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"COMM_LOC_ID: {self.comm_loc_id}, "
-            f"COMM_TYPE: {self.comm_type}, "
-            f"NAV_ID: {self.nav_id}, "
-            f"NAV_TYPE: {self.nav_type}, "
-            f"CITY: {self.city}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"REGION_CODE: {self.region_code}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"COMM_OUTLET_NAME: {self.comm_outlet_name}, "
-            f"LAT_DEG: {self.lat_deg}, "
-            f"LAT_MIN: {self.lat_min}, "
-            f"LAT_SEC: {self.lat_sec}, "
-            f"LAT_HEMIS: {self.lat_hemis}, "
-            f"LAT_DECIMAL: {self.lat_decimal}, "
-            f"LONG_DEG: {self.long_deg}, "
-            f"LONG_MIN: {self.long_min}, "
-            f"LONG_SEC: {self.long_sec}, "
-            f"LONG_HEMIS: {self.long_hemis}, "
-            f"LONG_DECIMAL: {self.long_decimal}, "
-            f"FACILITY_NAME: {self.facility_name}, "
-            f"ALT_FSS_ID: {self.alt_fss_id}, "
-            f"ALT_FSS_NAME: {self.alt_fss_name}, "
-            f"OPR_HRS: {self.opr_hrs}, "
-            f"COMM_STATUS_CODE: {self.comm_status_code}, "
-            f"COMM_STATUS_DATE: {self.comm_status_date}, "
-            f"REMARK: {self.remark}"
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = (
+            f"{self.facility_id} :: {self.comm_type} :: {self.comm_outlet_name}"
         )
+
+        modification_string = ""
+        if last_record:
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"COMM_LOC_ID: {self.comm_loc_id}, "
+                f"NAV_ID: {self.nav_id}, "
+                f"NAV_TYPE: {self.nav_type}, "
+                f"CITY: {self.city}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"REGION_CODE: {self.region_code}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"LAT_DEG: {self.lat_deg}, "
+                f"LAT_MIN: {self.lat_min}, "
+                f"LAT_SEC: {self.lat_sec}, "
+                f"LAT_HEMIS: {self.lat_hemis}, "
+                f"LAT_DECIMAL: {self.lat_decimal}, "
+                f"LONG_DEG: {self.long_deg}, "
+                f"LONG_MIN: {self.long_min}, "
+                f"LONG_SEC: {self.long_sec}, "
+                f"LONG_HEMIS: {self.long_hemis}, "
+                f"LONG_DECIMAL: {self.long_decimal}, "
+                f"FACILITY_NAME: {self.facility_name}, "
+                f"ALT_FSS_ID: {self.alt_fss_id}, "
+                f"ALT_FSS_NAME: {self.alt_fss_name}, "
+                f"OPR_HRS: {self.opr_hrs}, "
+                f"COMM_STATUS_CODE: {self.comm_status_code}, "
+                f"COMM_STATUS_DATE: {self.comm_status_date}, "
+                f"REMARK: {self.remark}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("COM")
 class COM_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Communication", filter_object)
+        super().__init__(file_path, "Communication", use_verbose, filter_object)
 
         self.__load_from_csv()
 

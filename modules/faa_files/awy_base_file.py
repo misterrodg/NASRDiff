@@ -48,28 +48,39 @@ class AWY_BASE(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.awy_id}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.awy_id} :: {modification_string}"
-        return (
-            f"{self.awy_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"REGULATORY: {self.regulatory}, "
-            f"AWY_DESIGNATION: {self.awy_designation}, "
-            f"AWY_LOCATION: {self.awy_location}, "
-            f"UPDATE_DATE: {self.update_date}, "
-            f"REMARK: {self.remark}, "
-            f"AIRWAY_STRING: {self.airway_string}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"REGULATORY: {self.regulatory}, "
+                f"AWY_DESIGNATION: {self.awy_designation}, "
+                f"AWY_LOCATION: {self.awy_location}, "
+                f"UPDATE_DATE: {self.update_date}, "
+                f"REMARK: {self.remark}, "
+                f"AIRWAY_STRING: {self.airway_string}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("AWY_BASE")
 class AWY_BASE_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Airway Base", filter_object)
+        super().__init__(file_path, "Airway Base", use_verbose, filter_object)
 
         self.__load_from_csv()
 

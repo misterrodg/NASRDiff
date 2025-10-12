@@ -171,66 +171,79 @@ class AWY_SEG_ALT(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
-        if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.awy_id} :: {self.point_seq} :: {modification_string}"
-        return (
-            f"{self.awy_id} :: {self.point_seq} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"REGULATORY: {self.regulatory}, "
-            f"AWY_LOCATION: {self.awy_location}, "
-            f"FROM_POINT: {self.from_point}, "
-            f"FROM_PT_TYPE: {self.from_pt_type}, "
-            f"NAV_NAME: {self.nav_name}, "
-            f"NAV_CITY: {self.nav_city}, "
-            f"ARTCC: {self.artcc}, "
-            f"ICAO_REGION_CODE: {self.icao_region_code}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"TO_POINT: {self.to_point}, "
-            f"MAG_COURSE: {self.mag_course}, "
-            f"OPP_MAG_COURSE: {self.opp_mag_course}, "
-            f"MAG_COURSE_DIST: {self.mag_course_dist}, "
-            f"CHGOVR_PT: {self.chgovr_pt}, "
-            f"CHGOVR_PT_NAME: {self.chgovr_pt_name}, "
-            f"CHGOVR_PT_DIST: {self.chgovr_pt_dist}, "
-            f"AWY_SEG_GAP_FLAG: {self.awy_seg_gap_flag}, "
-            f"SIGNAL_GAP_FLAG: {self.signal_gap_flag}, "
-            f"DOGLEG: {self.dogleg}, "
-            f"NEXT_MEA_PT: {self.next_mea_pt}, "
-            f"MIN_ENROUTE_ALT: {self.min_enroute_alt}, "
-            f"MIN_ENROUTE_ALT_DIR: {self.min_enroute_alt_dir}, "
-            f"MIN_ENROUTE_ALT_OPPOSITE: {self.min_enroute_alt_opposite}, "
-            f"MIN_ENROUTE_ALT_OPPOSITE_DIR: {self.min_enroute_alt_opposite_dir}, "
-            f"GPS_MIN_ENROUTE_ALT: {self.gps_min_enroute_alt}, "
-            f"GPS_MIN_ENROUTE_ALT_DIR: {self.gps_min_enroute_alt_dir}, "
-            f"GPS_MIN_ENROUTE_ALT_OPPOSITE: {self.gps_min_enroute_alt_opposite}, "
-            f"GPS_MEA_OPPOSITE_DIR: {self.gps_mea_opposite_dir}, "
-            f"DD_IRU_MEA: {self.dd_iru_mea}, "
-            f"DD_IRU_MEA_DIR: {self.dd_iru_mea_dir}, "
-            f"DD_I_MEA_OPPOSITE: {self.dd_i_mea_opposite}, "
-            f"DD_I_MEA_OPPOSITE_DIR: {self.dd_i_mea_opposite_dir}, "
-            f"MIN_OBSTN_CLNC_ALT: {self.min_obstn_clnc_alt}, "
-            f"MIN_CROSS_ALT: {self.min_cross_alt}, "
-            f"MIN_CROSS_ALT_DIR: {self.min_cross_alt_dir}, "
-            f"MIN_CROSS_ALT_NAV_PT: {self.min_cross_alt_nav_pt}, "
-            f"MIN_CROSS_ALT_OPPOSITE: {self.min_cross_alt_opposite}, "
-            f"MIN_CROSS_ALT_OPPOSITE_DIR: {self.min_cross_alt_opposite_dir}, "
-            f"MIN_RECEP_ALT: {self.min_recep_alt}, "
-            f"MAX_AUTH_ALT: {self.max_auth_alt}, "
-            f"MEA_GAP: {self.mea_gap}, "
-            f"REQD_NAV_PERFORMANCE: {self.reqd_nav_performance}, "
-            f"REMARK: {self.remark}"
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = (
+            f"{self.awy_id} :: {self.from_point}-{self.to_point} :: {self.point_seq}"
         )
+
+        modification_string = ""
+        if last_record:
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"REGULATORY: {self.regulatory}, "
+                f"AWY_LOCATION: {self.awy_location}, "
+                f"FROM_PT_TYPE: {self.from_pt_type}, "
+                f"NAV_NAME: {self.nav_name}, "
+                f"NAV_CITY: {self.nav_city}, "
+                f"ARTCC: {self.artcc}, "
+                f"ICAO_REGION_CODE: {self.icao_region_code}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"MAG_COURSE: {self.mag_course}, "
+                f"OPP_MAG_COURSE: {self.opp_mag_course}, "
+                f"MAG_COURSE_DIST: {self.mag_course_dist}, "
+                f"CHGOVR_PT: {self.chgovr_pt}, "
+                f"CHGOVR_PT_NAME: {self.chgovr_pt_name}, "
+                f"CHGOVR_PT_DIST: {self.chgovr_pt_dist}, "
+                f"AWY_SEG_GAP_FLAG: {self.awy_seg_gap_flag}, "
+                f"SIGNAL_GAP_FLAG: {self.signal_gap_flag}, "
+                f"DOGLEG: {self.dogleg}, "
+                f"NEXT_MEA_PT: {self.next_mea_pt}, "
+                f"MIN_ENROUTE_ALT: {self.min_enroute_alt}, "
+                f"MIN_ENROUTE_ALT_DIR: {self.min_enroute_alt_dir}, "
+                f"MIN_ENROUTE_ALT_OPPOSITE: {self.min_enroute_alt_opposite}, "
+                f"MIN_ENROUTE_ALT_OPPOSITE_DIR: {self.min_enroute_alt_opposite_dir}, "
+                f"GPS_MIN_ENROUTE_ALT: {self.gps_min_enroute_alt}, "
+                f"GPS_MIN_ENROUTE_ALT_DIR: {self.gps_min_enroute_alt_dir}, "
+                f"GPS_MIN_ENROUTE_ALT_OPPOSITE: {self.gps_min_enroute_alt_opposite}, "
+                f"GPS_MEA_OPPOSITE_DIR: {self.gps_mea_opposite_dir}, "
+                f"DD_IRU_MEA: {self.dd_iru_mea}, "
+                f"DD_IRU_MEA_DIR: {self.dd_iru_mea_dir}, "
+                f"DD_I_MEA_OPPOSITE: {self.dd_i_mea_opposite}, "
+                f"DD_I_MEA_OPPOSITE_DIR: {self.dd_i_mea_opposite_dir}, "
+                f"MIN_OBSTN_CLNC_ALT: {self.min_obstn_clnc_alt}, "
+                f"MIN_CROSS_ALT: {self.min_cross_alt}, "
+                f"MIN_CROSS_ALT_DIR: {self.min_cross_alt_dir}, "
+                f"MIN_CROSS_ALT_NAV_PT: {self.min_cross_alt_nav_pt}, "
+                f"MIN_CROSS_ALT_OPPOSITE: {self.min_cross_alt_opposite}, "
+                f"MIN_CROSS_ALT_OPPOSITE_DIR: {self.min_cross_alt_opposite_dir}, "
+                f"MIN_RECEP_ALT: {self.min_recep_alt}, "
+                f"MAX_AUTH_ALT: {self.max_auth_alt}, "
+                f"MEA_GAP: {self.mea_gap}, "
+                f"REQD_NAV_PERFORMANCE: {self.reqd_nav_performance}, "
+                f"REMARK: {self.remark}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("AWY_SEG_ALT")
 class AWY_SEG_ALT_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Airway Segment Altitude", filter_object)
+        super().__init__(
+            file_path, "Airway Segment Altitude", use_verbose, filter_object
+        )
 
         self.__load_from_csv()
 

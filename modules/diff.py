@@ -16,13 +16,15 @@ class Diff:
     file_paths: list[str]
     files_map: dict[str, faa.FAA_File_Base]
 
-    def __init__(self, format: str, should_show: bool, use_filters: bool) -> None:
+    def __init__(
+        self, format: str, should_show: bool, use_filters: bool, use_verbose: bool
+    ) -> None:
         self.format = format
         self.filters = None
         self.file_paths = get_csv_files()
         self.files_map = {}
 
-        self.__process_file_list(should_show, use_filters)
+        self.__process_file_list(should_show, use_filters, use_verbose)
 
     def build_reports(self) -> None:
         if self.format == "console":
@@ -30,7 +32,9 @@ class Diff:
         if self.format == "text":
             self.__to_text_report()
 
-    def __process_file_list(self, should_show: bool, use_filters: bool) -> None:
+    def __process_file_list(
+        self, should_show: bool, use_filters: bool, use_verbose: bool
+    ) -> None:
         filter_object = None
         allowed = set(FILE_REGISTRY.keys())
 
@@ -44,9 +48,9 @@ class Diff:
             for key, rpt in FILE_REGISTRY.items():
                 if key in allowed and fp.endswith(f"{key}_{FILE_SUFFIX}"):
                     if filter_object is not None:
-                        self.files_map[key] = rpt(fp, filter_object)
+                        self.files_map[key] = rpt(fp, use_verbose, filter_object)
                     else:
-                        self.files_map[key] = rpt(fp)
+                        self.files_map[key] = rpt(fp, use_verbose)
                     break
 
     def __handle_operation(self, operation: Callable) -> None:

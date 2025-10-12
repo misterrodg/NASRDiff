@@ -42,26 +42,36 @@ class FIX_CHRT(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.fix_id} :: {self.charting_type_desc}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.fix_id} :: {modification_string}"
-        return (
-            f"{self.fix_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"ICAO_REGION_CODE: {self.icao_region_code}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"CHARTING_TYPE_DESC: {self.charting_type_desc}, "
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"ICAO_REGION_CODE: {self.icao_region_code}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("FIX_CHRT")
 class FIX_CHRT_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "FIX Chart", filter_object)
+        super().__init__(file_path, "FIX Chart", use_verbose, filter_object)
 
         self.__load_from_csv()
 

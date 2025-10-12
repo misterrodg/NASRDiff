@@ -99,45 +99,55 @@ class AWOS(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.asos_awos_id} :: {self.asos_awos_type}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.asos_awos_id} :: {modification_string}"
-        return (
-            f"{self.asos_awos_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"ASOS_AWOS_TYPE: {self.asos_awos_type}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"CITY: {self.city}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"COMMISSIONED_DATE: {self.commissioned_date}, "
-            f"NAVAID_FLAG: {self.navaid_flag}, "
-            f"LAT_DEG: {self.lat_deg}, "
-            f"LAT_MIN: {self.lat_min}, "
-            f"LAT_SEC: {self.lat_sec}, "
-            f"LAT_HEMIS: {self.lat_hemis}, "
-            f"LAT_DECIMAL: {self.lat_decimal}, "
-            f"LONG_DEG: {self.long_deg}, "
-            f"LONG_MIN: {self.long_min}, "
-            f"LONG_SEC: {self.long_sec}, "
-            f"LONG_HEMIS: {self.long_hemis}, "
-            f"LONG_DECIMAL: {self.long_decimal}, "
-            f"ELEV: {self.elev}, "
-            f"SURVEY_METHOD_CODE: {self.survey_method_code}, "
-            f"PHONE_NO: {self.phone_no}, "
-            f"SECOND_PHONE_NO: {self.second_phone_no}, "
-            f"SITE_NO: {self.site_no}, "
-            f"SITE_TYPE_CODE: {self.site_type_code}, "
-            f"REMARK   : {self.remark}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"CITY: {self.city}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"COMMISSIONED_DATE: {self.commissioned_date}, "
+                f"NAVAID_FLAG: {self.navaid_flag}, "
+                f"LAT_DEG: {self.lat_deg}, "
+                f"LAT_MIN: {self.lat_min}, "
+                f"LAT_SEC: {self.lat_sec}, "
+                f"LAT_HEMIS: {self.lat_hemis}, "
+                f"LAT_DECIMAL: {self.lat_decimal}, "
+                f"LONG_DEG: {self.long_deg}, "
+                f"LONG_MIN: {self.long_min}, "
+                f"LONG_SEC: {self.long_sec}, "
+                f"LONG_HEMIS: {self.long_hemis}, "
+                f"LONG_DECIMAL: {self.long_decimal}, "
+                f"ELEV: {self.elev}, "
+                f"SURVEY_METHOD_CODE: {self.survey_method_code}, "
+                f"PHONE_NO: {self.phone_no}, "
+                f"SECOND_PHONE_NO: {self.second_phone_no}, "
+                f"SITE_NO: {self.site_no}, "
+                f"SITE_TYPE_CODE: {self.site_type_code}, "
+                f"REMARK   : {self.remark}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("AWOS")
 class AWOS_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "AWOS", filter_object)
+        super().__init__(file_path, "AWOS", use_verbose, filter_object)
 
         self.__load_from_csv()
 

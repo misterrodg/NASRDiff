@@ -89,40 +89,49 @@ class FRQ(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.facility} :: {self.serviced_facility} :: {self.freq_use} :: {self.freq}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.facility} :: {self.freq_use} :: {modification_string}"
-        return (
-            f"{self.facility} :: {self.freq_use} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"FAC_NAME: {self.fac_name}, "
-            f"FACILITY_TYPE: {self.facility_type}, "
-            f"ARTCC_OR_FSS_ID: {self.artcc_or_fss_id}, "
-            f"CPDLC: {self.cpdlc}, "
-            f"TOWER_HRS: {self.tower_hrs}, "
-            f"SERVICED_FACILITY: {self.serviced_facility}, "
-            f"SERVICED_FAC_NAME: {self.serviced_fac_name}, "
-            f"SERVICED_SITE_TYPE: {self.serviced_site_type}, "
-            f"LAT_DECIMAL: {self.lat_decimal}, "
-            f"LONG_DECIMAL: {self.long_decimal}, "
-            f"SERVICED_CITY: {self.serviced_city}, "
-            f"SERVICED_STATE: {self.serviced_state}, "
-            f"SERVICED_COUNTRY: {self.serviced_country}, "
-            f"TOWER_OR_COMM_CALL: {self.tower_or_comm_call}, "
-            f"PRIMARY_APPROACH_RADIO_CALL: {self.primary_approach_radio_call}, "
-            f"FREQ: {self.freq}, "
-            f"SECTORIZATION: {self.sectorization}, "
-            f"REMARK: {self.remark}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"FAC_NAME: {self.fac_name}, "
+                f"FACILITY_TYPE: {self.facility_type}, "
+                f"ARTCC_OR_FSS_ID: {self.artcc_or_fss_id}, "
+                f"CPDLC: {self.cpdlc}, "
+                f"TOWER_HRS: {self.tower_hrs}, "
+                f"SERVICED_FAC_NAME: {self.serviced_fac_name}, "
+                f"SERVICED_SITE_TYPE: {self.serviced_site_type}, "
+                f"LAT_DECIMAL: {self.lat_decimal}, "
+                f"LONG_DECIMAL: {self.long_decimal}, "
+                f"SERVICED_CITY: {self.serviced_city}, "
+                f"SERVICED_STATE: {self.serviced_state}, "
+                f"SERVICED_COUNTRY: {self.serviced_country}, "
+                f"TOWER_OR_COMM_CALL: {self.tower_or_comm_call}, "
+                f"PRIMARY_APPROACH_RADIO_CALL: {self.primary_approach_radio_call}, "
+                f"SECTORIZATION: {self.sectorization}, "
+                f"REMARK: {self.remark}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("FRQ")
 class FRQ_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Frequency Change", filter_object)
+        super().__init__(file_path, "Frequency Change", use_verbose, filter_object)
 
         self.__load_from_csv()
 
