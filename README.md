@@ -40,6 +40,7 @@ as an argument, the resulting reports will be in the `reports` directory.
 | `-n` | `--norun` | Skip report generation. |
 | `-p` | `--purge` | Purge files from reports dir. |
 | `-s` | `--show` | Show filters in console. |
+| `-v` | `--verbose` | Show record details. |
 
 ### Filters
 

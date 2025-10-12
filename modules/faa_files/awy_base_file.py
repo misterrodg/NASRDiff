@@ -9,50 +9,47 @@ from typing import Self
 import csv
 
 
-class ATC_SVC(FAA_Record_Base):
+class AWY_BASE(FAA_Record_Base):
     eff_date: str
-    site_no: str
-    site_type_code: str
-    facility_type: str
-    state_code: str
-    facility_id: str
-    city: str
-    country_code: str
-    ctl_svc: str
+    regulatory: str
+    awy_designation: str
+    awy_location: str
+    awy_id: str
+    update_date: str
+    remark: str
+    airway_string: str
     file: str
-    action: str
+    action: Action
     mods: str
 
     def __init__(
         self,
         eff_date: str,
-        site_no: str,
-        site_type_code: str,
-        facility_type: str,
-        state_code: str,
-        facility_id: str,
-        city: str,
-        country_code: str,
-        ctl_svc: str,
+        regulatory: str,
+        awy_designation: str,
+        awy_location: str,
+        awy_id: str,
+        update_date: str,
+        remark: str,
+        airway_string: str,
         file: str,
         action: Action,
         mods: str,
     ) -> None:
         self.eff_date = replace_empty_string(eff_date)
-        self.site_no = replace_empty_string(site_no)
-        self.site_type_code = replace_empty_string(site_type_code)
-        self.facility_type = replace_empty_string(facility_type)
-        self.state_code = replace_empty_string(state_code)
-        self.facility_id = replace_empty_string(facility_id)
-        self.city = replace_empty_string(city)
-        self.country_code = replace_empty_string(country_code)
-        self.ctl_svc = replace_empty_string(ctl_svc)
+        self.regulatory = replace_empty_string(regulatory)
+        self.awy_designation = replace_empty_string(awy_designation)
+        self.awy_location = replace_empty_string(awy_location)
+        self.awy_id = replace_empty_string(awy_id)
+        self.update_date = replace_empty_string(update_date)
+        self.remark = replace_empty_string(remark)
+        self.airway_string = replace_empty_string(airway_string)
         self.file = file
         self.action = action
         self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.facility_id} :: {self.facility_type} :: {self.ctl_svc}"
+        base_string = f"{self.awy_id}"
 
         modification_string = ""
         if last_record:
@@ -63,26 +60,27 @@ class ATC_SVC(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"SITE_NO: {self.site_no}, "
-                f"SITE_TYPE_CODE: {self.site_type_code}, "
-                f"STATE_CODE: {self.state_code}, "
-                f"CITY: {self.city}, "
-                f"COUNTRY_CODE: {self.country_code}"
+                f"REGULATORY: {self.regulatory}, "
+                f"AWY_DESIGNATION: {self.awy_designation}, "
+                f"AWY_LOCATION: {self.awy_location}, "
+                f"UPDATE_DATE: {self.update_date}, "
+                f"REMARK: {self.remark}, "
+                f"AIRWAY_STRING: {self.airway_string}"
                 " ]"
             )
 
         return f"{base_string}{modification_string}{record_string}"
 
 
-@register_faa_file("ATC_SVC")
-class ATC_SVC_File(FAA_File_Base):
+@register_faa_file("AWY_BASE")
+class AWY_BASE_File(FAA_File_Base):
     def __init__(
         self,
         file_path: str,
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "ATC Service", use_verbose, filter_object)
+        super().__init__(file_path, "Airway Base", use_verbose, filter_object)
 
         self.__load_from_csv()
 
@@ -91,26 +89,25 @@ class ATC_SVC_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = ATC_SVC(
+                record = AWY_BASE(
                     eff_date=row["EFF_DATE"],
-                    site_no=row["SITE_NO"],
-                    site_type_code=row["SITE_TYPE_CODE"],
-                    facility_type=row["FACILITY_TYPE"],
-                    state_code=row["STATE_CODE"],
-                    facility_id=row["FACILITY_ID"],
-                    city=row["CITY"],
-                    country_code=row["COUNTRY_CODE"],
-                    ctl_svc=row["CTL_SVC"],
+                    regulatory=row["REGULATORY"],
+                    awy_designation=row["AWY_DESIGNATION"],
+                    awy_location=row["AWY_LOCATION"],
+                    awy_id=row["AWY_ID"],
+                    update_date=row["UPDATE_DATE"],
+                    remark=row["REMARK"],
+                    airway_string=row["AIRWAY_STRING"],
                     file=row["File"],
-                    action=Action(row["Action"]),
+                    action=row["Action"],
                     mods=row["Mods"],
                 )
 
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.facility_id.strip()
+                    is_in_filters = self.filter_object.is_in_airways(
+                        record.awy_id.strip()
                     )
 
                 if not use_filters or is_in_filters:

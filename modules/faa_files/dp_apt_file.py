@@ -9,18 +9,15 @@ from typing import Self
 import csv
 
 
-class APT_ATT(FAA_Record_Base):
+class DP_APT(FAA_Record_Base):
     eff_date: str
-    site_no: str
-    site_type_code: str
-    state_code: str
+    dp_name: str
+    artcc: str
+    dp_computer_code: str
+    body_name: str
+    body_seq: str
     arpt_id: str
-    city: str
-    country_code: str
-    sked_seq_no: str
-    month: str
-    day: str
-    hour: str
+    rwy_end_id: str
     file: str
     action: Action
     mods: str
@@ -28,37 +25,31 @@ class APT_ATT(FAA_Record_Base):
     def __init__(
         self,
         eff_date: str,
-        site_no: str,
-        site_type_code: str,
-        state_code: str,
+        dp_name: str,
+        artcc: str,
+        dp_computer_code: str,
+        body_name: str,
+        body_seq: str,
         arpt_id: str,
-        city: str,
-        country_code: str,
-        sked_seq_no: str,
-        month: str,
-        day: str,
-        hour: str,
+        rwy_end_id: str,
         file: str,
         action: Action,
         mods: str,
     ) -> None:
         self.eff_date = replace_empty_string(eff_date)
-        self.site_no = replace_empty_string(site_no)
-        self.site_type_code = replace_empty_string(site_type_code)
-        self.state_code = replace_empty_string(state_code)
+        self.dp_name = replace_empty_string(dp_name)
+        self.artcc = replace_empty_string(artcc)
+        self.dp_computer_code = replace_empty_string(dp_computer_code)
+        self.body_name = replace_empty_string(body_name)
+        self.body_seq = replace_empty_string(body_seq)
         self.arpt_id = replace_empty_string(arpt_id)
-        self.city = replace_empty_string(city)
-        self.country_code = replace_empty_string(country_code)
-        self.sked_seq_no = replace_empty_string(sked_seq_no)
-        self.month = replace_empty_string(month)
-        self.day = replace_empty_string(day)
-        self.hour = replace_empty_string(hour)
+        self.rwy_end_id = replace_empty_string(rwy_end_id)
         self.file = file
         self.action = action
         self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.arpt_id} :: {self.sked_seq_no}"
+        base_string = f"{self.arpt_id} :: {self.dp_computer_code} :: {self.body_name}"
 
         modification_string = ""
         if last_record:
@@ -69,29 +60,27 @@ class APT_ATT(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"SITE_NO: {self.site_no}, "
-                f"SITE_TYPE_CODE: {self.site_type_code}, "
-                f"STATE_CODE: {self.state_code}, "
-                f"CITY: {self.city}, "
-                f"COUNTRY_CODE: {self.country_code}, "
-                f"MONTH: {self.month}, "
-                f"DAY: {self.day}, "
-                f"HOUR: {self.hour}"
+                f"DP_NAME: {self.dp_name}"
+                f"ARTCC: {self.artcc}, "
+                f"BODY_SEQ: {self.body_seq}, "
+                f"RWY_END_ID: {self.rwy_end_id}"
                 " ]"
             )
 
         return f"{base_string}{modification_string}{record_string}"
 
 
-@register_faa_file("APT_ATT")
-class APT_ATT_File(FAA_File_Base):
+@register_faa_file("DP_APT")
+class DP_APT_File(FAA_File_Base):
     def __init__(
         self,
         file_path: str,
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Airport Attendance", use_verbose, filter_object)
+        super().__init__(
+            file_path, "Departure Procedure Airport", use_verbose, filter_object
+        )
 
         self.__load_from_csv()
 
@@ -100,18 +89,15 @@ class APT_ATT_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = APT_ATT(
+                record = DP_APT(
                     eff_date=row["EFF_DATE"],
-                    site_no=row["SITE_NO"],
-                    site_type_code=row["SITE_TYPE_CODE"],
-                    state_code=row["STATE_CODE"],
+                    dp_name=row["DP_NAME"],
+                    artcc=row["ARTCC"],
+                    dp_computer_code=row["DP_COMPUTER_CODE"],
+                    body_name=row["BODY_NAME"],
+                    body_seq=row["BODY_SEQ"],
                     arpt_id=row["ARPT_ID"],
-                    city=row["CITY"],
-                    country_code=row["COUNTRY_CODE"],
-                    sked_seq_no=row["SKED_SEQ_NO"],
-                    month=row["MONTH"],
-                    day=row["DAY"],
-                    hour=row["HOUR"],
+                    rwy_end_id=row["RWY_END_ID"],
                     file=row["File"],
                     action=Action(row["Action"]),
                     mods=row["Mods"],

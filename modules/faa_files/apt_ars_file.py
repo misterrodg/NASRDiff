@@ -9,7 +9,7 @@ from typing import Self
 import csv
 
 
-class CLS_ARSP(FAA_Record_Base):
+class APT_ARS(FAA_Record_Base):
     eff_date: str
     site_no: str
     site_type_code: str
@@ -17,12 +17,9 @@ class CLS_ARSP(FAA_Record_Base):
     arpt_id: str
     city: str
     country_code: str
-    class_b_airspace: str
-    class_c_airspace: str
-    class_d_airspace: str
-    class_e_airspace: str
-    airspace_hrs: str
-    remark: str
+    rwy_id: str
+    rwy_end_id: str
+    arrest_device_code: str
     file: str
     action: Action
     mods: str
@@ -36,12 +33,9 @@ class CLS_ARSP(FAA_Record_Base):
         arpt_id: str,
         city: str,
         country_code: str,
-        class_b_airspace: str,
-        class_c_airspace: str,
-        class_d_airspace: str,
-        class_e_airspace: str,
-        airspace_hrs: str,
-        remark: str,
+        rwy_id: str,
+        rwy_end_id: str,
+        arrest_device_code: str,
         file: str,
         action: Action,
         mods: str,
@@ -53,18 +47,17 @@ class CLS_ARSP(FAA_Record_Base):
         self.arpt_id = replace_empty_string(arpt_id)
         self.city = replace_empty_string(city)
         self.country_code = replace_empty_string(country_code)
-        self.class_b_airspace = replace_empty_string(class_b_airspace)
-        self.class_c_airspace = replace_empty_string(class_c_airspace)
-        self.class_d_airspace = replace_empty_string(class_d_airspace)
-        self.class_e_airspace = replace_empty_string(class_e_airspace)
-        self.airspace_hrs = replace_empty_string(airspace_hrs)
-        self.remark = replace_empty_string(remark)
+        self.rwy_id = replace_empty_string(rwy_id)
+        self.rwy_end_id = replace_empty_string(rwy_end_id)
+        self.arrest_device_code = replace_empty_string(arrest_device_code)
         self.file = file
         self.action = action
         self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.arpt_id}"
+        base_string = (
+            f"{self.arpt_id} :: {self.rwy_end_id} :: {self.arrest_device_code}"
+        )
 
         modification_string = ""
         if last_record:
@@ -80,27 +73,22 @@ class CLS_ARSP(FAA_Record_Base):
                 f"STATE_CODE: {self.state_code}, "
                 f"CITY: {self.city}, "
                 f"COUNTRY_CODE: {self.country_code}, "
-                f"CLASS_B_AIRSPACE: {self.class_b_airspace}, "
-                f"CLASS_C_AIRSPACE: {self.class_c_airspace}, "
-                f"CLASS_D_AIRSPACE: {self.class_d_airspace}, "
-                f"CLASS_E_AIRSPACE: {self.class_e_airspace}, "
-                f"AIRSPACE_HRS: {self.airspace_hrs}, "
-                f"REMARK: {self.remark}"
+                f"RWY_ID: {self.rwy_id}"
                 " ]"
             )
 
         return f"{base_string}{modification_string}{record_string}"
 
 
-@register_faa_file("CLS_ARSP")
-class CLS_ARSP_File(FAA_File_Base):
+@register_faa_file("APT_ARS")
+class APT_ARS_File(FAA_File_Base):
     def __init__(
         self,
         file_path: str,
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Class Airspace", use_verbose, filter_object)
+        super().__init__(file_path, "Airport Arresting", use_verbose, filter_object)
 
         self.__load_from_csv()
 
@@ -109,7 +97,7 @@ class CLS_ARSP_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = CLS_ARSP(
+                record = APT_ARS(
                     eff_date=row["EFF_DATE"],
                     site_no=row["SITE_NO"],
                     site_type_code=row["SITE_TYPE_CODE"],
@@ -117,14 +105,11 @@ class CLS_ARSP_File(FAA_File_Base):
                     arpt_id=row["ARPT_ID"],
                     city=row["CITY"],
                     country_code=row["COUNTRY_CODE"],
-                    class_b_airspace=row["CLASS_B_AIRSPACE"],
-                    class_c_airspace=row["CLASS_C_AIRSPACE"],
-                    class_d_airspace=row["CLASS_D_AIRSPACE"],
-                    class_e_airspace=row["CLASS_E_AIRSPACE"],
-                    airspace_hrs=row["AIRSPACE_HRS"],
-                    remark=row["REMARK"],
+                    rwy_id=row["RWY_ID"],
+                    rwy_end_id=row["RWY_END_ID"],
+                    arrest_device_code=row["ARREST_DEVICE_CODE"],
                     file=row["File"],
-                    action=Action(row["Action"]),
+                    action=row["Action"],
                     mods=row["Mods"],
                 )
 

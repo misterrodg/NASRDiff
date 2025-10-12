@@ -10,10 +10,17 @@
         "w_lon": -80.8,
         "e_lon": -72.5
     },
+    "artccs": ["ZDC"],
     "airports": [
         "ADW",
         "BWI",
         "DCA",
         "IAD"
+    ],
+    "airways": [
+        "J110",
+        "J149",
+        "J162",
+        "J211"
     ]
 }

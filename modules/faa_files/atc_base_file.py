@@ -114,50 +114,60 @@ class ATC_BASE(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.facility_id} :: {self.facility_type}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.facility_id} :: {modification_string}"
-        return (
-            f"{self.arpt_id} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"SITE_NO: {self.site_no}, "
-            f"SITE_TYPE_CODE: {self.site_type_code}, "
-            f"FACILITY_TYPE: {self.facility_type}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"CITY: {self.city}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"ICAO_ID: {self.icao_id}, "
-            f"FACILITY_NAME: {self.facility_name}, "
-            f"REGION_CODE: {self.region_code}, "
-            f"TWR_OPERATOR_CODE: {self.twr_operator_code}, "
-            f"TWR_CALL: {self.twr_call}, "
-            f"TWR_HRS: {self.twr_hrs}, "
-            f"PRIMARY_APCH_RADIO_CALL: {self.primary_apch_radio_call}, "
-            f"APCH_P_PROVIDER: {self.apch_p_provider}, "
-            f"APCH_P_PROV_TYPE_CD: {self.apch_p_prov_type_cd}, "
-            f"SECONDARY_APCH_RADIO_CALL: {self.secondary_apch_radio_call}, "
-            f"APCH_S_PROVIDER: {self.apch_s_provider}, "
-            f"APCH_S_PROV_TYPE_CD: {self.apch_s_prov_type_cd}, "
-            f"PRIMARY_DEP_RADIO_CALL: {self.primary_dep_radio_call}, "
-            f"DEP_P_PROVIDER: {self.dep_p_provider}, "
-            f"DEP_P_PROV_TYPE_CD: {self.dep_p_prov_type_cd}, "
-            f"SECONDARY_DEP_RADIO_CALL: {self.secondary_dep_radio_call}, "
-            f"DEP_S_PROVIDER: {self.dep_s_provider}, "
-            f"DEP_S_PROV_TYPE_CD: {self.dep_s_prov_type_cd}, "
-            f"CTL_FAC_APCH_DEP_CALLS: {self.ctl_fac_apch_dep_calls}, "
-            f"APCH_DEP_OPER_CODE: {self.apch_dep_oper_code}, "
-            f"CTL_PRVDING_HRS: {self.ctl_prvding_hrs}, "
-            f"SECONDARY_CTL_PRVDING_HRS: {self.secondary_ctl_prvding_hrs}"
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"SITE_NO: {self.site_no}, "
+                f"SITE_TYPE_CODE: {self.site_type_code}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"CITY: {self.city}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"ICAO_ID: {self.icao_id}, "
+                f"FACILITY_NAME: {self.facility_name}, "
+                f"REGION_CODE: {self.region_code}, "
+                f"TWR_OPERATOR_CODE: {self.twr_operator_code}, "
+                f"TWR_CALL: {self.twr_call}, "
+                f"TWR_HRS: {self.twr_hrs}, "
+                f"PRIMARY_APCH_RADIO_CALL: {self.primary_apch_radio_call}, "
+                f"APCH_P_PROVIDER: {self.apch_p_provider}, "
+                f"APCH_P_PROV_TYPE_CD: {self.apch_p_prov_type_cd}, "
+                f"SECONDARY_APCH_RADIO_CALL: {self.secondary_apch_radio_call}, "
+                f"APCH_S_PROVIDER: {self.apch_s_provider}, "
+                f"APCH_S_PROV_TYPE_CD: {self.apch_s_prov_type_cd}, "
+                f"PRIMARY_DEP_RADIO_CALL: {self.primary_dep_radio_call}, "
+                f"DEP_P_PROVIDER: {self.dep_p_provider}, "
+                f"DEP_P_PROV_TYPE_CD: {self.dep_p_prov_type_cd}, "
+                f"SECONDARY_DEP_RADIO_CALL: {self.secondary_dep_radio_call}, "
+                f"DEP_S_PROVIDER: {self.dep_s_provider}, "
+                f"DEP_S_PROV_TYPE_CD: {self.dep_s_prov_type_cd}, "
+                f"CTL_FAC_APCH_DEP_CALLS: {self.ctl_fac_apch_dep_calls}, "
+                f"APCH_DEP_OPER_CODE: {self.apch_dep_oper_code}, "
+                f"CTL_PRVDING_HRS: {self.ctl_prvding_hrs}, "
+                f"SECONDARY_CTL_PRVDING_HRS: {self.secondary_ctl_prvding_hrs}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("ATC_BASE")
 class ATC_BASE_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "ATC Base", filter_object)
+        super().__init__(file_path, "ATC Base", use_verbose, filter_object)
 
         self.__load_from_csv()
 

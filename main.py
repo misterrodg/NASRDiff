@@ -30,6 +30,9 @@ def main():
     parser.add_argument(
         "-s", "--show", action="store_true", help="show filters in console"
     )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="include record details"
+    )
     args = parser.parse_args()
     use_filters = not args.all
     should_clear = args.clear
@@ -39,6 +42,7 @@ def main():
     should_skip_run = args.norun
     should_purge = args.purge
     should_show = args.show
+    use_verbose = args.verbose
 
     if should_clear:
         clear_navdata()
@@ -48,7 +52,7 @@ def main():
         print("reports purged")
 
     if not should_skip_run:
-        diff = Diff(format, should_show, use_filters)
+        diff = Diff(format, should_show, use_filters, use_verbose)
         diff.build_reports()
 
 

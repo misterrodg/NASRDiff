@@ -60,31 +60,42 @@ class ATC_ATIS(FAA_Record_Base):
         self.action = action
         self.mods = mods
 
-    def to_string(self, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.facility_id} :: {self.atis_no}"
+
+        modification_string = ""
         if last_record:
-            modification_string = self.get_mod_string(last_record)
-            return f"{self.facility_id} :: {self.atis_no} :: {modification_string}"
-        return (
-            f"{self.facility_id} :: {self.atis_no} :: "
-            f"EFF_DATE: {self.eff_date}, "
-            f"SITE_NO: {self.site_no}, "
-            f"SITE_TYPE_CODE: {self.site_type_code}, "
-            f"FACILITY_TYPE: {self.facility_type}, "
-            f"STATE_CODE: {self.state_code}, "
-            f"CITY: {self.city}, "
-            f"COUNTRY_CODE: {self.country_code}, "
-            f"DESCRIPTION: {self.description}, "
-            f"ATIS_HRS: {self.atis_hrs}, "
-            f"ATIS_PHONE_NO: {self.atis_phone_no}, "
-        )
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"SITE_NO: {self.site_no}, "
+                f"SITE_TYPE_CODE: {self.site_type_code}, "
+                f"FACILITY_TYPE: {self.facility_type}, "
+                f"STATE_CODE: {self.state_code}, "
+                f"CITY: {self.city}, "
+                f"COUNTRY_CODE: {self.country_code}, "
+                f"DESCRIPTION: {self.description}, "
+                f"ATIS_HRS: {self.atis_hrs}, "
+                f"ATIS_PHONE_NO: {self.atis_phone_no}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
 
 
 @register_faa_file("ATC_ATIS")
 class ATC_ATIS_File(FAA_File_Base):
     def __init__(
-        self, file_path: str, filter_object: FilterObject | None = None
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "ATC ATIS", filter_object)
+        super().__init__(file_path, "ATC ATIS", use_verbose, filter_object)
 
         self.__load_from_csv()
 

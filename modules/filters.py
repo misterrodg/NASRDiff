@@ -7,23 +7,41 @@ FILTER_FILE = "filters.json"
 
 
 class FilterObject:
+    artccs: list[str]
     airports: list[str]
+    airways: list[str]
     n_lat: float
     s_lat: float
     w_lon: float
     e_lon: float
 
     def __init__(self) -> None:
+        self.artccs = []
         self.airports = []
+        self.airways = []
         self.n_lat = 0.0
         self.s_lat = 0.0
         self.w_lon = 0.0
         self.e_lon = 0.0
 
+    def is_in_artccs(self, artcc_id: str) -> bool:
+        if len(self.artccs) == 0:
+            return False
+        if artcc_id in self.artccs:
+            return True
+        return False
+
     def is_in_airports(self, airport_id: str) -> bool:
         if len(self.airports) == 0:
             return False
         if airport_id in self.airports:
+            return True
+        return False
+
+    def is_in_airways(self, airway_id: str) -> bool:
+        if len(self.airways) == 0:
+            return False
+        if airway_id in self.airways:
             return True
         return False
 
@@ -69,8 +87,12 @@ class Filters:
             print("Filtering on:")
             if self.files:
                 print(f"  Files: {", ".join(self.files)}")
+            if self.filter_object.artccs:
+                print(f"  ARTCCs: {", ".join(self.filter_object.artccs)}")
             if self.filter_object.airports:
                 print(f"  Airports: {", ".join(self.filter_object.airports)}")
+            if self.filter_object.airways:
+                print(f"  Airways: {", ".join(self.filter_object.airways)}")
             if (
                 self.filter_object.n_lat != 0.0
                 and self.filter_object.s_lat != 0.0
@@ -88,7 +110,9 @@ class Filters:
                 data = json.load(f)
 
                 self.files = data.get("files", [])
+                self.filter_object.artccs = data.get("artccs", [])
                 self.filter_object.airports = data.get("airports", [])
+                self.filter_object.airways = data.get("airways", [])
 
                 bounds = data.get("bounds", {})
                 self.filter_object.n_lat = bounds.get("n_lat", 0.0)

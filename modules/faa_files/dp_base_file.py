@@ -9,18 +9,16 @@ from typing import Self
 import csv
 
 
-class APT_ATT(FAA_Record_Base):
+class DP_BASE(FAA_Record_Base):
     eff_date: str
-    site_no: str
-    site_type_code: str
-    state_code: str
-    arpt_id: str
-    city: str
-    country_code: str
-    sked_seq_no: str
-    month: str
-    day: str
-    hour: str
+    dp_name: str
+    amendment_no: str
+    artcc: str
+    dp_amend_eff_date: str
+    rnav_flag: str
+    dp_computer_code: str
+    graphical_dp_type: str
+    served_arpt: str
     file: str
     action: Action
     mods: str
@@ -28,37 +26,33 @@ class APT_ATT(FAA_Record_Base):
     def __init__(
         self,
         eff_date: str,
-        site_no: str,
-        site_type_code: str,
-        state_code: str,
-        arpt_id: str,
-        city: str,
-        country_code: str,
-        sked_seq_no: str,
-        month: str,
-        day: str,
-        hour: str,
+        dp_name: str,
+        amendment_no: str,
+        artcc: str,
+        dp_amend_eff_date: str,
+        rnav_flag: str,
+        dp_computer_code: str,
+        graphical_dp_type: str,
+        served_arpt: str,
         file: str,
         action: Action,
         mods: str,
     ) -> None:
         self.eff_date = replace_empty_string(eff_date)
-        self.site_no = replace_empty_string(site_no)
-        self.site_type_code = replace_empty_string(site_type_code)
-        self.state_code = replace_empty_string(state_code)
-        self.arpt_id = replace_empty_string(arpt_id)
-        self.city = replace_empty_string(city)
-        self.country_code = replace_empty_string(country_code)
-        self.sked_seq_no = replace_empty_string(sked_seq_no)
-        self.month = replace_empty_string(month)
-        self.day = replace_empty_string(day)
-        self.hour = replace_empty_string(hour)
+        self.dp_name = replace_empty_string(dp_name)
+        self.amendment_no = replace_empty_string(amendment_no)
+        self.artcc = replace_empty_string(artcc)
+        self.dp_amend_eff_date = replace_empty_string(dp_amend_eff_date)
+        self.rnav_flag = replace_empty_string(rnav_flag)
+        self.dp_computer_code = replace_empty_string(dp_computer_code)
+        self.graphical_dp_type = replace_empty_string(graphical_dp_type)
+        self.served_arpt = replace_empty_string(served_arpt)
         self.file = file
         self.action = action
         self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.arpt_id} :: {self.sked_seq_no}"
+        base_string = f"{self.served_arpt} :: {self.dp_name} {self.amendment_no}"
 
         modification_string = ""
         if last_record:
@@ -69,29 +63,28 @@ class APT_ATT(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"SITE_NO: {self.site_no}, "
-                f"SITE_TYPE_CODE: {self.site_type_code}, "
-                f"STATE_CODE: {self.state_code}, "
-                f"CITY: {self.city}, "
-                f"COUNTRY_CODE: {self.country_code}, "
-                f"MONTH: {self.month}, "
-                f"DAY: {self.day}, "
-                f"HOUR: {self.hour}"
+                f"ARTCC: {self.artcc}, "
+                f"DP_AMEND_EFF_DATE: {self.dp_amend_eff_date}, "
+                f"RNAV_FLAG: {self.rnav_flag}, "
+                f"DP_COMPUTER_CODE: {self.dp_computer_code}, "
+                f"GRAPHICAL_DP_TYPE: {self.graphical_dp_type}"
                 " ]"
             )
 
         return f"{base_string}{modification_string}{record_string}"
 
 
-@register_faa_file("APT_ATT")
-class APT_ATT_File(FAA_File_Base):
+@register_faa_file("DP_BASE")
+class DP_BASE_File(FAA_File_Base):
     def __init__(
         self,
         file_path: str,
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Airport Attendance", use_verbose, filter_object)
+        super().__init__(
+            file_path, "Departure Procedure Base", use_verbose, filter_object
+        )
 
         self.__load_from_csv()
 
@@ -100,18 +93,16 @@ class APT_ATT_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = APT_ATT(
+                record = DP_BASE(
                     eff_date=row["EFF_DATE"],
-                    site_no=row["SITE_NO"],
-                    site_type_code=row["SITE_TYPE_CODE"],
-                    state_code=row["STATE_CODE"],
-                    arpt_id=row["ARPT_ID"],
-                    city=row["CITY"],
-                    country_code=row["COUNTRY_CODE"],
-                    sked_seq_no=row["SKED_SEQ_NO"],
-                    month=row["MONTH"],
-                    day=row["DAY"],
-                    hour=row["HOUR"],
+                    dp_name=row["DP_NAME"],
+                    amendment_no=row["AMENDMENT_NO"],
+                    artcc=row["ARTCC"],
+                    dp_amend_eff_date=row["DP_AMEND_EFF_DATE"],
+                    rnav_flag=row["RNAV_FLAG"],
+                    dp_computer_code=row["DP_COMPUTER_CODE"],
+                    graphical_dp_type=row["GRAPHICAL_DP_TYPE"],
+                    served_arpt=row["SERVED_ARPT"],
                     file=row["File"],
                     action=Action(row["Action"]),
                     mods=row["Mods"],
@@ -121,7 +112,7 @@ class APT_ATT_File(FAA_File_Base):
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
                     is_in_filters = self.filter_object.is_in_airports(
-                        record.arpt_id.strip()
+                        record.served_arpt.strip()
                     )
 
                 if not use_filters or is_in_filters:
