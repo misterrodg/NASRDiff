@@ -25,6 +25,7 @@ from .frq_file import FRQ_File
 from .fss_base_file import FSS_BASE_File
 from .fss_rmk_file import FSS_RMK_File
 from .hpf_base_file import HPF_BASE_File
+from .hpf_chrt_file import HPF_CHRT_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -55,5 +56,6 @@ __all__ = [
     "FSS_BASE_File",
     "FSS_RMK_File",
     "HPF_BASE_File",
+    "HPF_CHRT_File",
     "FAA_File_Base",
 ]
