@@ -76,10 +76,12 @@ class FilterObject:
 class Filters:
     files: list[str]
     filter_object: FilterObject
+    filter_found: bool
 
     def __init__(self, should_show: bool) -> None:
         self.files = []
         self.filter_object = FilterObject()
+        self.filter_found = False
 
         self.__load_json()
 
@@ -119,5 +121,7 @@ class Filters:
                 self.filter_object.s_lat = bounds.get("s_lat", 0.0)
                 self.filter_object.w_lon = bounds.get("w_lon", 0.0)
                 self.filter_object.e_lon = bounds.get("e_lon", 0.0)
+
+                self.filter_found = True
         else:
-            print("Filters file not found.")
+            print("Filters file not found.\n")

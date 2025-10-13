@@ -40,6 +40,10 @@ class Diff:
 
         if use_filters:
             self.filters = Filters(should_show)
+            if not self.filters.filter_found:
+                self.filters = None
+
+        if self.filters:
             filter_object = self.filters.filter_object
             if self.filters.files:
                 allowed = set(self.filters.files)
