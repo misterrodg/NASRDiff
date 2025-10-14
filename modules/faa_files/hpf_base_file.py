@@ -65,6 +65,28 @@ class HPF_BASE(FAA_Record_Base):
         self.turn_direction = replace_empty_string(turn_direction)
         self.leg_length_dist = replace_empty_string(leg_length_dist)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"HP_NAME={self.hp_name!r}, "
+            f"HP_NO={self.hp_no!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"FIX_ID={self.fix_id!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"NAV_ID={self.nav_id!r}, "
+            f"NAV_TYPE={self.nav_type!r}, "
+            f"HOLD_DIRECTION={self.hold_direction!r}, "
+            f"HOLD_DEG_OR_CRS={self.hold_deg_or_crs!r}, "
+            f"AZIMUTH={self.azimuth!r}, "
+            f"COURSE_INBOUND_DEG={self.course_inbound_deg!r}, "
+            f"TURN_DIRECTION={self.turn_direction!r}, "
+            f"LEG_LENGTH_DIST={self.leg_length_dist!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.hp_name} :: {self.hp_no}"
 

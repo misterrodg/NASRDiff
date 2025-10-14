@@ -47,6 +47,22 @@ class ATC_SVC(FAA_Record_Base):
         self.country_code = replace_empty_string(country_code)
         self.ctl_svc = replace_empty_string(ctl_svc)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"FACILITY_ID={self.facility_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"CTL_SVC={self.ctl_svc!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.facility_type} :: {self.ctl_svc}"
 

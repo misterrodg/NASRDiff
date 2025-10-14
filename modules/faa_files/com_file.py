@@ -104,6 +104,41 @@ class COM(FAA_Record_Base):
         self.comm_status_date = replace_empty_string(comm_status_date)
         self.remark = replace_empty_string(remark)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"COMM_LOC_ID={self.comm_loc_id!r}, "
+            f"COMM_TYPE={self.comm_type!r}, "
+            f"NAV_ID={self.nav_id!r}, "
+            f"NAV_TYPE={self.nav_type!r}, "
+            f"CITY={self.city!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"REGION_CODE={self.region_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"COMM_OUTLET_NAME={self.comm_outlet_name!r}, "
+            f"LAT_DEG={self.lat_deg!r}, "
+            f"LAT_MIN={self.lat_min!r}, "
+            f"LAT_SEC={self.lat_sec!r}, "
+            f"LAT_HEMIS={self.lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DEG={self.long_deg!r}, "
+            f"LONG_MIN={self.long_min!r}, "
+            f"LONG_SEC={self.long_sec!r}, "
+            f"LONG_HEMIS={self.long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"FACILITY_ID={self.facility_id!r}, "
+            f"FACILITY_NAME={self.facility_name!r}, "
+            f"ALT_FSS_ID={self.alt_fss_id!r}, "
+            f"ALT_FSS_NAME={self.alt_fss_name!r}, "
+            f"OPR_HRS={self.opr_hrs!r}, "
+            f"COMM_STATUS_CODE={self.comm_status_code!r}, "
+            f"COMM_STATUS_DATE={self.comm_status_date!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (
             f"{self.facility_id} :: {self.comm_type} :: {self.comm_outlet_name}"

@@ -41,6 +41,20 @@ class HPF_SPD_ALT(FAA_Record_Base):
         self.speed_range = replace_empty_string(speed_range)
         self.altitude = replace_empty_string(altitude)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"HP_NAME={self.hp_name!r}, "
+            f"HP_NO={self.hp_no!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"SPEED_RANGE={self.speed_range!r}, "
+            f"ALTITUDE={self.altitude!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (
             f"{self.hp_name} :: {self.hp_no} :: {self.speed_range} // {self.altitude}"

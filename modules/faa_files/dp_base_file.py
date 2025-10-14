@@ -47,6 +47,22 @@ class DP_BASE(FAA_Record_Base):
         self.graphical_dp_type = replace_empty_string(graphical_dp_type)
         self.served_arpt = replace_empty_string(served_arpt)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"DP_NAME={self.dp_name!r}, "
+            f"AMENDMENT_NO={self.amendment_no!r}, "
+            f"ARTCC={self.artcc!r}, "
+            f"DP_AMEND_EFF_DATE={self.dp_amend_eff_date!r}, "
+            f"RNAV_FLAG={self.rnav_flag!r}, "
+            f"DP_COMPUTER_CODE={self.dp_computer_code!r}, "
+            f"GRAPHICAL_DP_TYPE={self.graphical_dp_type!r}, "
+            f"SERVED_ARPT={self.served_arpt!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.served_arpt} :: {self.dp_name} {self.amendment_no}"
 

@@ -95,6 +95,38 @@ class AWOS(FAA_Record_Base):
         self.site_type_code = replace_empty_string(site_type_code)
         self.remark = replace_empty_string(remark)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"ASOS_AWOS_ID={self.asos_awos_id!r}, "
+            f"ASOS_AWOS_TYPE={self.asos_awos_type!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"COMMISSIONED_DATE={self.commissioned_date!r}, "
+            f"NAVAID_FLAG={self.navaid_flag!r}, "
+            f"LAT_DEG={self.lat_deg!r}, "
+            f"LAT_MIN={self.lat_min!r}, "
+            f"LAT_SEC={self.lat_sec!r}, "
+            f"LAT_HEMIS={self.lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DEG={self.long_deg!r}, "
+            f"LONG_MIN={self.long_min!r}, "
+            f"LONG_SEC={self.long_sec!r}, "
+            f"LONG_HEMIS={self.long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"ELEV={self.elev!r}, "
+            f"SURVEY_METHOD_CODE={self.survey_method_code!r}, "
+            f"PHONE_NO={self.phone_no!r}, "
+            f"SECOND_PHONE_NO={self.second_phone_no!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.asos_awos_id} :: {self.asos_awos_type}"
 

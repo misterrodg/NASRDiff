@@ -53,6 +53,24 @@ class APT_ATT(FAA_Record_Base):
         self.day = replace_empty_string(day)
         self.hour = replace_empty_string(hour)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"SKED_SEQ_NO={self.sked_seq_no!r}, "
+            f"MONTH={self.month!r}, "
+            f"DAY={self.day!r}, "
+            f"HOUR={self.hour!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.sked_seq_no}"
 

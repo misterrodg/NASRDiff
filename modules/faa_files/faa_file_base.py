@@ -15,6 +15,9 @@ class FAA_Record_Base:
         self.action = action
         self.mods = mods
 
+    def __repr__(self):
+        return f"FILE={self.file!r}, ACTION={self.action.value!r}, MODS={self.mods!r}"
+
     def get_mod_string(self, last_record: Self) -> str:
         modifications = []
         modification_list = self.mods.split(" ")

@@ -68,6 +68,29 @@ class APT_CON(FAA_Record_Base):
         self.zip_plus_four = replace_empty_string(zip_plus_four)
         self.phone_no = replace_empty_string(phone_no)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"TITLE={self.title!r}, "
+            f"NAME={self.name!r}, "
+            f"ADDRESS1={self.address1!r}, "
+            f"ADDRESS2={self.address2!r}, "
+            f"TITLE_CITY={self.title_city!r}, "
+            f"STATE={self.state!r}, "
+            f"ZIP_CODE={self.zip_code!r}, "
+            f"ZIP_PLUS_FOUR={self.zip_plus_four!r}, "
+            f"PHONE_NO={self.phone_no!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"
 

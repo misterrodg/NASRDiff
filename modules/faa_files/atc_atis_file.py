@@ -56,6 +56,25 @@ class ATC_ATIS(FAA_Record_Base):
         self.atis_hrs = replace_empty_string(atis_hrs)
         self.atis_phone_no = replace_empty_string(atis_phone_no)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"FACILITY_ID={self.facility_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"ATIS_NO={self.atis_no!r}, "
+            f"DESCRIPTION={self.description!r}, "
+            f"ATIS_HRS={self.atis_hrs!r}, "
+            f"ATIS_PHONE_NO={self.atis_phone_no!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.atis_no}"
 

@@ -47,6 +47,22 @@ class FIX_NAV(FAA_Record_Base):
         self.bearing = replace_empty_string(bearing)
         self.distance = replace_empty_string(distance)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FIX_ID={self.fix_id!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"NAV_ID={self.nav_id!r}, "
+            f"NAV_TYPE={self.nav_type!r}, "
+            f"BEARING={self.bearing!r}, "
+            f"DISTANCE={self.distance!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fix_id} :: {self.nav_id} :: {self.nav_type}"
 

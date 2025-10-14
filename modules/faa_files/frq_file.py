@@ -85,6 +85,34 @@ class FRQ(FAA_Record_Base):
         self.freq_use = replace_empty_string(freq_use)
         self.remark = replace_empty_string(remark)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FACILITY={self.facility!r}, "
+            f"FAC_NAME={self.fac_name!r}, "
+            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"ARTCC_OR_FSS_ID={self.artcc_or_fss_id!r}, "
+            f"CPDLC={self.cpdlc!r}, "
+            f"TOWER_HRS={self.tower_hrs!r}, "
+            f"SERVICED_FACILITY={self.serviced_facility!r}, "
+            f"SERVICED_FAC_NAME={self.serviced_fac_name!r}, "
+            f"SERVICED_SITE_TYPE={self.serviced_site_type!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"SERVICED_CITY={self.serviced_city!r}, "
+            f"SERVICED_STATE={self.serviced_state!r}, "
+            f"SERVICED_COUNTRY={self.serviced_country!r}, "
+            f"TOWER_OR_COMM_CALL={self.tower_or_comm_call!r}, "
+            f"PRIMARY_APPROACH_RADIO_CALL={self.primary_approach_radio_call!r}, "
+            f"FREQ={self.freq!r}, "
+            f"SECTORIZATION={self.sectorization!r}, "
+            f"FREQ_USE={self.freq_use!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility} :: {self.serviced_facility} :: {self.freq_use} :: {self.freq}"
 

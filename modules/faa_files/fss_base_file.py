@@ -95,6 +95,38 @@ class FSS_BASE(FAA_Record_Base):
         self.phone_no = replace_empty_string(phone_no)
         self.toll_free_no = replace_empty_string(toll_free_no)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FSS_ID={self.fss_id!r}, "
+            f"NAME={self.name!r}, "
+            f"UPDATE_DATE={self.update_date!r}, "
+            f"FSS_FAC_TYPE={self.fss_fac_type!r}, "
+            f"VOICE_CALL={self.voice_call!r}, "
+            f"CITY={self.city!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"LAT_DEG={self.lat_deg!r}, "
+            f"LAT_MIN={self.lat_min!r}, "
+            f"LAT_SEC={self.lat_sec!r}, "
+            f"LAT_HEMIS={self.lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DEG={self.long_deg!r}, "
+            f"LONG_MIN={self.long_min!r}, "
+            f"LONG_SEC={self.long_sec!r}, "
+            f"LONG_HEMIS={self.long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"OPR_HOURS={self.opr_hours!r}, "
+            f"FAC_STATUS={self.fac_status!r}, "
+            f"ALTERNATE_FSS={self.alternate_fss!r}, "
+            f"WEA_RADAR_FLAG={self.wea_radar_flag!r}, "
+            f"PHONE_NO={self.phone_no!r}, "
+            f"TOLL_FREE_NO={self.toll_free_no!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fss_id} :: {self.name}"
 

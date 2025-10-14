@@ -50,6 +50,23 @@ class APT_ARS(FAA_Record_Base):
         self.rwy_end_id = replace_empty_string(rwy_end_id)
         self.arrest_device_code = replace_empty_string(arrest_device_code)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"RWY_ID={self.rwy_id!r}, "
+            f"RWY_END_ID={self.rwy_end_id!r}, "
+            f"ARREST_DEVICE_CODE={self.arrest_device_code!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (
             f"{self.arpt_id} :: {self.rwy_end_id} :: {self.arrest_device_code}"

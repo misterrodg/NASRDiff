@@ -59,6 +59,26 @@ class APT_RMK(FAA_Record_Base):
         self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
         self.remark = replace_empty_string(remark)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"LEGACY_ELEMENT_NUMBER={self.legacy_element_number!r}, "
+            f"TAB_NAME={self.tab_name!r}, "
+            f"REF_COL_NAME={self.ref_col_name!r}, "
+            f"ELEMENT={self.element!r}, "
+            f"REF_COL_SEQ_NO={self.ref_col_seq_no!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.ref_col_seq_no}"
 

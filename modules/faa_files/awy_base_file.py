@@ -44,6 +44,21 @@ class AWY_BASE(FAA_Record_Base):
         self.remark = replace_empty_string(remark)
         self.airway_string = replace_empty_string(airway_string)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"REGULATORY={self.regulatory!r}, "
+            f"AWY_DESIGNATION={self.awy_designation!r}, "
+            f"AWY_LOCATION={self.awy_location!r}, "
+            f"AWY_ID={self.awy_id!r}, "
+            f"UPDATE_DATE={self.update_date!r}, "
+            f"REMARK={self.remark!r}, "
+            f"AIRWAY_STRING={self.airway_string!r}"
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.awy_id}"
 

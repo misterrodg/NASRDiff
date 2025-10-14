@@ -47,6 +47,22 @@ class HPF_RMK(FAA_Record_Base):
         self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
         self.remark = replace_empty_string(remark)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"HP_NAME={self.hp_name!r}, "
+            f"HP_NO={self.hp_no!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"TAB_NAME={self.tab_name!r}, "
+            f"REF_COL_NAME={self.ref_col_name!r}, "
+            f"REF_COL_SEQ_NO={self.ref_col_seq_no!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.hp_name} :: {self.hp_no} :: {self.remark}"
 

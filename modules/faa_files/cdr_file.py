@@ -58,6 +58,25 @@ class CDR(FAA_Record_Base):
 
         self.mods = self.mods.replace("Route String", "Route_String")
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"RCODE={self.rcode!r}, "
+            f"ORIG={self.orig!r}, "
+            f"DEST={self.dest!r}, "
+            f"DEPFIX={self.depfix!r}, "
+            f"ROUTE STRING={self.route_string!r}, "
+            f"DCNTR={self.dcntr!r}, "
+            f"ACNTR={self.acntr!r}, "
+            f"TCNTRS={self.tcntrs!r}, "
+            f"COORDREQ={self.coordreq!r}, "
+            f"PLAY={self.play!r}, "
+            f"NAVEQP={self.naveqp!r}, "
+            f"LENGTH={self.length!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.orig}-{self.dest} :: {self.rcode} :: {self.depfix}"
 

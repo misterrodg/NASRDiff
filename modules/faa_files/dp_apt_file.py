@@ -44,6 +44,21 @@ class DP_APT(FAA_Record_Base):
         self.arpt_id = replace_empty_string(arpt_id)
         self.rwy_end_id = replace_empty_string(rwy_end_id)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"DP_NAME={self.dp_name!r}, "
+            f"ARTCC={self.artcc!r}, "
+            f"DP_COMPUTER_CODE={self.dp_computer_code!r}, "
+            f"BODY_NAME={self.body_name!r}, "
+            f"BODY_SEQ={self.body_seq!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"RWY_END_ID={self.rwy_end_id!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.dp_computer_code} :: {self.body_name}"
 

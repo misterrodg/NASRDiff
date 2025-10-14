@@ -62,6 +62,27 @@ class DP_RTE(FAA_Record_Base):
         self.next_point = replace_empty_string(next_point)
         self.arpt_rwy_assoc = replace_empty_string(arpt_rwy_assoc)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"DP_NAME={self.dp_name!r}, "
+            f"ARTCC={self.artcc!r}, "
+            f"DP_COMPUTER_CODE={self.dp_computer_code!r}, "
+            f"ROUTE_PORTION_TYPE={self.route_portion_type!r}, "
+            f"ROUTE_NAME={self.route_name!r}, "
+            f"BODY_SEQ={self.body_seq!r}, "
+            f"TRANSITION_COMPUTER_CODE={self.transition_computer_code!r}, "
+            f"POINT_SEQ={self.point_seq!r}, "
+            f"POINT={self.point!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"POINT_TYPE={self.point_type!r}, "
+            f"NEXT_POINT={self.next_point!r}, "
+            f"ARPT_RWY_ASSOC={self.arpt_rwy_assoc!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         comp_code = self.transition_computer_code
         if comp_code == EMPTY_VALUE:

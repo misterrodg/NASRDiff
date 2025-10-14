@@ -59,6 +59,26 @@ class CLS_ARSP(FAA_Record_Base):
         self.airspace_hrs = replace_empty_string(airspace_hrs)
         self.remark = replace_empty_string(remark)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"CLASS_B_AIRSPACE={self.class_b_airspace!r}, "
+            f"CLASS_C_AIRSPACE={self.class_c_airspace!r}, "
+            f"CLASS_D_AIRSPACE={self.class_d_airspace!r}, "
+            f"CLASS_E_AIRSPACE={self.class_e_airspace!r}, "
+            f"AIRSPACE_HRS={self.airspace_hrs!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"
 

@@ -128,6 +128,49 @@ class ILS_BASE(FAA_Record_Base):
         self.loc_freq = replace_empty_string(loc_freq)
         self.bk_course_status_code = replace_empty_string(bk_course_status_code)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"RWY_END_ID={self.rwy_end_id!r}, "
+            f"ILS_LOC_ID={self.ils_loc_id!r}, "
+            f"SYSTEM_TYPE_CODE={self.system_type_code!r}, "
+            f"STATE_NAME={self.state_name!r}, "
+            f"REGION_CODE={self.region_code!r}, "
+            f"RWY_LEN={self.rwy_len!r}, "
+            f"RWY_WIDTH={self.rwy_width!r}, "
+            f"CATEGORY={self.category!r}, "
+            f"OWNER={self.owner!r}, "
+            f"OPERATOR={self.operator!r}, "
+            f"APCH_BEAR={self.apch_bear!r}, "
+            f"MAG_VAR={self.mag_var!r}, "
+            f"MAG_VAR_HEMIS={self.mag_var_hemis!r}, "
+            f"COMPONENT_STATUS={self.component_status!r}, "
+            f"COMPONENT_STATUS_DATE={self.component_status_date!r}, "
+            f"LAT_DEG={self.lat_deg!r}, "
+            f"LAT_MIN={self.lat_min!r}, "
+            f"LAT_SEC={self.lat_sec!r}, "
+            f"LAT_HEMIS={self.lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DEG={self.long_deg!r}, "
+            f"LONG_MIN={self.long_min!r}, "
+            f"LONG_SEC={self.long_sec!r}, "
+            f"LONG_HEMIS={self.long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"LAT_LONG_SOURCE_CODE={self.lat_long_source_code!r}, "
+            f"SITE_ELEVATION={self.site_elevation!r}, "
+            f"LOC_FREQ={self.loc_freq!r}, "
+            f"BK_COURSE_STATUS_CODE={self.bk_course_status_code!r}"
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.rwy_end_id} :: I-{self.ils_loc_id}"
 

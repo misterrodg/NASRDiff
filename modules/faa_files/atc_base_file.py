@@ -110,6 +110,43 @@ class ATC_BASE(FAA_Record_Base):
         self.ctl_prvding_hrs = replace_empty_string(ctl_prvding_hrs)
         self.secondary_ctl_prvding_hrs = replace_empty_string(secondary_ctl_prvding_hrs)
 
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"FACILITY_ID={self.facility_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"ICAO_ID={self.icao_id!r}, "
+            f"FACILITY_NAME={self.facility_name!r}, "
+            f"REGION_CODE={self.region_code!r}, "
+            f"TWR_OPERATOR_CODE={self.twr_operator_code!r}, "
+            f"TWR_CALL={self.twr_call!r}, "
+            f"TWR_HRS={self.twr_hrs!r}, "
+            f"PRIMARY_APCH_RADIO_CALL={self.primary_apch_radio_call!r}, "
+            f"APCH_P_PROVIDER={self.apch_p_provider!r}, "
+            f"APCH_P_PROV_TYPE_CD={self.apch_p_prov_type_cd!r}, "
+            f"SECONDARY_APCH_RADIO_CALL={self.secondary_apch_radio_call!r}, "
+            f"APCH_S_PROVIDER={self.apch_s_provider!r}, "
+            f"APCH_S_PROV_TYPE_CD={self.apch_s_prov_type_cd!r}, "
+            f"PRIMARY_DEP_RADIO_CALL={self.primary_dep_radio_call!r}, "
+            f"DEP_P_PROVIDER={self.dep_p_provider!r}, "
+            f"DEP_P_PROV_TYPE_CD={self.dep_p_prov_type_cd!r}, "
+            f"SECONDARY_DEP_RADIO_CALL={self.secondary_dep_radio_call!r}, "
+            f"DEP_S_PROVIDER={self.dep_s_provider!r}, "
+            f"DEP_S_PROV_TYPE_CD={self.dep_s_prov_type_cd!r}, "
+            f"CTL_FAC_APCH_DEP_CALLS={self.ctl_fac_apch_dep_calls!r}, "
+            f"APCH_DEP_OPER_CODE={self.apch_dep_oper_code!r}, "
+            f"CTL_PRVDING_HRS={self.ctl_prvding_hrs!r}, "
+            f"SECONDARY_CTL_PRVDING_HRS={self.secondary_ctl_prvding_hrs!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.facility_type}"
 
