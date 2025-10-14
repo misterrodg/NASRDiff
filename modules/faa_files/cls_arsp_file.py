@@ -23,9 +23,6 @@ class CLS_ARSP(FAA_Record_Base):
     class_e_airspace: str
     airspace_hrs: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -46,6 +43,8 @@ class CLS_ARSP(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -59,9 +58,6 @@ class CLS_ARSP(FAA_Record_Base):
         self.class_e_airspace = replace_empty_string(class_e_airspace)
         self.airspace_hrs = replace_empty_string(airspace_hrs)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"

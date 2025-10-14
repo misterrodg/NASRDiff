@@ -22,9 +22,6 @@ class CDR(FAA_Record_Base):
     play: str
     naveqp: str
     length: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -44,6 +41,8 @@ class CDR(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.rcode = replace_empty_string(rcode)
         self.orig = replace_empty_string(orig)
         self.dest = replace_empty_string(dest)
@@ -56,9 +55,6 @@ class CDR(FAA_Record_Base):
         self.play = replace_empty_string(play)
         self.naveqp = replace_empty_string(naveqp)
         self.length = replace_empty_string(length)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
         self.mods = self.mods.replace("Route String", "Route_String")
 

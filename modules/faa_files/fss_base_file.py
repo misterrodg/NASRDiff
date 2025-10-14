@@ -35,9 +35,6 @@ class FSS_BASE(FAA_Record_Base):
     wea_radar_flag: str
     phone_no: str
     toll_free_no: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -70,6 +67,8 @@ class FSS_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.fss_id = replace_empty_string(fss_id)
         self.name = replace_empty_string(name)
@@ -95,9 +94,6 @@ class FSS_BASE(FAA_Record_Base):
         self.wea_radar_flag = replace_empty_string(wea_radar_flag)
         self.phone_no = replace_empty_string(phone_no)
         self.toll_free_no = replace_empty_string(toll_free_no)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fss_id} :: {self.name}"

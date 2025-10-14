@@ -20,9 +20,6 @@ class APT_ARS(FAA_Record_Base):
     rwy_id: str
     rwy_end_id: str
     arrest_device_code: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -40,6 +37,8 @@ class APT_ARS(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -50,9 +49,6 @@ class APT_ARS(FAA_Record_Base):
         self.rwy_id = replace_empty_string(rwy_id)
         self.rwy_end_id = replace_empty_string(rwy_end_id)
         self.arrest_device_code = replace_empty_string(arrest_device_code)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (

@@ -1,10 +1,20 @@
+from modules.action import Action
 from modules.filters import FilterObject
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Self
 
 
-class FAA_Record_Base(ABC):
+class FAA_Record_Base:
+    file: str
+    action: Action
+    mods: str
+
+    def __init__(self, file: str, action: Action, mods: str) -> None:
+        self.file = file
+        self.action = action
+        self.mods = mods
+
     def get_mod_string(self, last_record: Self) -> str:
         modifications = []
         modification_list = self.mods.split(" ")

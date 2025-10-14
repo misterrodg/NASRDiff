@@ -90,9 +90,6 @@ class APT_RWY_END(FAA_Record_Base):
     long_lahso_decimal: str
     lahso_psn_source: str
     rwy_end_lahso_psn_date: str
-    file: str
-    action: str
-    mods: str
 
     def __init__(
         self,
@@ -180,6 +177,8 @@ class APT_RWY_END(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -268,9 +267,6 @@ class APT_RWY_END(FAA_Record_Base):
         self.long_lahso_decimal = replace_empty_string(long_lahso_decimal)
         self.lahso_psn_source = replace_empty_string(lahso_psn_source)
         self.rwy_end_lahso_psn_date = replace_empty_string(rwy_end_lahso_psn_date)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.rwy_end_id}"

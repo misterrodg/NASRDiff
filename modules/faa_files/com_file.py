@@ -38,9 +38,6 @@ class COM(FAA_Record_Base):
     comm_status_code: str
     comm_status_date: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -76,6 +73,8 @@ class COM(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.comm_loc_id = replace_empty_string(comm_loc_id)
         self.comm_type = replace_empty_string(comm_type)
@@ -104,9 +103,6 @@ class COM(FAA_Record_Base):
         self.comm_status_code = replace_empty_string(comm_status_code)
         self.comm_status_date = replace_empty_string(comm_status_date)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (

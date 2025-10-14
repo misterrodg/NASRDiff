@@ -17,9 +17,6 @@ class HPF_SPD_ALT(FAA_Record_Base):
     country_code: str
     speed_range: str
     altitude: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -34,6 +31,8 @@ class HPF_SPD_ALT(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.hp_name = replace_empty_string(hp_name)
         self.hp_no = replace_empty_string(hp_no)
@@ -41,9 +40,6 @@ class HPF_SPD_ALT(FAA_Record_Base):
         self.country_code = replace_empty_string(country_code)
         self.speed_range = replace_empty_string(speed_range)
         self.altitude = replace_empty_string(altitude)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (

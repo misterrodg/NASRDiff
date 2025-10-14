@@ -25,9 +25,6 @@ class HPF_BASE(FAA_Record_Base):
     course_inbound_deg: str
     turn_direction: str
     leg_length_dist: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -50,6 +47,8 @@ class HPF_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.hp_name = replace_empty_string(hp_name)
         self.hp_no = replace_empty_string(hp_no)
@@ -65,9 +64,6 @@ class HPF_BASE(FAA_Record_Base):
         self.course_inbound_deg = replace_empty_string(course_inbound_deg)
         self.turn_direction = replace_empty_string(turn_direction)
         self.leg_length_dist = replace_empty_string(leg_length_dist)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.hp_name} :: {self.hp_no}"

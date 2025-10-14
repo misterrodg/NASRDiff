@@ -19,9 +19,6 @@ class FIX_NAV(FAA_Record_Base):
     nav_type: str
     bearing: str
     distance: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -38,6 +35,8 @@ class FIX_NAV(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.fix_id = replace_empty_string(fix_id)
         self.icao_region_code = replace_empty_string(icao_region_code)
@@ -47,9 +46,6 @@ class FIX_NAV(FAA_Record_Base):
         self.nav_type = replace_empty_string(nav_type)
         self.bearing = replace_empty_string(bearing)
         self.distance = replace_empty_string(distance)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fix_id} :: {self.nav_id} :: {self.nav_type}"

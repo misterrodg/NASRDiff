@@ -57,9 +57,6 @@ class AWY_SEG_ALT(FAA_Record_Base):
     mea_gap: str
     reqd_nav_performance: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -114,6 +111,8 @@ class AWY_SEG_ALT(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.regulatory = replace_empty_string(regulatory)
         self.awy_location = replace_empty_string(awy_location)
@@ -167,9 +166,6 @@ class AWY_SEG_ALT(FAA_Record_Base):
         self.mea_gap = replace_empty_string(mea_gap)
         self.reqd_nav_performance = replace_empty_string(reqd_nav_performance)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (

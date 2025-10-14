@@ -18,9 +18,6 @@ class DP_APT(FAA_Record_Base):
     body_seq: str
     arpt_id: str
     rwy_end_id: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -36,6 +33,8 @@ class DP_APT(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.dp_name = replace_empty_string(dp_name)
         self.artcc = replace_empty_string(artcc)
@@ -44,9 +43,6 @@ class DP_APT(FAA_Record_Base):
         self.body_seq = replace_empty_string(body_seq)
         self.arpt_id = replace_empty_string(arpt_id)
         self.rwy_end_id = replace_empty_string(rwy_end_id)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.dp_computer_code} :: {self.body_name}"

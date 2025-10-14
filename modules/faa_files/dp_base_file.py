@@ -19,9 +19,6 @@ class DP_BASE(FAA_Record_Base):
     dp_computer_code: str
     graphical_dp_type: str
     served_arpt: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -38,6 +35,8 @@ class DP_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.dp_name = replace_empty_string(dp_name)
         self.amendment_no = replace_empty_string(amendment_no)
@@ -47,9 +46,6 @@ class DP_BASE(FAA_Record_Base):
         self.dp_computer_code = replace_empty_string(dp_computer_code)
         self.graphical_dp_type = replace_empty_string(graphical_dp_type)
         self.served_arpt = replace_empty_string(served_arpt)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.served_arpt} :: {self.dp_name} {self.amendment_no}"

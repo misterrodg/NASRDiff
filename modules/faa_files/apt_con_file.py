@@ -26,9 +26,6 @@ class APT_CON(FAA_Record_Base):
     zip_code: str
     zip_plus_four: str
     phone_no: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -52,6 +49,8 @@ class APT_CON(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -68,9 +67,6 @@ class APT_CON(FAA_Record_Base):
         self.zip_code = replace_empty_string(zip_code)
         self.zip_plus_four = replace_empty_string(zip_plus_four)
         self.phone_no = replace_empty_string(phone_no)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"

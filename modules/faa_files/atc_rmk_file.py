@@ -23,9 +23,6 @@ class ATC_RMK(FAA_Record_Base):
     ref_col_name: str
     remark_no: str
     remark: str
-    file: str
-    action: str
-    mods: str
 
     def __init__(
         self,
@@ -46,6 +43,8 @@ class ATC_RMK(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -59,9 +58,6 @@ class ATC_RMK(FAA_Record_Base):
         self.ref_col_name = replace_empty_string(ref_col_name)
         self.remark_no = replace_empty_string(remark_no)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.remark_no} :: {self.remark}"

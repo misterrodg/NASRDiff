@@ -36,9 +36,6 @@ class FIX_BASE(FAA_Record_Base):
     min_recep_alt: str
     compulsory: str
     charts: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -72,6 +69,8 @@ class FIX_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.fix_id = replace_empty_string(fix_id)
         self.icao_region_code = replace_empty_string(icao_region_code)
@@ -98,9 +97,6 @@ class FIX_BASE(FAA_Record_Base):
         self.min_recep_alt = replace_empty_string(min_recep_alt)
         self.compulsory = replace_empty_string(compulsory)
         self.charts = replace_empty_string(charts)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fix_id} :: {self.charts}"

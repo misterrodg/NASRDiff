@@ -16,9 +16,6 @@ class HPF_CHRT(FAA_Record_Base):
     state_code: str
     country_code: str
     charting_type_desc: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -32,15 +29,14 @@ class HPF_CHRT(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.hp_name = replace_empty_string(hp_name)
         self.hp_no = replace_empty_string(hp_no)
         self.state_code = replace_empty_string(state_code)
         self.country_code = replace_empty_string(country_code)
         self.charting_type_desc = replace_empty_string(charting_type_desc)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.hp_name} :: {self.hp_no} :: {self.charting_type_desc}"

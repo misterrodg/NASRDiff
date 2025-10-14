@@ -19,9 +19,6 @@ class ATC_SVC(FAA_Record_Base):
     city: str
     country_code: str
     ctl_svc: str
-    file: str
-    action: str
-    mods: str
 
     def __init__(
         self,
@@ -38,6 +35,8 @@ class ATC_SVC(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -47,9 +46,6 @@ class ATC_SVC(FAA_Record_Base):
         self.city = replace_empty_string(city)
         self.country_code = replace_empty_string(country_code)
         self.ctl_svc = replace_empty_string(ctl_svc)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.facility_type} :: {self.ctl_svc}"

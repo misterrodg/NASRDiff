@@ -21,9 +21,6 @@ class APT_ATT(FAA_Record_Base):
     month: str
     day: str
     hour: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -42,6 +39,8 @@ class APT_ATT(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -53,9 +52,6 @@ class APT_ATT(FAA_Record_Base):
         self.month = replace_empty_string(month)
         self.day = replace_empty_string(day)
         self.hour = replace_empty_string(hour)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.sked_seq_no}"

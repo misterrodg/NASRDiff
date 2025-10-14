@@ -22,9 +22,6 @@ class ATC_ATIS(FAA_Record_Base):
     description: str
     atis_hrs: str
     atis_phone_no: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -44,6 +41,8 @@ class ATC_ATIS(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -56,9 +55,6 @@ class ATC_ATIS(FAA_Record_Base):
         self.description = replace_empty_string(description)
         self.atis_hrs = replace_empty_string(atis_hrs)
         self.atis_phone_no = replace_empty_string(atis_phone_no)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.atis_no}"

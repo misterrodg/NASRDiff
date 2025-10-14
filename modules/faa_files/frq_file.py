@@ -31,9 +31,6 @@ class FRQ(FAA_Record_Base):
     sectorization: str
     freq_use: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -62,6 +59,8 @@ class FRQ(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.facility = replace_empty_string(facility)
         self.fac_name = replace_empty_string(fac_name)
@@ -85,9 +84,6 @@ class FRQ(FAA_Record_Base):
         self.sectorization = replace_empty_string(sectorization)
         self.freq_use = replace_empty_string(freq_use)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility} :: {self.serviced_facility} :: {self.freq_use} :: {self.freq}"

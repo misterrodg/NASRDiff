@@ -46,9 +46,6 @@ class ILS_BASE(FAA_Record_Base):
     site_elevation: str
     loc_freq: str
     bk_course_status_code: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -92,6 +89,8 @@ class ILS_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -128,9 +127,6 @@ class ILS_BASE(FAA_Record_Base):
         self.site_elevation = replace_empty_string(site_elevation)
         self.loc_freq = replace_empty_string(loc_freq)
         self.bk_course_status_code = replace_empty_string(bk_course_status_code)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.rwy_end_id} :: I-{self.ils_loc_id}"

@@ -40,9 +40,6 @@ class ATC_BASE(FAA_Record_Base):
     apch_dep_oper_code: str
     ctl_prvding_hrs: str
     secondary_ctl_prvding_hrs: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -80,6 +77,8 @@ class ATC_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -110,9 +109,6 @@ class ATC_BASE(FAA_Record_Base):
         self.apch_dep_oper_code = replace_empty_string(apch_dep_oper_code)
         self.ctl_prvding_hrs = replace_empty_string(ctl_prvding_hrs)
         self.secondary_ctl_prvding_hrs = replace_empty_string(secondary_ctl_prvding_hrs)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.facility_type}"

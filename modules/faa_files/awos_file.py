@@ -35,9 +35,6 @@ class AWOS(FAA_Record_Base):
     site_no: str
     site_type_code: str
     remark: str
-    file: str
-    action: str
-    mods: str
 
     def __init__(
         self,
@@ -70,6 +67,8 @@ class AWOS(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.asos_awos_id = replace_empty_string(asos_awos_id)
         self.asos_awos_type = replace_empty_string(asos_awos_type)
@@ -95,9 +94,6 @@ class AWOS(FAA_Record_Base):
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.asos_awos_id} :: {self.asos_awos_type}"

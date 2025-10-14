@@ -19,9 +19,6 @@ class HPF_RMK(FAA_Record_Base):
     ref_col_name: str
     ref_col_seq_no: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -38,6 +35,8 @@ class HPF_RMK(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.hp_name = replace_empty_string(hp_name)
         self.hp_no = replace_empty_string(hp_no)
@@ -47,9 +46,6 @@ class HPF_RMK(FAA_Record_Base):
         self.ref_col_name = replace_empty_string(ref_col_name)
         self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.hp_name} :: {self.hp_no} :: {self.remark}"

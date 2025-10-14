@@ -100,9 +100,6 @@ class APT_BASE(FAA_Record_Base):
     min_op_network: str
     user_fee_flag: str
     cta: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -200,6 +197,8 @@ class APT_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -290,9 +289,6 @@ class APT_BASE(FAA_Record_Base):
         self.min_op_network = replace_empty_string(min_op_network)
         self.user_fee_flag = replace_empty_string(user_fee_flag)
         self.cta = replace_empty_string(cta)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"
