@@ -130,7 +130,7 @@ class ATC_RMK_File(FAA_File_Base):
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
                     is_in_filters = self.filter_object.is_in_airports(
-                        record.facility_id.strip()
+                        record.facility_id
                     )
 
                 if not use_filters or is_in_filters:

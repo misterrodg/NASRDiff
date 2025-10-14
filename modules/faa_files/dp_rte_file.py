@@ -138,9 +138,7 @@ class DP_RTE_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_artccs(
-                        record.artcc.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_artccs(record.artcc)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

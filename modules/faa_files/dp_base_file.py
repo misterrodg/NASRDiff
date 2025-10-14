@@ -112,7 +112,7 @@ class DP_BASE_File(FAA_File_Base):
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
                     is_in_filters = self.filter_object.is_in_airports(
-                        record.served_arpt.strip()
+                        record.served_arpt
                     )
 
                 if not use_filters or is_in_filters:
