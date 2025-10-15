@@ -127,7 +127,11 @@ class ILS_MKR(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, ILS_MKR):
             return False
-        return (self.arpt_id, self.ils_loc_id) < (other.arpt_id, other.ils_loc_id)
+        return (self.arpt_id, self.ils_loc_id, self.file) < (
+            other.arpt_id,
+            other.ils_loc_id,
+            other.file,
+        )
 
     def __repr__(self):
         return (

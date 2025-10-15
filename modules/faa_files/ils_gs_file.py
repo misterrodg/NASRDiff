@@ -112,7 +112,11 @@ class ILS_GS(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, ILS_GS):
             return False
-        return (self.arpt_id, self.ils_loc_id) < (other.arpt_id, other.ils_loc_id)
+        return (self.arpt_id, self.ils_loc_id, self.file) < (
+            other.arpt_id,
+            other.ils_loc_id,
+            other.file,
+        )
 
     def __repr__(self):
         return (
@@ -197,7 +201,7 @@ class ILS_GS_File(FAA_File_Base):
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "ILS DME", use_verbose, filter_object)
+        super().__init__(file_path, "ILS GS", use_verbose, filter_object)
 
         self.__load_from_csv()
 

@@ -106,7 +106,11 @@ class ILS_DME(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, ILS_DME):
             return False
-        return (self.arpt_id, self.ils_loc_id) < (other.arpt_id, other.ils_loc_id)
+        return (self.arpt_id, self.ils_loc_id, self.file) < (
+            other.arpt_id,
+            other.ils_loc_id,
+            other.file,
+        )
 
     def __repr__(self):
         return (
@@ -172,7 +176,7 @@ class ILS_DME(FAA_Record_Base):
                 f"LONG_DECIMAL: {self.long_decimal}, "
                 f"LAT_LONG_SOURCE_CODE: {self.lat_long_source_code}, "
                 f"SITE_ELEVATION: {self.site_elevation}, "
-                f"CHANNEL: {self.channel}, "
+                f"CHANNEL: {self.channel}"
                 " ]"
             )
 
