@@ -71,7 +71,7 @@ class MTR_BASE(FAA_Record_Base):
         )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.route_id}"
+        base_string = f"{self.route_type_code}{self.route_id}"
 
         modification_string = ""
         if last_record:
@@ -82,7 +82,6 @@ class MTR_BASE(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"ROUTE_TYPE_CODE: {self.route_type_code}, "
                 f"ARTCC: {self.artcc}, "
                 f"FSS: {self.fss}, "
                 f"TIME_OF_USE: {self.time_of_use}"
