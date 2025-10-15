@@ -173,7 +173,7 @@ class AWOS(FAA_Record_Base):
                 f"SECOND_PHONE_NO: {self.second_phone_no}, "
                 f"SITE_NO: {self.site_no}, "
                 f"SITE_TYPE_CODE: {self.site_type_code}, "
-                f"REMARK   : {self.remark}"
+                f"REMARK: {self.remark}"
                 " ]"
             )
 

@@ -152,7 +152,6 @@ class FSS_BASE(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"NAME: {self.name}, "
                 f"UPDATE_DATE: {self.update_date}, "
                 f"FSS_FAC_TYPE: {self.fss_fac_type}, "
                 f"VOICE_CALL: {self.voice_call}, "
