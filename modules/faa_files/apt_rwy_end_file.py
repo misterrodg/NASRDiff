@@ -90,9 +90,6 @@ class APT_RWY_END(FAA_Record_Base):
     long_lahso_decimal: str
     lahso_psn_source: str
     rwy_end_lahso_psn_date: str
-    file: str
-    action: str
-    mods: str
 
     def __init__(
         self,
@@ -180,6 +177,8 @@ class APT_RWY_END(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -268,9 +267,110 @@ class APT_RWY_END(FAA_Record_Base):
         self.long_lahso_decimal = replace_empty_string(long_lahso_decimal)
         self.lahso_psn_source = replace_empty_string(lahso_psn_source)
         self.rwy_end_lahso_psn_date = replace_empty_string(rwy_end_lahso_psn_date)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.rwy_end_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY_END):
+            return False
+        return self.arpt_id == other.arpt_id and self.rwy_end_id == other.rwy_end_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY_END):
+            return False
+        return (self.arpt_id, self.rwy_end_id, self.file) < (
+            other.arpt_id,
+            other.rwy_end_id,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"RWY_ID={self.rwy_id!r}, "
+            f"RWY_END_ID={self.rwy_end_id!r}, "
+            f"TRUE_ALIGNMENT={self.true_alignment!r}, "
+            f"ILS_TYPE={self.ils_type!r}, "
+            f"RIGHT_HAND_TRAFFIC_PAT_FLAG={self.right_hand_traffic_pat_flag!r}, "
+            f"RWY_MARKING_TYPE_CODE={self.rwy_marking_type_code!r}, "
+            f"RWY_MARKING_COND={self.rwy_marking_cond!r}, "
+            f"RWY_END_LAT_DEG={self.rwy_end_lat_deg!r}, "
+            f"RWY_END_LAT_MIN={self.rwy_end_lat_min!r}, "
+            f"RWY_END_LAT_SEC={self.rwy_end_lat_sec!r}, "
+            f"RWY_END_LAT_HEMIS={self.rwy_end_lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"RWY_END_LONG_DEG={self.rwy_end_long_deg!r}, "
+            f"RWY_END_LONG_MIN={self.rwy_end_long_min!r}, "
+            f"RWY_END_LONG_SEC={self.rwy_end_long_sec!r}, "
+            f"RWY_END_LONG_HEMIS={self.rwy_end_long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"RWY_END_ELEV={self.rwy_end_elev!r}, "
+            f"THR_CROSSING_HGT={self.thr_crossing_hgt!r}, "
+            f"VISUAL_GLIDE_PATH_ANGLE={self.visual_glide_path_angle!r}, "
+            f"DISPLACED_THR_LAT_DEG={self.displaced_thr_lat_deg!r}, "
+            f"DISPLACED_THR_LAT_MIN={self.displaced_thr_lat_min!r}, "
+            f"DISPLACED_THR_LAT_SEC={self.displaced_thr_lat_sec!r}, "
+            f"DISPLACED_THR_LAT_HEMIS={self.displaced_thr_lat_hemis!r}, "
+            f"LAT_DISPLACED_THR_DECIMAL={self.lat_displaced_thr_decimal!r}, "
+            f"DISPLACED_THR_LONG_DEG={self.displaced_thr_long_deg!r}, "
+            f"DISPLACED_THR_LONG_MIN={self.displaced_thr_long_min!r}, "
+            f"DISPLACED_THR_LONG_SEC={self.displaced_thr_long_sec!r}, "
+            f"DISPLACED_THR_LONG_HEMIS={self.displaced_thr_long_hemis!r}, "
+            f"LONG_DISPLACED_THR_DECIMAL={self.long_displaced_thr_decimal!r}, "
+            f"DISPLACED_THR_ELEV={self.displaced_thr_elev!r}, "
+            f"DISPLACED_THR_LEN={self.displaced_thr_len!r}, "
+            f"TDZ_ELEV={self.tdz_elev!r}, "
+            f"VGSI_CODE={self.vgsi_code!r}, "
+            f"RWY_VISUAL_RANGE_EQUIP_CODE={self.rwy_visual_range_equip_code!r}, "
+            f"RWY_VSBY_VALUE_EQUIP_FLAG={self.rwy_vsby_value_equip_flag!r}, "
+            f"APCH_LGT_SYSTEM_CODE={self.apch_lgt_system_code!r}, "
+            f"RWY_END_LGTS_FLAG={self.rwy_end_lgts_flag!r}, "
+            f"CNTRLN_LGTS_AVBL_FLAG={self.cntrln_lgts_avbl_flag!r}, "
+            f"TDZ_LGT_AVBL_FLAG={self.tdz_lgt_avbl_flag!r}, "
+            f"OBSTN_TYPE={self.obstn_type!r}, "
+            f"OBSTN_MRKD_CODE={self.obstn_mrkd_code!r}, "
+            f"FAR_PART_77_CODE={self.far_part_77_code!r}, "
+            f"OBSTN_CLNC_SLOPE={self.obstn_clnc_slope!r}, "
+            f"OBSTN_HGT={self.obstn_hgt!r}, "
+            f"DIST_FROM_THR={self.dist_from_thr!r}, "
+            f"CNTRLN_OFFSET={self.cntrln_offset!r}, "
+            f"CNTRLN_DIR_CODE={self.cntrln_dir_code!r}, "
+            f"RWY_GRAD={self.rwy_grad!r}, "
+            f"RWY_GRAD_DIRECTION={self.rwy_grad_direction!r}, "
+            f"RWY_END_PSN_SOURCE={self.rwy_end_psn_source!r}, "
+            f"RWY_END_PSN_DATE={self.rwy_end_psn_date!r}, "
+            f"RWY_END_ELEV_SOURCE={self.rwy_end_elev_source!r}, "
+            f"RWY_END_ELEV_DATE={self.rwy_end_elev_date!r}, "
+            f"DSPL_THR_PSN_SOURCE={self.dspl_thr_psn_source!r}, "
+            f"RWY_END_DSPL_THR_PSN_DATE={self.rwy_end_dspl_thr_psn_date!r}, "
+            f"DSPL_THR_ELEV_SOURCE={self.dspl_thr_elev_source!r}, "
+            f"RWY_END_DSPL_THR_ELEV_DATE={self.rwy_end_dspl_thr_elev_date!r}, "
+            f"TDZ_ELEV_SOURCE={self.tdz_elev_source!r}, "
+            f"RWY_END_TDZ_ELEV_DATE={self.rwy_end_tdz_elev_date!r}, "
+            f"TKOF_RUN_AVBL={self.tkof_run_avbl!r}, "
+            f"TKOF_DIST_AVBL={self.tkof_dist_avbl!r}, "
+            f"ACLT_STOP_DIST_AVBL={self.aclt_stop_dist_avbl!r}, "
+            f"LNDG_DIST_AVBL={self.lndg_dist_avbl!r}, "
+            f"LAHSO_ALD={self.lahso_ald!r}, "
+            f"RWY_END_INTERSECT_LAHSO={self.rwy_end_intersect_lahso!r}, "
+            f"LAHSO_DESC={self.lahso_desc!r}, "
+            f"LAHSO_LAT={self.lahso_lat!r}, "
+            f"LAT_LAHSO_DECIMAL={self.lat_lahso_decimal!r}, "
+            f"LAHSO_LONG={self.lahso_long!r}, "
+            f"LONG_LAHSO_DECIMAL={self.long_lahso_decimal!r}, "
+            f"LAHSO_PSN_SOURCE={self.lahso_psn_source!r}, "
+            f"RWY_END_LAHSO_PSN_DATE={self.rwy_end_lahso_psn_date!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.rwy_end_id}"
@@ -473,9 +573,7 @@ class APT_RWY_END_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.arpt_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airports(record.arpt_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

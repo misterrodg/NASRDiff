@@ -35,9 +35,6 @@ class APT_RWY(FAA_Record_Base):
     gross_wt_dw: str
     gross_wt_dtw: str
     gross_wt_ddtw: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -70,6 +67,8 @@ class APT_RWY(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -95,9 +94,55 @@ class APT_RWY(FAA_Record_Base):
         self.gross_wt_dw = replace_empty_string(gross_wt_dw)
         self.gross_wt_dtw = replace_empty_string(gross_wt_dtw)
         self.gross_wt_ddtw = replace_empty_string(gross_wt_ddtw)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.rwy_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY):
+            return False
+        return self.arpt_id == other.arpt_id and self.rwy_id == other.rwy_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY):
+            return False
+        return (self.arpt_id, self.rwy_id, self.file) < (
+            other.arpt_id,
+            other.rwy_id,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"RWY_ID={self.rwy_id!r}, "
+            f"RWY_LEN={self.rwy_len!r}, "
+            f"RWY_WIDTH={self.rwy_width!r}, "
+            f"SURFACE_TYPE_CODE={self.surface_type_code!r}, "
+            f"COND={self.cond!r}, "
+            f"TREATMENT_CODE={self.treatment_code!r}, "
+            f"PCN={self.pcn!r}, "
+            f"PAVEMENT_TYPE_CODE={self.pavement_type_code!r}, "
+            f"SUBGRADE_STRENGTH_CODE={self.subgrade_strength_code!r}, "
+            f"TIRE_PRES_CODE={self.tire_pres_code!r}, "
+            f"DTRM_METHOD_CODE={self.dtrm_method_code!r}, "
+            f"RWY_LGT_CODE={self.rwy_lgt_code!r}, "
+            f"RWY_LEN_SOURCE={self.rwy_len_source!r}, "
+            f"LENGTH_SOURCE_DATE={self.length_source_date!r}, "
+            f"GROSS_WT_SW={self.gross_wt_sw!r}, "
+            f"GROSS_WT_DW={self.gross_wt_dw!r}, "
+            f"GROSS_WT_DTW={self.gross_wt_dtw!r}, "
+            f"GROSS_WT_DDTW={self.gross_wt_ddtw!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.rwy_id}"
@@ -190,9 +235,7 @@ class APT_RWY_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.arpt_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airports(record.arpt_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

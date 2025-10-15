@@ -24,9 +24,6 @@ class DP_RTE(FAA_Record_Base):
     point_type: str
     next_point: str
     arpt_rwy_assoc: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -48,6 +45,8 @@ class DP_RTE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.dp_name = replace_empty_string(dp_name)
         self.artcc = replace_empty_string(artcc)
@@ -62,9 +61,44 @@ class DP_RTE(FAA_Record_Base):
         self.point_type = replace_empty_string(point_type)
         self.next_point = replace_empty_string(next_point)
         self.arpt_rwy_assoc = replace_empty_string(arpt_rwy_assoc)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.artcc, self.dp_name))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, DP_RTE):
+            return False
+        return self.artcc == other.artcc and self.dp_name == other.dp_name
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, DP_RTE):
+            return False
+        return (self.artcc, self.dp_name, self.file) < (
+            other.artcc,
+            other.dp_name,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"DP_NAME={self.dp_name!r}, "
+            f"ARTCC={self.artcc!r}, "
+            f"DP_COMPUTER_CODE={self.dp_computer_code!r}, "
+            f"ROUTE_PORTION_TYPE={self.route_portion_type!r}, "
+            f"ROUTE_NAME={self.route_name!r}, "
+            f"BODY_SEQ={self.body_seq!r}, "
+            f"TRANSITION_COMPUTER_CODE={self.transition_computer_code!r}, "
+            f"POINT_SEQ={self.point_seq!r}, "
+            f"POINT={self.point!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"POINT_TYPE={self.point_type!r}, "
+            f"NEXT_POINT={self.next_point!r}, "
+            f"ARPT_RWY_ASSOC={self.arpt_rwy_assoc!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         comp_code = self.transition_computer_code
@@ -138,9 +172,7 @@ class DP_RTE_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_artccs(
-                        record.artcc.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_artccs(record.artcc)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

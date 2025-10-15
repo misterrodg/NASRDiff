@@ -23,9 +23,6 @@ class CLS_ARSP(FAA_Record_Base):
     class_e_airspace: str
     airspace_hrs: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -46,6 +43,8 @@ class CLS_ARSP(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -59,9 +58,39 @@ class CLS_ARSP(FAA_Record_Base):
         self.class_e_airspace = replace_empty_string(class_e_airspace)
         self.airspace_hrs = replace_empty_string(airspace_hrs)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.arpt_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, CLS_ARSP):
+            return False
+        return self.arpt_id == other.arpt_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, CLS_ARSP):
+            return False
+        return (self.arpt_id, self.file) < (other.arpt_id, other.file)
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"CLASS_B_AIRSPACE={self.class_b_airspace!r}, "
+            f"CLASS_C_AIRSPACE={self.class_c_airspace!r}, "
+            f"CLASS_D_AIRSPACE={self.class_d_airspace!r}, "
+            f"CLASS_E_AIRSPACE={self.class_e_airspace!r}, "
+            f"AIRSPACE_HRS={self.airspace_hrs!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"
@@ -131,9 +160,7 @@ class CLS_ARSP_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.arpt_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airports(record.arpt_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

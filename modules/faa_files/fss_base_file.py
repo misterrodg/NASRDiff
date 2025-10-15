@@ -35,9 +35,6 @@ class FSS_BASE(FAA_Record_Base):
     wea_radar_flag: str
     phone_no: str
     toll_free_no: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -70,6 +67,8 @@ class FSS_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.fss_id = replace_empty_string(fss_id)
         self.name = replace_empty_string(name)
@@ -95,9 +94,51 @@ class FSS_BASE(FAA_Record_Base):
         self.wea_radar_flag = replace_empty_string(wea_radar_flag)
         self.phone_no = replace_empty_string(phone_no)
         self.toll_free_no = replace_empty_string(toll_free_no)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.fss_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FSS_BASE):
+            return False
+        return self.fss_id == other.fss_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FSS_BASE):
+            return False
+        return (self.fss_id, self.file) < (other.fss_id, other.file)
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FSS_ID={self.fss_id!r}, "
+            f"NAME={self.name!r}, "
+            f"UPDATE_DATE={self.update_date!r}, "
+            f"FSS_FAC_TYPE={self.fss_fac_type!r}, "
+            f"VOICE_CALL={self.voice_call!r}, "
+            f"CITY={self.city!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"LAT_DEG={self.lat_deg!r}, "
+            f"LAT_MIN={self.lat_min!r}, "
+            f"LAT_SEC={self.lat_sec!r}, "
+            f"LAT_HEMIS={self.lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DEG={self.long_deg!r}, "
+            f"LONG_MIN={self.long_min!r}, "
+            f"LONG_SEC={self.long_sec!r}, "
+            f"LONG_HEMIS={self.long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"OPR_HOURS={self.opr_hours!r}, "
+            f"FAC_STATUS={self.fac_status!r}, "
+            f"ALTERNATE_FSS={self.alternate_fss!r}, "
+            f"WEA_RADAR_FLAG={self.wea_radar_flag!r}, "
+            f"PHONE_NO={self.phone_no!r}, "
+            f"TOLL_FREE_NO={self.toll_free_no!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fss_id} :: {self.name}"
@@ -111,7 +152,6 @@ class FSS_BASE(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"NAME: {self.name}, "
                 f"UPDATE_DATE: {self.update_date}, "
                 f"FSS_FAC_TYPE: {self.fss_fac_type}, "
                 f"VOICE_CALL: {self.voice_call}, "

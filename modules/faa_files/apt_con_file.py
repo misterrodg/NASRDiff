@@ -26,9 +26,6 @@ class APT_CON(FAA_Record_Base):
     zip_code: str
     zip_plus_four: str
     phone_no: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -52,6 +49,8 @@ class APT_CON(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -68,9 +67,42 @@ class APT_CON(FAA_Record_Base):
         self.zip_code = replace_empty_string(zip_code)
         self.zip_plus_four = replace_empty_string(zip_plus_four)
         self.phone_no = replace_empty_string(phone_no)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.arpt_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_CON):
+            return False
+        return self.arpt_id == other.arpt_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_CON):
+            return False
+        return (self.arpt_id, self.file) < (other.arpt_id, other.file)
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"TITLE={self.title!r}, "
+            f"NAME={self.name!r}, "
+            f"ADDRESS1={self.address1!r}, "
+            f"ADDRESS2={self.address2!r}, "
+            f"TITLE_CITY={self.title_city!r}, "
+            f"STATE={self.state!r}, "
+            f"ZIP_CODE={self.zip_code!r}, "
+            f"ZIP_PLUS_FOUR={self.zip_plus_four!r}, "
+            f"PHONE_NO={self.phone_no!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"
@@ -146,9 +178,7 @@ class APT_CON_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.arpt_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airports(record.arpt_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

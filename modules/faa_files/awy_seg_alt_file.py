@@ -57,9 +57,6 @@ class AWY_SEG_ALT(FAA_Record_Base):
     mea_gap: str
     reqd_nav_performance: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -114,6 +111,8 @@ class AWY_SEG_ALT(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.regulatory = replace_empty_string(regulatory)
         self.awy_location = replace_empty_string(awy_location)
@@ -167,9 +166,82 @@ class AWY_SEG_ALT(FAA_Record_Base):
         self.mea_gap = replace_empty_string(mea_gap)
         self.reqd_nav_performance = replace_empty_string(reqd_nav_performance)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.awy_id, self.from_point, self.to_point))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, AWY_SEG_ALT):
+            return False
+        return (
+            self.awy_id == other.awy_id
+            and self.from_point == other.from_point
+            and self.to_point == other.to_point
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, AWY_SEG_ALT):
+            return False
+        return (self.awy_id, self.from_point, self.to_point, self.file) < (
+            other.awy_id,
+            other.from_point,
+            other.to_point,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"REGULATORY={self.regulatory!r}, "
+            f"AWY_LOCATION={self.awy_location!r}, "
+            f"AWY_ID={self.awy_id!r}, "
+            f"POINT_SEQ={self.point_seq!r}, "
+            f"FROM_POINT={self.from_point!r}, "
+            f"FROM_PT_TYPE={self.from_pt_type!r}, "
+            f"NAV_NAME={self.nav_name!r}, "
+            f"NAV_CITY={self.nav_city!r}, "
+            f"ARTCC={self.artcc!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"TO_POINT={self.to_point!r}, "
+            f"MAG_COURSE={self.mag_course!r}, "
+            f"OPP_MAG_COURSE={self.opp_mag_course!r}, "
+            f"MAG_COURSE_DIST={self.mag_course_dist!r}, "
+            f"CHGOVR_PT={self.chgovr_pt!r}, "
+            f"CHGOVR_PT_NAME={self.chgovr_pt_name!r}, "
+            f"CHGOVR_PT_DIST={self.chgovr_pt_dist!r}, "
+            f"AWY_SEG_GAP_FLAG={self.awy_seg_gap_flag!r}, "
+            f"SIGNAL_GAP_FLAG={self.signal_gap_flag!r}, "
+            f"DOGLEG={self.dogleg!r}, "
+            f"NEXT_MEA_PT={self.next_mea_pt!r}, "
+            f"MIN_ENROUTE_ALT={self.min_enroute_alt!r}, "
+            f"MIN_ENROUTE_ALT_DIR={self.min_enroute_alt_dir!r}, "
+            f"MIN_ENROUTE_ALT_OPPOSITE={self.min_enroute_alt_opposite!r}, "
+            f"MIN_ENROUTE_ALT_OPPOSITE_DIR={self.min_enroute_alt_opposite_dir!r}, "
+            f"GPS_MIN_ENROUTE_ALT={self.gps_min_enroute_alt!r}, "
+            f"GPS_MIN_ENROUTE_ALT_DIR={self.gps_min_enroute_alt_dir!r}, "
+            f"GPS_MIN_ENROUTE_ALT_OPPOSITE={self.gps_min_enroute_alt_opposite!r}, "
+            f"GPS_MEA_OPPOSITE_DIR={self.gps_mea_opposite_dir!r}, "
+            f"DD_IRU_MEA={self.dd_iru_mea!r}, "
+            f"DD_IRU_MEA_DIR={self.dd_iru_mea_dir!r}, "
+            f"DD_I_MEA_OPPOSITE={self.dd_i_mea_opposite!r}, "
+            f"DD_I_MEA_OPPOSITE_DIR={self.dd_i_mea_opposite_dir!r}, "
+            f"MIN_OBSTN_CLNC_ALT={self.min_obstn_clnc_alt!r}, "
+            f"MIN_CROSS_ALT={self.min_cross_alt!r}, "
+            f"MIN_CROSS_ALT_DIR={self.min_cross_alt_dir!r}, "
+            f"MIN_CROSS_ALT_NAV_PT={self.min_cross_alt_nav_pt!r}, "
+            f"MIN_CROSS_ALT_OPPOSITE={self.min_cross_alt_opposite!r}, "
+            f"MIN_CROSS_ALT_OPPOSITE_DIR={self.min_cross_alt_opposite_dir!r}, "
+            f"MIN_RECEP_ALT={self.min_recep_alt!r}, "
+            f"MAX_AUTH_ALT={self.max_auth_alt!r}, "
+            f"MEA_GAP={self.mea_gap!r}, "
+            f"REQD_NAV_PERFORMANCE={self.reqd_nav_performance!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = (
@@ -308,9 +380,7 @@ class AWY_SEG_ALT_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airways(
-                        record.awy_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airways(record.awy_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

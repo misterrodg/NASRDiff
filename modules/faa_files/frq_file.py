@@ -31,9 +31,6 @@ class FRQ(FAA_Record_Base):
     sectorization: str
     freq_use: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -62,6 +59,8 @@ class FRQ(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.facility = replace_empty_string(facility)
         self.fac_name = replace_empty_string(fac_name)
@@ -85,9 +84,56 @@ class FRQ(FAA_Record_Base):
         self.sectorization = replace_empty_string(sectorization)
         self.freq_use = replace_empty_string(freq_use)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.facility, self.serviced_facility, self.freq))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FRQ):
+            return False
+        return (
+            self.facility == other.facility
+            and self.serviced_facility == other.serviced_facility
+            and self.freq == other.freq
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FRQ):
+            return False
+        return (self.facility, self.serviced_facility, self.freq, self.file) < (
+            other.facility,
+            other.serviced_facility,
+            other.freq,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FACILITY={self.facility!r}, "
+            f"FAC_NAME={self.fac_name!r}, "
+            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"ARTCC_OR_FSS_ID={self.artcc_or_fss_id!r}, "
+            f"CPDLC={self.cpdlc!r}, "
+            f"TOWER_HRS={self.tower_hrs!r}, "
+            f"SERVICED_FACILITY={self.serviced_facility!r}, "
+            f"SERVICED_FAC_NAME={self.serviced_fac_name!r}, "
+            f"SERVICED_SITE_TYPE={self.serviced_site_type!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"SERVICED_CITY={self.serviced_city!r}, "
+            f"SERVICED_STATE={self.serviced_state!r}, "
+            f"SERVICED_COUNTRY={self.serviced_country!r}, "
+            f"TOWER_OR_COMM_CALL={self.tower_or_comm_call!r}, "
+            f"PRIMARY_APPROACH_RADIO_CALL={self.primary_approach_radio_call!r}, "
+            f"FREQ={self.freq!r}, "
+            f"SECTORIZATION={self.sectorization!r}, "
+            f"FREQ_USE={self.freq_use!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility} :: {self.serviced_facility} :: {self.freq_use} :: {self.freq}"
@@ -131,7 +177,7 @@ class FRQ_File(FAA_File_Base):
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Frequency Change", use_verbose, filter_object)
+        super().__init__(file_path, "Frequency", use_verbose, filter_object)
 
         self.__load_from_csv()
 

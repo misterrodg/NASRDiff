@@ -25,9 +25,6 @@ class HPF_BASE(FAA_Record_Base):
     course_inbound_deg: str
     turn_direction: str
     leg_length_dist: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -50,6 +47,8 @@ class HPF_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.hp_name = replace_empty_string(hp_name)
         self.hp_no = replace_empty_string(hp_no)
@@ -65,9 +64,45 @@ class HPF_BASE(FAA_Record_Base):
         self.course_inbound_deg = replace_empty_string(course_inbound_deg)
         self.turn_direction = replace_empty_string(turn_direction)
         self.leg_length_dist = replace_empty_string(leg_length_dist)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.hp_name, self.hp_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_BASE):
+            return False
+        return self.hp_name == other.hp_name and self.hp_no == other.hp_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_BASE):
+            return False
+        return (self.hp_name, self.hp_no, self.file) < (
+            other.hp_name,
+            other.hp_no,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"HP_NAME={self.hp_name!r}, "
+            f"HP_NO={self.hp_no!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"FIX_ID={self.fix_id!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"NAV_ID={self.nav_id!r}, "
+            f"NAV_TYPE={self.nav_type!r}, "
+            f"HOLD_DIRECTION={self.hold_direction!r}, "
+            f"HOLD_DEG_OR_CRS={self.hold_deg_or_crs!r}, "
+            f"AZIMUTH={self.azimuth!r}, "
+            f"COURSE_INBOUND_DEG={self.course_inbound_deg!r}, "
+            f"TURN_DIRECTION={self.turn_direction!r}, "
+            f"LEG_LENGTH_DIST={self.leg_length_dist!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.hp_name} :: {self.hp_no}"

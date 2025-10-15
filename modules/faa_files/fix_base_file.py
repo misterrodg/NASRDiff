@@ -36,9 +36,6 @@ class FIX_BASE(FAA_Record_Base):
     min_recep_alt: str
     compulsory: str
     charts: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -72,6 +69,8 @@ class FIX_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.fix_id = replace_empty_string(fix_id)
         self.icao_region_code = replace_empty_string(icao_region_code)
@@ -98,9 +97,56 @@ class FIX_BASE(FAA_Record_Base):
         self.min_recep_alt = replace_empty_string(min_recep_alt)
         self.compulsory = replace_empty_string(compulsory)
         self.charts = replace_empty_string(charts)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.fix_id, self.charts))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_BASE):
+            return False
+        return self.fix_id == other.fix_id and self.charts == other.charts
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_BASE):
+            return False
+        return (self.fix_id, self.charts, self.file) < (
+            other.fix_id,
+            other.charts,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FIX_ID={self.fix_id!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"LAT_DEG={self.lat_deg!r}, "
+            f"LAT_MIN={self.lat_min!r}, "
+            f"LAT_SEC={self.lat_sec!r}, "
+            f"LAT_HEMIS={self.lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DEG={self.long_deg!r}, "
+            f"LONG_MIN={self.long_min!r}, "
+            f"LONG_SEC={self.long_sec!r}, "
+            f"LONG_HEMIS={self.long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"FIX_ID_OLD={self.fix_id_old!r}, "
+            f"CHARTING_REMARK={self.charting_remark!r}, "
+            f"FIX_USE_CODE={self.fix_use_code!r}, "
+            f"ARTCC_ID_HIGH={self.artcc_id_high!r}, "
+            f"ARTCC_ID_LOW={self.artcc_id_low!r}, "
+            f"PITCH_FLAG={self.pitch_flag!r}, "
+            f"CATCH_FLAG={self.catch_flag!r}, "
+            f"SUA_ATCAA_FLAG={self.sua_atcaa_flag!r}, "
+            f"MIN_RECEP_ALT={self.min_recep_alt!r}, "
+            f"COMPULSORY={self.compulsory!r}, "
+            f"CHARTS={self.charts!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fix_id} :: {self.charts}"

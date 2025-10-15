@@ -19,9 +19,6 @@ class ATC_SVC(FAA_Record_Base):
     city: str
     country_code: str
     ctl_svc: str
-    file: str
-    action: str
-    mods: str
 
     def __init__(
         self,
@@ -38,6 +35,8 @@ class ATC_SVC(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -47,9 +46,44 @@ class ATC_SVC(FAA_Record_Base):
         self.city = replace_empty_string(city)
         self.country_code = replace_empty_string(country_code)
         self.ctl_svc = replace_empty_string(ctl_svc)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.facility_id, self.facility_type, self.ctl_svc))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_SVC):
+            return False
+        return (
+            self.facility_id == other.facility_id
+            and self.facility_type == other.facility_type
+            and self.ctl_svc == other.ctl_svc
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_SVC):
+            return False
+        return (self.facility_id, self.facility_type, self.ctl_svc, self.file) < (
+            other.facility_id,
+            other.facility_type,
+            other.ctl_svc,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"FACILITY_ID={self.facility_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"CTL_SVC={self.ctl_svc!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.facility_type} :: {self.ctl_svc}"
@@ -110,7 +144,7 @@ class ATC_SVC_File(FAA_File_Base):
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
                     is_in_filters = self.filter_object.is_in_airports(
-                        record.facility_id.strip()
+                        record.facility_id
                     )
 
                 if not use_filters or is_in_filters:

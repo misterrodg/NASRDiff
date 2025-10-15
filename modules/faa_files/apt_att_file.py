@@ -21,9 +21,6 @@ class APT_ATT(FAA_Record_Base):
     month: str
     day: str
     hour: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -42,6 +39,8 @@ class APT_ATT(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -53,9 +52,41 @@ class APT_ATT(FAA_Record_Base):
         self.month = replace_empty_string(month)
         self.day = replace_empty_string(day)
         self.hour = replace_empty_string(hour)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.sked_seq_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_ATT):
+            return False
+        return self.arpt_id == other.arpt_id and self.sked_seq_no == other.sked_seq_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_ATT):
+            return False
+        return (self.arpt_id, self.sked_seq_no, self.file) < (
+            other.arpt_id,
+            other.sked_seq_no,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"SKED_SEQ_NO={self.sked_seq_no!r}, "
+            f"MONTH={self.month!r}, "
+            f"DAY={self.day!r}, "
+            f"HOUR={self.hour!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id} :: {self.sked_seq_no}"
@@ -120,9 +151,7 @@ class APT_ATT_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.arpt_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airports(record.arpt_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

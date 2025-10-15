@@ -23,9 +23,6 @@ class ATC_RMK(FAA_Record_Base):
     ref_col_name: str
     remark_no: str
     remark: str
-    file: str
-    action: str
-    mods: str
 
     def __init__(
         self,
@@ -46,6 +43,8 @@ class ATC_RMK(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -59,9 +58,45 @@ class ATC_RMK(FAA_Record_Base):
         self.ref_col_name = replace_empty_string(ref_col_name)
         self.remark_no = replace_empty_string(remark_no)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.facility_id, self.remark_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_RMK):
+            return False
+        return (
+            self.facility_id == other.facility_id and self.remark_no == other.remark_no
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_RMK):
+            return False
+        return (self.facility_id, self.remark_no, self.file) < (
+            other.facility_id,
+            other.remark_no,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"FACILITY_ID={self.facility_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"LEGACY_ELEMENT_NUMBER={self.legacy_element_number!r}, "
+            f"TAB_NAME={self.tab_name!r}, "
+            f"REF_COL_NAME={self.ref_col_name!r}, "
+            f"REMARK_NO={self.remark_no!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.facility_id} :: {self.remark_no} :: {self.remark}"
@@ -130,7 +165,7 @@ class ATC_RMK_File(FAA_File_Base):
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
                     is_in_filters = self.filter_object.is_in_airports(
-                        record.facility_id.strip()
+                        record.facility_id
                     )
 
                 if not use_filters or is_in_filters:

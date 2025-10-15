@@ -100,9 +100,6 @@ class APT_BASE(FAA_Record_Base):
     min_op_network: str
     user_fee_flag: str
     cta: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -200,6 +197,8 @@ class APT_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.site_no = replace_empty_string(site_no)
         self.site_type_code = replace_empty_string(site_type_code)
@@ -290,9 +289,116 @@ class APT_BASE(FAA_Record_Base):
         self.min_op_network = replace_empty_string(min_op_network)
         self.user_fee_flag = replace_empty_string(user_fee_flag)
         self.cta = replace_empty_string(cta)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.arpt_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_BASE):
+            return False
+        return self.arpt_id == other.arpt_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_BASE):
+            return False
+        return (self.arpt_id, self.file) < (other.arpt_id, other.file)
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"SITE_NO={self.site_no!r}, "
+            f"SITE_TYPE_CODE={self.site_type_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"ARPT_ID={self.arpt_id!r}, "
+            f"CITY={self.city!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"REGION_CODE={self.region_code!r}, "
+            f"ADO_CODE={self.ado_code!r}, "
+            f"STATE_NAME={self.state_name!r}, "
+            f"COUNTY_NAME={self.county_name!r}, "
+            f"COUNTY_ASSOC_STATE={self.county_assoc_state!r}, "
+            f"ARPT_NAME={self.arpt_name!r}, "
+            f"OWNERSHIP_TYPE_CODE={self.ownership_type_code!r}, "
+            f"FACILITY_USE_CODE={self.facility_use_code!r}, "
+            f"LAT_DEG={self.lat_deg!r}, "
+            f"LAT_MIN={self.lat_min!r}, "
+            f"LAT_SEC={self.lat_sec!r}, "
+            f"LAT_HEMIS={self.lat_hemis!r}, "
+            f"LAT_DECIMAL={self.lat_decimal!r}, "
+            f"LONG_DEG={self.long_deg!r}, "
+            f"LONG_MIN={self.long_min!r}, "
+            f"LONG_SEC={self.long_sec!r}, "
+            f"LONG_HEMIS={self.long_hemis!r}, "
+            f"LONG_DECIMAL={self.long_decimal!r}, "
+            f"SURVEY_METHOD_CODE={self.survey_method_code!r}, "
+            f"ELEV={self.elev!r}, "
+            f"ELEV_METHOD_CODE={self.elev_method_code!r}, "
+            f"MAG_VARN={self.mag_varn!r}, "
+            f"MAG_HEMIS={self.mag_hemis!r}, "
+            f"MAG_VARN_YEAR={self.mag_varn_year!r}, "
+            f"TPA={self.tpa!r}, "
+            f"CHART_NAME={self.chart_name!r}, "
+            f"DIST_CITY_TO_AIRPORT={self.dist_city_to_airport!r}, "
+            f"DIRECTION_CODE={self.direction_code!r}, "
+            f"ACREAGE={self.acreage!r}, "
+            f"RESP_ARTCC_ID={self.resp_artcc_id!r}, "
+            f"COMPUTER_ID={self.computer_id!r}, "
+            f"ARTCC_NAME={self.artcc_name!r}, "
+            f"FSS_ON_ARPT_FLAG={self.fss_on_arpt_flag!r}, "
+            f"FSS_ID={self.fss_id!r}, "
+            f"FSS_NAME={self.fss_name!r}, "
+            f"PHONE_NO={self.phone_no!r}, "
+            f"TOLL_FREE_NO={self.toll_free_no!r}, "
+            f"ALT_FSS_ID={self.alt_fss_id!r}, "
+            f"ALT_FSS_NAME={self.alt_fss_name!r}, "
+            f"ALT_TOLL_FREE_NO={self.alt_toll_free_no!r}, "
+            f"NOTAM_ID={self.notam_id!r}, "
+            f"NOTAM_FLAG={self.notam_flag!r}, "
+            f"ACTIVATION_DATE={self.activation_date!r}, "
+            f"ARPT_STATUS={self.arpt_status!r}, "
+            f"FAR_139_TYPE_CODE={self.far_139_type_code!r}, "
+            f"FAR_139_CARRIER_SER_CODE={self.far_139_carrier_ser_code!r}, "
+            f"ARFF_CERT_TYPE_DATE={self.arff_cert_type_date!r}, "
+            f"NASP_CODE={self.nasp_code!r}, "
+            f"ASP_ANLYS_DTRM_CODE={self.asp_anlys_dtrm_code!r}, "
+            f"CUST_FLAG={self.cust_flag!r}, "
+            f"LNDG_RIGHTS_FLAG={self.lndg_rights_flag!r}, "
+            f"JOINT_USE_FLAG={self.joint_use_flag!r}, "
+            f"MIL_LNDG_FLAG={self.mil_lndg_flag!r}, "
+            f"INSPECT_METHOD_CODE={self.inspect_method_code!r}, "
+            f"INSPECTOR_CODE={self.inspector_code!r}, "
+            f"LAST_INSPECTION={self.last_inspection!r}, "
+            f"LAST_INFO_RESPONSE={self.last_info_response!r}, "
+            f"FUEL_TYPES={self.fuel_types!r}, "
+            f"AIRFRAME_REPAIR_SER_CODE={self.airframe_repair_ser_code!r}, "
+            f"PWR_PLANT_REPAIR_SER={self.pwr_plant_repair_ser!r}, "
+            f"BOTTLED_OXY_TYPE={self.bottled_oxy_type!r}, "
+            f"BULK_OXY_TYPE={self.bulk_oxy_type!r}, "
+            f"LGT_SKED={self.lgt_sked!r}, "
+            f"BCN_LGT_SKED={self.bcn_lgt_sked!r}, "
+            f"TWR_TYPE_CODE={self.twr_type_code!r}, "
+            f"SEG_CIRCLE_MKR_FLAG={self.seg_circle_mkr_flag!r}, "
+            f"BCN_LENS_COLOR={self.bcn_lens_color!r}, "
+            f"LNDG_FEE_FLAG={self.lndg_fee_flag!r}, "
+            f"MEDICAL_USE_FLAG={self.medical_use_flag!r}, "
+            f"ARPT_PSN_SOURCE={self.arpt_psn_source!r}, "
+            f"POSITION_SRC_DATE={self.position_src_date!r}, "
+            f"ARPT_ELEV_SOURCE={self.arpt_elev_source!r}, "
+            f"ELEVATION_SRC_DATE={self.elevation_src_date!r}, "
+            f"CONTR_FUEL_AVBL={self.contr_fuel_avbl!r}, "
+            f"TRNS_STRG_BUOY_FLAG={self.trns_strg_buoy_flag!r}, "
+            f"TRNS_STRG_HGR_FLAG={self.trns_strg_hgr_flag!r}, "
+            f"TRNS_STRG_TIE_FLAG={self.trns_strg_tie_flag!r}, "
+            f"OTHER_SERVICES={self.other_services!r}, "
+            f"WIND_INDCR_FLAG={self.wind_indcr_flag!r}, "
+            f"ICAO_ID={self.icao_id!r}, "
+            f"MIN_OP_NETWORK={self.min_op_network!r}, "
+            f"USER_FEE_FLAG={self.user_fee_flag!r}, "
+            f"CTA={self.cta!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.arpt_id}"
@@ -516,9 +622,7 @@ class APT_BASE_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.arpt_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airports(record.arpt_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

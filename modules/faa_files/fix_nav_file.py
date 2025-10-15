@@ -19,9 +19,6 @@ class FIX_NAV(FAA_Record_Base):
     nav_type: str
     bearing: str
     distance: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -38,6 +35,8 @@ class FIX_NAV(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.fix_id = replace_empty_string(fix_id)
         self.icao_region_code = replace_empty_string(icao_region_code)
@@ -47,9 +46,44 @@ class FIX_NAV(FAA_Record_Base):
         self.nav_type = replace_empty_string(nav_type)
         self.bearing = replace_empty_string(bearing)
         self.distance = replace_empty_string(distance)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.fix_id, self.nav_id, self.nav_type))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_NAV):
+            return False
+        return (
+            self.fix_id == other.fix_id
+            and self.nav_id == other.nav_id
+            and self.nav_type == other.nav_type
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_NAV):
+            return False
+        return (self.fix_id, self.nav_id, self.nav_type, self.file) < (
+            other.fix_id,
+            other.nav_id,
+            other.nav_type,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FIX_ID={self.fix_id!r}, "
+            f"ICAO_REGION_CODE={self.icao_region_code!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"NAV_ID={self.nav_id!r}, "
+            f"NAV_TYPE={self.nav_type!r}, "
+            f"BEARING={self.bearing!r}, "
+            f"DISTANCE={self.distance!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fix_id} :: {self.nav_id} :: {self.nav_type}"

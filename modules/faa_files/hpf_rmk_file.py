@@ -9,34 +9,28 @@ from typing import Self
 import csv
 
 
-class ATC_ATIS(FAA_Record_Base):
+class HPF_RMK(FAA_Record_Base):
     eff_date: str
-    site_no: str
-    site_type_code: str
-    facility_type: str
+    hp_name: str
+    hp_no: str
     state_code: str
-    facility_id: str
-    city: str
     country_code: str
-    atis_no: str
-    description: str
-    atis_hrs: str
-    atis_phone_no: str
+    tab_name: str
+    ref_col_name: str
+    ref_col_seq_no: str
+    remark: str
 
     def __init__(
         self,
         eff_date: str,
-        site_no: str,
-        site_type_code: str,
-        facility_type: str,
+        hp_name: str,
+        hp_no: str,
         state_code: str,
-        facility_id: str,
-        city: str,
         country_code: str,
-        atis_no: str,
-        description: str,
-        atis_hrs: str,
-        atis_phone_no: str,
+        tab_name: str,
+        ref_col_name: str,
+        ref_col_seq_no: str,
+        remark: str,
         file: str,
         action: Action,
         mods: str,
@@ -44,32 +38,29 @@ class ATC_ATIS(FAA_Record_Base):
         super().__init__(file, action, mods)
 
         self.eff_date = replace_empty_string(eff_date)
-        self.site_no = replace_empty_string(site_no)
-        self.site_type_code = replace_empty_string(site_type_code)
-        self.facility_type = replace_empty_string(facility_type)
+        self.hp_name = replace_empty_string(hp_name)
+        self.hp_no = replace_empty_string(hp_no)
         self.state_code = replace_empty_string(state_code)
-        self.facility_id = replace_empty_string(facility_id)
-        self.city = replace_empty_string(city)
         self.country_code = replace_empty_string(country_code)
-        self.atis_no = replace_empty_string(atis_no)
-        self.description = replace_empty_string(description)
-        self.atis_hrs = replace_empty_string(atis_hrs)
-        self.atis_phone_no = replace_empty_string(atis_phone_no)
+        self.tab_name = replace_empty_string(tab_name)
+        self.ref_col_name = replace_empty_string(ref_col_name)
+        self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
+        self.remark = replace_empty_string(remark)
 
     def __hash__(self) -> int:
-        return hash((self.facility_id, self.atis_no))
+        return hash((self.hp_name, self.hp_no))
 
     def __eq__(self, other: Self) -> bool:
-        if not isinstance(other, ATC_ATIS):
+        if not isinstance(other, HPF_RMK):
             return False
-        return self.facility_id == other.facility_id and self.atis_no == other.atis_no
+        return self.hp_name == other.hp_name and self.hp_no == other.hp_no
 
     def __lt__(self, other: Self) -> bool:
-        if not isinstance(other, ATC_ATIS):
+        if not isinstance(other, HPF_RMK):
             return False
-        return (self.facility_id.self.atis_no, self.file) < (
-            other.facility_id,
-            other.atis_no,
+        return (self.hp_name, self.hp_no, self.file) < (
+            other.hp_name,
+            other.hp_no,
             other.file,
         )
 
@@ -77,23 +68,20 @@ class ATC_ATIS(FAA_Record_Base):
         return (
             f"{self.__class__.__name__} ( "
             f"EFF_DATE={self.eff_date!r}, "
-            f"SITE_NO={self.site_no!r}, "
-            f"SITE_TYPE_CODE={self.site_type_code!r}, "
-            f"FACILITY_TYPE={self.facility_type!r}, "
+            f"HP_NAME={self.hp_name!r}, "
+            f"HP_NO={self.hp_no!r}, "
             f"STATE_CODE={self.state_code!r}, "
-            f"FACILITY_ID={self.facility_id!r}, "
-            f"CITY={self.city!r}, "
             f"COUNTRY_CODE={self.country_code!r}, "
-            f"ATIS_NO={self.atis_no!r}, "
-            f"DESCRIPTION={self.description!r}, "
-            f"ATIS_HRS={self.atis_hrs!r}, "
-            f"ATIS_PHONE_NO={self.atis_phone_no!r}, "
+            f"TAB_NAME={self.tab_name!r}, "
+            f"REF_COL_NAME={self.ref_col_name!r}, "
+            f"REF_COL_SEQ_NO={self.ref_col_seq_no!r}, "
+            f"REMARK={self.remark!r}, "
             f"{super().__repr__()}"
             " )"
         )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.facility_id} :: {self.atis_no}"
+        base_string = f"{self.hp_name} :: {self.hp_no} :: {self.remark}"
 
         modification_string = ""
         if last_record:
@@ -104,30 +92,28 @@ class ATC_ATIS(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"SITE_NO: {self.site_no}, "
-                f"SITE_TYPE_CODE: {self.site_type_code}, "
-                f"FACILITY_TYPE: {self.facility_type}, "
                 f"STATE_CODE: {self.state_code}, "
-                f"CITY: {self.city}, "
                 f"COUNTRY_CODE: {self.country_code}, "
-                f"DESCRIPTION: {self.description}, "
-                f"ATIS_HRS: {self.atis_hrs}, "
-                f"ATIS_PHONE_NO: {self.atis_phone_no}"
+                f"TAB_NAME: {self.tab_name}, "
+                f"REF_COL_NAME: {self.ref_col_name}, "
+                f"REF_COL_SEQ_NO: {self.ref_col_seq_no}"
                 " ]"
             )
 
         return f"{base_string}{modification_string}{record_string}"
 
 
-@register_faa_file("ATC_ATIS")
-class ATC_ATIS_File(FAA_File_Base):
+@register_faa_file("HPF_RMK")
+class HPF_RMK_File(FAA_File_Base):
     def __init__(
         self,
         file_path: str,
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "ATC ATIS", use_verbose, filter_object)
+        super().__init__(
+            file_path, "Holding Pattern Remark", use_verbose, filter_object
+        )
 
         self.__load_from_csv()
 
@@ -136,19 +122,16 @@ class ATC_ATIS_File(FAA_File_Base):
             reader = csv.DictReader(f)
 
             for row in reader:
-                record = ATC_ATIS(
+                record = HPF_RMK(
                     eff_date=row["EFF_DATE"],
-                    site_no=row["SITE_NO"],
-                    site_type_code=row["SITE_TYPE_CODE"],
-                    facility_type=row["FACILITY_TYPE"],
+                    hp_name=row["HP_NAME"],
+                    hp_no=row["HP_NO"],
                     state_code=row["STATE_CODE"],
-                    facility_id=row["FACILITY_ID"],
-                    city=row["CITY"],
                     country_code=row["COUNTRY_CODE"],
-                    atis_no=row["ATIS_NO"],
-                    description=row["DESCRIPTION"],
-                    atis_hrs=row["ATIS_HRS"],
-                    atis_phone_no=row["ATIS_PHONE_NO"],
+                    tab_name=row["TAB_NAME"],
+                    ref_col_name=row["REF_COL_NAME"],
+                    ref_col_seq_no=row["REF_COL_SEQ_NO"],
+                    remark=row["REMARK"],
                     file=row["File"],
                     action=Action(row["Action"]),
                     mods=row["Mods"],
@@ -157,9 +140,8 @@ class ATC_ATIS_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.facility_id
-                    )
+                    # This file does not have filterable fields.
+                    pass
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

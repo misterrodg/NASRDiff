@@ -22,9 +22,6 @@ class CDR(FAA_Record_Base):
     play: str
     naveqp: str
     length: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -44,6 +41,8 @@ class CDR(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.rcode = replace_empty_string(rcode)
         self.orig = replace_empty_string(orig)
         self.dest = replace_empty_string(dest)
@@ -56,11 +55,40 @@ class CDR(FAA_Record_Base):
         self.play = replace_empty_string(play)
         self.naveqp = replace_empty_string(naveqp)
         self.length = replace_empty_string(length)
-        self.file = file
-        self.action = action
-        self.mods = mods
 
         self.mods = self.mods.replace("Route String", "Route_String")
+
+    def __hash__(self) -> int:
+        return hash((self.rcode))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, CDR):
+            return False
+        return self.rcode == other.rcode
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, CDR):
+            return False
+        return (self.rcode, self.file) < (other.rcode, other.file)
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"RCODE={self.rcode!r}, "
+            f"ORIG={self.orig!r}, "
+            f"DEST={self.dest!r}, "
+            f"DEPFIX={self.depfix!r}, "
+            f"ROUTE STRING={self.route_string!r}, "
+            f"DCNTR={self.dcntr!r}, "
+            f"ACNTR={self.acntr!r}, "
+            f"TCNTRS={self.tcntrs!r}, "
+            f"COORDREQ={self.coordreq!r}, "
+            f"PLAY={self.play!r}, "
+            f"NAVEQP={self.naveqp!r}, "
+            f"LENGTH={self.length!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.orig}-{self.dest} :: {self.rcode} :: {self.depfix}"
@@ -128,9 +156,7 @@ class CDR_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports(
-                        record.orig.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airports(record.orig)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:

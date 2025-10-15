@@ -19,9 +19,6 @@ class FSS_RMK(FAA_Record_Base):
     ref_col_name: str
     ref_col_seq_no: str
     remark: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -38,6 +35,8 @@ class FSS_RMK(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.fss_id = replace_empty_string(fss_id)
         self.name = replace_empty_string(name)
@@ -47,9 +46,41 @@ class FSS_RMK(FAA_Record_Base):
         self.ref_col_name = replace_empty_string(ref_col_name)
         self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
         self.remark = replace_empty_string(remark)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.fss_id, self.ref_col_seq_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FSS_RMK):
+            return False
+        return (
+            self.fss_id == other.fss_id and self.ref_col_seq_no == other.ref_col_seq_no
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FSS_RMK):
+            return False
+        return (self.fss_id, self.ref_col_seq_no, self.file) < (
+            other.fss_id,
+            other.ref_col_seq_no,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"FSS_ID={self.fss_id!r}, "
+            f"NAME={self.name!r}, "
+            f"CITY={self.city!r}, "
+            f"STATE_CODE={self.state_code!r}, "
+            f"COUNTRY_CODE={self.country_code!r}, "
+            f"REF_COL_NAME={self.ref_col_name!r}, "
+            f"REF_COL_SEQ_NO={self.ref_col_seq_no!r}, "
+            f"REMARK={self.remark!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.fss_id} :: {self.ref_col_seq_no}"

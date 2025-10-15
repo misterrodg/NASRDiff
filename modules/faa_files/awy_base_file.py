@@ -18,9 +18,6 @@ class AWY_BASE(FAA_Record_Base):
     update_date: str
     remark: str
     airway_string: str
-    file: str
-    action: Action
-    mods: str
 
     def __init__(
         self,
@@ -36,6 +33,8 @@ class AWY_BASE(FAA_Record_Base):
         action: Action,
         mods: str,
     ) -> None:
+        super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.regulatory = replace_empty_string(regulatory)
         self.awy_designation = replace_empty_string(awy_designation)
@@ -44,9 +43,34 @@ class AWY_BASE(FAA_Record_Base):
         self.update_date = replace_empty_string(update_date)
         self.remark = replace_empty_string(remark)
         self.airway_string = replace_empty_string(airway_string)
-        self.file = file
-        self.action = action
-        self.mods = mods
+
+    def __hash__(self) -> int:
+        return hash((self.awy_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, AWY_BASE):
+            return False
+        return self.awy_id == other.awy_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, AWY_BASE):
+            return False
+        return (self.awy_id, self.file) < (other.awy_id, other.file)
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"REGULATORY={self.regulatory!r}, "
+            f"AWY_DESIGNATION={self.awy_designation!r}, "
+            f"AWY_LOCATION={self.awy_location!r}, "
+            f"AWY_ID={self.awy_id!r}, "
+            f"UPDATE_DATE={self.update_date!r}, "
+            f"REMARK={self.remark!r}, "
+            f"AIRWAY_STRING={self.airway_string!r}"
+            f"{super().__repr__()}"
+            " )"
+        )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
         base_string = f"{self.awy_id}"
@@ -106,9 +130,7 @@ class AWY_BASE_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airways(
-                        record.awy_id.strip()
-                    )
+                    is_in_filters = self.filter_object.is_in_airways(record.awy_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:
