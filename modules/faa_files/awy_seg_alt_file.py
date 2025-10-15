@@ -373,7 +373,7 @@ class AWY_SEG_ALT_File(FAA_File_Base):
                     reqd_nav_performance=row["REQD_NAV_PERFORMANCE"],
                     remark=row["REMARK"],
                     file=row["File"],
-                    action=row["Action"],
+                    action=Action(row["Action"]),
                     mods=row["Mods"],
                 )
 

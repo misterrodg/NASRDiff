@@ -135,7 +135,7 @@ class APT_ARS_File(FAA_File_Base):
                     rwy_end_id=row["RWY_END_ID"],
                     arrest_device_code=row["ARREST_DEVICE_CODE"],
                     file=row["File"],
-                    action=row["Action"],
+                    action=Action(row["Action"]),
                     mods=row["Mods"],
                 )
 

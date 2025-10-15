@@ -123,7 +123,7 @@ class AWY_BASE_File(FAA_File_Base):
                     remark=row["REMARK"],
                     airway_string=row["AIRWAY_STRING"],
                     file=row["File"],
-                    action=row["Action"],
+                    action=Action(row["Action"]),
                     mods=row["Mods"],
                 )
 

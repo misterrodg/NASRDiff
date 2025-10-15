@@ -223,7 +223,7 @@ class ILS_DME_File(FAA_File_Base):
                     site_elevation=row["SITE_ELEVATION"],
                     channel=row["CHANNEL"],
                     file=row["File"],
-                    action=row["Action"],
+                    action=Action(row["Action"]),
                     mods=row["Mods"],
                 )
 

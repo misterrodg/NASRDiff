@@ -224,7 +224,7 @@ class FSS_BASE_File(FAA_File_Base):
                     phone_no=row["PHONE_NO"],
                     toll_free_no=row["TOLL_FREE_NO"],
                     file=row["File"],
-                    action=row["Action"],
+                    action=Action(row["Action"]),
                     mods=row["Mods"],
                 )
 

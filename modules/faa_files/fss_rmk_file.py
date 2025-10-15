@@ -134,7 +134,7 @@ class FSS_RMK_File(FAA_File_Base):
                     ref_col_seq_no=row["REF_COL_SEQ_NO"],
                     remark=row["REMARK"],
                     file=row["File"],
-                    action=row["Action"],
+                    action=Action(row["Action"]),
                     mods=row["Mods"],
                 )
 
