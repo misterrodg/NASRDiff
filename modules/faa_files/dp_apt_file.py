@@ -84,7 +84,7 @@ class DP_APT(FAA_Record_Base):
         )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.arpt_id} :: {self.dp_computer_code} :: {self.body_name}"
+        base_string = f"{self.arpt_id} :: {self.dp_name} :: {self.dp_computer_code} :: {self.body_name}"
 
         modification_string = ""
         if last_record:
@@ -95,7 +95,6 @@ class DP_APT(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"DP_NAME: {self.dp_name}, "
                 f"ARTCC: {self.artcc}, "
                 f"BODY_SEQ: {self.body_seq}, "
                 f"RWY_END_ID: {self.rwy_end_id}"
