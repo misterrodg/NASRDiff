@@ -34,6 +34,7 @@ from .ils_gs_file import ILS_GS_File
 from .ils_mkr_file import ILS_MKR_File
 from .ils_rmk_file import ILS_RMK_File
 from .lid_file import LID_File
+from .maa_base_file import MAA_BASE_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -73,5 +74,6 @@ __all__ = [
     "ILS_MKR_File",
     "ILS_RMK_File",
     "LID_File",
+    "MAA_BASE_File",
     "FAA_File_Base",
 ]
