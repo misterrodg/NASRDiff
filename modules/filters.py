@@ -34,6 +34,15 @@ class FilterObject:
             return True
         return False
 
+    def is_in_artccs_many(self, artcc_ids: str) -> bool:
+        if len(self.artccs) == 0:
+            return False
+        list_ids = artcc_ids.split()
+        for id in list_ids:
+            if id in self.artccs:
+                return True
+        return False
+
     def is_in_airports(self, airport_id: str) -> bool:
         if len(self.airports) == 0:
             return False
