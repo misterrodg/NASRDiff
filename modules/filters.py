@@ -38,6 +38,15 @@ class FilterObject:
             return True
         return False
 
+    def is_in_airports_many(self, airport_ids: str) -> bool:
+        if len(self.airports) == 0:
+            return False
+        list_ids = airport_ids.split()
+        for id in list_ids:
+            if id in self.airports:
+                return True
+        return False
+
     def is_in_airways(self, airway_id: str) -> bool:
         if len(self.airways) == 0:
             return False
