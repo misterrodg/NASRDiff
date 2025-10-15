@@ -39,6 +39,7 @@ from .maa_con_file import MAA_CON_File
 from .maa_rmk_file import MAA_RMK_File
 from .maa_shp_file import MAA_SHP_File
 from .mil_ops_file import MIL_OPS_File
+from .mtr_agy_file import MTR_AGY_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -83,5 +84,6 @@ __all__ = [
     "MAA_RMK_File",
     "MAA_SHP_File",
     "MIL_OPS_File",
+    "MTR_AGY_File",
     "FAA_File_Base",
 ]
