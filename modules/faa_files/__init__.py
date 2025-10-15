@@ -37,6 +37,7 @@ from .lid_file import LID_File
 from .maa_base_file import MAA_BASE_File
 from .maa_con_file import MAA_CON_File
 from .maa_rmk_file import MAA_RMK_File
+from .maa_shp_file import MAA_SHP_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -79,5 +80,6 @@ __all__ = [
     "MAA_BASE_File",
     "MAA_CON_File",
     "MAA_RMK_File",
+    "MAA_SHP_File",
     "FAA_File_Base",
 ]
