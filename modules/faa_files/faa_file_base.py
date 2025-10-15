@@ -68,7 +68,12 @@ class FAA_File_Base:
         self.__get_delete_add()
 
         result = f"{self.report_name}:\n"
-        if len(self.adds) == 0 and len(self.mods) == 0 and len(self.dels) == 0:
+        if (
+            len(self.adds) == 0
+            and len(self.mods) == 0
+            and len(self.del_adds) == 0
+            and len(self.dels) == 0
+        ):
             result += "  No changes\n"
             return result
 
