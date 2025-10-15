@@ -38,8 +38,6 @@ class MAA_RMK(FAA_Record_Base):
         self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
         self.remark = replace_empty_string(remark)
 
-        print(self)
-
     def __hash__(self) -> int:
         return hash((self.maa_id, self.ref_col_seq_no))
 
