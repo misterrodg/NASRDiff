@@ -39,17 +39,23 @@ class MTR_BASE(FAA_Record_Base):
         self.time_of_use = replace_empty_string(time_of_use)
 
     def __hash__(self) -> int:
-        return hash((self.route_id))
+        return hash((self.route_type_code, self.route_id))
 
     def __eq__(self, other: Self) -> bool:
         if not isinstance(other, MTR_BASE):
             return False
-        return self.route_id == other.route_id
+        return (
+            self.route_type_code == other.route_type_code
+            and self.route_id == other.route_id
+        )
 
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, MTR_BASE):
             return False
-        return (self.route_id) < (other.route_id)
+        return (self.route_type_code, self.route_id) < (
+            other.route_type_code,
+            other.route_id,
+        )
 
     def __repr__(self):
         return (
