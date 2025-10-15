@@ -67,7 +67,7 @@ class ATC_ATIS(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, ATC_ATIS):
             return False
-        return (self.facility_id.self.atis_no, self.file) < (
+        return (self.facility_id, self.atis_no, self.file) < (
             other.facility_id,
             other.atis_no,
             other.file,
