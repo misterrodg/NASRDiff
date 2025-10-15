@@ -128,6 +128,23 @@ class ILS_BASE(FAA_Record_Base):
         self.loc_freq = replace_empty_string(loc_freq)
         self.bk_course_status_code = replace_empty_string(bk_course_status_code)
 
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.ils_loc_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, ILS_BASE):
+            return False
+        return self.arpt_id == other.arpt_id and self.ils_loc_id == other.ils_loc_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, ILS_BASE):
+            return False
+        return (self.arpt_id, self.ils_loc_id, self.file) < (
+            other.arpt_id,
+            other.ils_loc_id,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

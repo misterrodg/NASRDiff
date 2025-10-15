@@ -59,6 +59,25 @@ class ATC_RMK(FAA_Record_Base):
         self.remark_no = replace_empty_string(remark_no)
         self.remark = replace_empty_string(remark)
 
+    def __hash__(self) -> int:
+        return hash((self.facility_id, self.remark_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_RMK):
+            return False
+        return (
+            self.facility_id == other.facility_id and self.remark_no == other.remark_no
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_RMK):
+            return False
+        return (self.facility_id, self.remark_no, self.file) < (
+            other.facility_id,
+            other.remark_no,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

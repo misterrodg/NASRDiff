@@ -41,6 +41,23 @@ class HPF_SPD_ALT(FAA_Record_Base):
         self.speed_range = replace_empty_string(speed_range)
         self.altitude = replace_empty_string(altitude)
 
+    def __hash__(self) -> int:
+        return hash((self.hp_name, self.hp_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_SPD_ALT):
+            return False
+        return self.hp_name == other.hp_name and self.hp_no == other.hp_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_SPD_ALT):
+            return False
+        return (self.hp_name, self.hp_no, self.file) < (
+            other.hp_name,
+            other.hp_no,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

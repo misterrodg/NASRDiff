@@ -44,6 +44,19 @@ class AWY_BASE(FAA_Record_Base):
         self.remark = replace_empty_string(remark)
         self.airway_string = replace_empty_string(airway_string)
 
+    def __hash__(self) -> int:
+        return hash((self.awy_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, AWY_BASE):
+            return False
+        return self.awy_id == other.awy_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, AWY_BASE):
+            return False
+        return (self.awy_id, self.file) < (other.awy_id, other.file)
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

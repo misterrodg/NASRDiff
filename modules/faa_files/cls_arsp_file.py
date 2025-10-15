@@ -59,6 +59,19 @@ class CLS_ARSP(FAA_Record_Base):
         self.airspace_hrs = replace_empty_string(airspace_hrs)
         self.remark = replace_empty_string(remark)
 
+    def __hash__(self) -> int:
+        return hash((self.arpt_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, CLS_ARSP):
+            return False
+        return self.arpt_id == other.arpt_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, CLS_ARSP):
+            return False
+        return (self.arpt_id, self.file) < (other.arpt_id, other.file)
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

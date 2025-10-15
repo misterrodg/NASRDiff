@@ -38,6 +38,23 @@ class HPF_CHRT(FAA_Record_Base):
         self.country_code = replace_empty_string(country_code)
         self.charting_type_desc = replace_empty_string(charting_type_desc)
 
+    def __hash__(self) -> int:
+        return hash((self.hp_name, self.hp_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_CHRT):
+            return False
+        return self.hp_name == other.hp_name and self.hp_no == other.hp_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_CHRT):
+            return False
+        return (self.hp_name, self.hp_no, self.file) < (
+            other.hp_name,
+            other.hp_no,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

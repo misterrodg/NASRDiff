@@ -65,6 +65,23 @@ class HPF_BASE(FAA_Record_Base):
         self.turn_direction = replace_empty_string(turn_direction)
         self.leg_length_dist = replace_empty_string(leg_length_dist)
 
+    def __hash__(self) -> int:
+        return hash((self.hp_name, self.hp_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_BASE):
+            return False
+        return self.hp_name == other.hp_name and self.hp_no == other.hp_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_BASE):
+            return False
+        return (self.hp_name, self.hp_no, self.file) < (
+            other.hp_name,
+            other.hp_no,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

@@ -38,6 +38,26 @@ class FIX_CHRT(FAA_Record_Base):
         self.country_code = replace_empty_string(country_code)
         self.charting_type_desc = replace_empty_string(charting_type_desc)
 
+    def __hash__(self) -> int:
+        return hash((self.fix_id, self.charting_type_desc))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_CHRT):
+            return False
+        return (
+            self.fix_id == other.fix_id
+            and self.charting_type_desc == other.charting_type_desc
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_CHRT):
+            return False
+        return (self.fix_id, self.charting_type_desc, self.file) < (
+            other.fix_id,
+            other.charting_type_desc,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

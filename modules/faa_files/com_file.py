@@ -104,6 +104,27 @@ class COM(FAA_Record_Base):
         self.comm_status_date = replace_empty_string(comm_status_date)
         self.remark = replace_empty_string(remark)
 
+    def __hash__(self) -> int:
+        return hash((self.comm_loc_id, self.facility_id, self.comm_type))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, COM):
+            return False
+        return (
+            self.comm_loc_id == other.comm_loc_id
+            and self.facility_id == other.facility_id
+            and self.comm_type == other.comm_type
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, COM):
+            return False
+        return (self.facility_id, self.comm_type, self.file) < (
+            other.facility_id,
+            other.comm_type,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

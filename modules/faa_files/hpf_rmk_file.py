@@ -47,6 +47,23 @@ class HPF_RMK(FAA_Record_Base):
         self.ref_col_seq_no = replace_empty_string(ref_col_seq_no)
         self.remark = replace_empty_string(remark)
 
+    def __hash__(self) -> int:
+        return hash((self.hp_name, self.hp_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_RMK):
+            return False
+        return self.hp_name == other.hp_name and self.hp_no == other.hp_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, HPF_RMK):
+            return False
+        return (self.hp_name, self.hp_no, self.file) < (
+            other.hp_name,
+            other.hp_no,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

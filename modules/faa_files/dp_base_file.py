@@ -47,6 +47,23 @@ class DP_BASE(FAA_Record_Base):
         self.graphical_dp_type = replace_empty_string(graphical_dp_type)
         self.served_arpt = replace_empty_string(served_arpt)
 
+    def __hash__(self) -> int:
+        return hash((self.served_arpt, self.dp_name))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, DP_BASE):
+            return False
+        return self.served_arpt == other.served_arpt and self.dp_name == other.dp_name
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, DP_BASE):
+            return False
+        return (self.served_arpt, self.dp_name, self.file) < (
+            other.served_arpt,
+            other.dp_name,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

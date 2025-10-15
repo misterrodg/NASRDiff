@@ -68,6 +68,19 @@ class APT_CON(FAA_Record_Base):
         self.zip_plus_four = replace_empty_string(zip_plus_four)
         self.phone_no = replace_empty_string(phone_no)
 
+    def __hash__(self) -> int:
+        return hash((self.arpt_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_CON):
+            return False
+        return self.arpt_id == other.arpt_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_CON):
+            return False
+        return (self.arpt_id, self.file) < (other.arpt_id, other.file)
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

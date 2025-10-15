@@ -50,6 +50,19 @@ class APT_ARS(FAA_Record_Base):
         self.rwy_end_id = replace_empty_string(rwy_end_id)
         self.arrest_device_code = replace_empty_string(arrest_device_code)
 
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.rwy_end_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_ARS):
+            return False
+        return self.arpt_id == other.arpt_id and self.rwy_end_id == other.rwy_end_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_ARS):
+            return False
+        return self.arpt_id < other.arpt_id and self.rwy_end_id < other.rwy_end_id
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

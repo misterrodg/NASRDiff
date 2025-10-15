@@ -110,6 +110,26 @@ class ATC_BASE(FAA_Record_Base):
         self.ctl_prvding_hrs = replace_empty_string(ctl_prvding_hrs)
         self.secondary_ctl_prvding_hrs = replace_empty_string(secondary_ctl_prvding_hrs)
 
+    def __hash__(self) -> int:
+        return hash((self.facility_id, self.facility_type))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_BASE):
+            return False
+        return (
+            self.facility_id == other.facility_id
+            and self.facility_type == other.facility_type
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_BASE):
+            return False
+        return (self.facility_id, self.facility_type, self.file) < (
+            other.facility_id,
+            other.facility_type,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

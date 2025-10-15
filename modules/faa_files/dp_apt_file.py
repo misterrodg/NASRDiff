@@ -44,6 +44,30 @@ class DP_APT(FAA_Record_Base):
         self.arpt_id = replace_empty_string(arpt_id)
         self.rwy_end_id = replace_empty_string(rwy_end_id)
 
+    def __hash__(self) -> int:
+        return hash((self.dp_name, self.artcc, self.arpt_id, self.rwy_end_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, DP_APT):
+            return False
+        return (
+            self.dp_name == other.dp_name
+            and self.artcc == other.artcc
+            and self.arpt_id == other.arpt_id
+            and self.rwy_end_id == other.rwy_end_id
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, DP_APT):
+            return False
+        return (self.dp_name, self.artcc, self.arpt_id, self.rwy_end_id, self.file) < (
+            other.dp_name,
+            other.artcc,
+            other.arpt_id,
+            other.rwy_end_id,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

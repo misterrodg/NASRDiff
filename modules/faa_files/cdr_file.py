@@ -58,6 +58,19 @@ class CDR(FAA_Record_Base):
 
         self.mods = self.mods.replace("Route String", "Route_String")
 
+    def __hash__(self) -> int:
+        return hash((self.rcode))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, CDR):
+            return False
+        return self.rcode == other.rcode
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, CDR):
+            return False
+        return (self.rcode, self.file) < (other.rcode, other.file)
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

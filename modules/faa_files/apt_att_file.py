@@ -53,6 +53,23 @@ class APT_ATT(FAA_Record_Base):
         self.day = replace_empty_string(day)
         self.hour = replace_empty_string(hour)
 
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.sked_seq_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_ATT):
+            return False
+        return self.arpt_id == other.arpt_id and self.sked_seq_no == other.sked_seq_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_ATT):
+            return False
+        return (self.arpt_id, self.sked_seq_no, self.file) < (
+            other.arpt_id,
+            other.sked_seq_no,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

@@ -47,6 +47,28 @@ class ATC_SVC(FAA_Record_Base):
         self.country_code = replace_empty_string(country_code)
         self.ctl_svc = replace_empty_string(ctl_svc)
 
+    def __hash__(self) -> int:
+        return hash((self.facility_id, self.facility_type, self.ctl_svc))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_SVC):
+            return False
+        return (
+            self.facility_id == other.facility_id
+            and self.facility_type == other.facility_type
+            and self.ctl_svc == other.ctl_svc
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_SVC):
+            return False
+        return (self.facility_id, self.facility_type, self.ctl_svc, self.file) < (
+            other.facility_id,
+            other.facility_type,
+            other.ctl_svc,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

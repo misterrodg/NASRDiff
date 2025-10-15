@@ -95,6 +95,23 @@ class APT_RWY(FAA_Record_Base):
         self.gross_wt_dtw = replace_empty_string(gross_wt_dtw)
         self.gross_wt_ddtw = replace_empty_string(gross_wt_ddtw)
 
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.rwy_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY):
+            return False
+        return self.arpt_id == other.arpt_id and self.rwy_id == other.rwy_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY):
+            return False
+        return (self.arpt_id, self.rwy_id, self.file) < (
+            other.arpt_id,
+            other.rwy_id,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

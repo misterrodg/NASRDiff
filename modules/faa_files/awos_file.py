@@ -95,6 +95,19 @@ class AWOS(FAA_Record_Base):
         self.site_type_code = replace_empty_string(site_type_code)
         self.remark = replace_empty_string(remark)
 
+    def __hash__(self) -> int:
+        return hash((self.asos_awos_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, AWOS):
+            return False
+        return self.asos_awos_id == other.asos_awos_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, AWOS):
+            return False
+        return (self.asos_awos_id, self.file) < (other.asos_awos_id, other.file)
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

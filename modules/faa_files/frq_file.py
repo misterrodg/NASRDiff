@@ -85,6 +85,28 @@ class FRQ(FAA_Record_Base):
         self.freq_use = replace_empty_string(freq_use)
         self.remark = replace_empty_string(remark)
 
+    def __hash__(self) -> int:
+        return hash((self.facility, self.serviced_facility, self.freq))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FRQ):
+            return False
+        return (
+            self.facility == other.facility
+            and self.serviced_facility == other.serviced_facility
+            and self.freq == other.freq
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FRQ):
+            return False
+        return (self.facility, self.serviced_facility, self.freq, self.file) < (
+            other.facility,
+            other.serviced_facility,
+            other.freq,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

@@ -268,6 +268,23 @@ class APT_RWY_END(FAA_Record_Base):
         self.lahso_psn_source = replace_empty_string(lahso_psn_source)
         self.rwy_end_lahso_psn_date = replace_empty_string(rwy_end_lahso_psn_date)
 
+    def __hash__(self) -> int:
+        return hash((self.arpt_id, self.rwy_end_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY_END):
+            return False
+        return self.arpt_id == other.arpt_id and self.rwy_end_id == other.rwy_end_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, APT_RWY_END):
+            return False
+        return (self.arpt_id, self.rwy_end_id, self.file) < (
+            other.arpt_id,
+            other.rwy_end_id,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

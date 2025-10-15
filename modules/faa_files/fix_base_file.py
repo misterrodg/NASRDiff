@@ -98,6 +98,23 @@ class FIX_BASE(FAA_Record_Base):
         self.compulsory = replace_empty_string(compulsory)
         self.charts = replace_empty_string(charts)
 
+    def __hash__(self) -> int:
+        return hash((self.fix_id, self.charts))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_BASE):
+            return False
+        return self.fix_id == other.fix_id and self.charts == other.charts
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_BASE):
+            return False
+        return (self.fix_id, self.charts, self.file) < (
+            other.fix_id,
+            other.charts,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

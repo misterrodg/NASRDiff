@@ -95,6 +95,19 @@ class FSS_BASE(FAA_Record_Base):
         self.phone_no = replace_empty_string(phone_no)
         self.toll_free_no = replace_empty_string(toll_free_no)
 
+    def __hash__(self) -> int:
+        return hash((self.fss_id))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FSS_BASE):
+            return False
+        return self.fss_id == other.fss_id
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FSS_BASE):
+            return False
+        return (self.fss_id, self.file) < (other.fss_id, other.file)
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

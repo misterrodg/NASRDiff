@@ -56,6 +56,23 @@ class ATC_ATIS(FAA_Record_Base):
         self.atis_hrs = replace_empty_string(atis_hrs)
         self.atis_phone_no = replace_empty_string(atis_phone_no)
 
+    def __hash__(self) -> int:
+        return hash((self.facility_id, self.atis_no))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_ATIS):
+            return False
+        return self.facility_id == other.facility_id and self.atis_no == other.atis_no
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, ATC_ATIS):
+            return False
+        return (self.facility_id.self.atis_no, self.file) < (
+            other.facility_id,
+            other.atis_no,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "

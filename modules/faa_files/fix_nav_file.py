@@ -47,6 +47,28 @@ class FIX_NAV(FAA_Record_Base):
         self.bearing = replace_empty_string(bearing)
         self.distance = replace_empty_string(distance)
 
+    def __hash__(self) -> int:
+        return hash((self.fix_id, self.nav_id, self.nav_type))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_NAV):
+            return False
+        return (
+            self.fix_id == other.fix_id
+            and self.nav_id == other.nav_id
+            and self.nav_type == other.nav_type
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, FIX_NAV):
+            return False
+        return (self.fix_id, self.nav_id, self.nav_type, self.file) < (
+            other.fix_id,
+            other.nav_id,
+            other.nav_type,
+            other.file,
+        )
+
     def __repr__(self):
         return (
             f"{self.__class__.__name__} ( "
