@@ -31,6 +31,7 @@ from .hpf_spd_alt_file import HPF_SPD_ALT_File
 from .ils_base_file import ILS_BASE_File
 from .ils_dme_file import ILS_DME_File
 from .ils_gs_file import ILS_GS_File
+from .ils_mkr_file import ILS_MKR_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
