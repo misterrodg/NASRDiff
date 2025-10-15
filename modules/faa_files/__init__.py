@@ -41,6 +41,7 @@ from .maa_shp_file import MAA_SHP_File
 from .mil_ops_file import MIL_OPS_File
 from .mtr_agy_file import MTR_AGY_File
 from .mtr_base_file import MTR_BASE_File
+from .mtr_pt_file import MTR_PT_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -87,5 +88,6 @@ __all__ = [
     "MIL_OPS_File",
     "MTR_AGY_File",
     "MTR_BASE_File",
+    "MTR_PT_File",
     "FAA_File_Base",
 ]
