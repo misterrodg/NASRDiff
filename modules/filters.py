@@ -1,9 +1,12 @@
 import json
 import os
+import re
 
 
 FILTER_DIR = "./"
 FILTER_FILE = "filters.json"
+
+BAD_CONVERSION = 360.0
 
 
 class FilterObject:
@@ -54,17 +57,13 @@ class FilterObject:
             return True
         return False
 
-    def is_in_bounds(self, lat: str, lon: str) -> bool:
-        lat_float = 0.0
-        lon_float = 0.0
+    def __convert_float(self, value: str) -> float:
         try:
-            lat_float = float(lat)
-        except ValueError:
-            return False
-        try:
-            lon_float = float(lon)
-        except ValueError:
-            return False
+            return float(value)
+        except:
+            return BAD_CONVERSION
+
+    def __is_in_bounds(self, lat: float, lon: float) -> bool:
         if (
             self.n_lat == 0.0
             and self.s_lat == 0.0
@@ -73,13 +72,70 @@ class FilterObject:
         ):
             return False
         if (
-            self.n_lat >= lat_float
-            and self.s_lat <= lat_float
-            and self.w_lon <= lon_float
-            and self.e_lon >= lon_float
+            self.n_lat >= lat
+            and self.s_lat <= lat
+            and self.w_lon <= lon
+            and self.e_lon >= lon
         ):
             return True
         return False
+
+    def is_in_bounds(self, lat: str, lon: str) -> bool:
+        lat_float = self.__convert_float(lat)
+        if lat_float == BAD_CONVERSION:
+            return False
+
+        lon_float = self.__convert_float(lon)
+        if lon_float == BAD_CONVERSION:
+            return False
+
+        return self.__is_in_bounds(lat_float, lon_float)
+
+    def __convert_dms(self, value: str) -> float:
+        pattern = r"^(\d{2,3})-(\d{2})-(\d{2}\.\d{4})([NSEW])$"
+        m = re.match(pattern, value)
+        if not m.groups():
+            return BAD_CONVERSION
+
+        dec, mins, secs, hemi = m.groups()
+
+        dec_float = self.__convert_float(dec)
+        if dec_float == BAD_CONVERSION:
+            return BAD_CONVERSION
+
+        mins_float = self.__convert_float(mins)
+        if mins_float == BAD_CONVERSION:
+            return BAD_CONVERSION
+
+        secs_float = self.__convert_float(secs)
+        if secs_float == BAD_CONVERSION:
+            return BAD_CONVERSION
+
+        if hemi not in ["N", "E", "S", "W"]:
+            return BAD_CONVERSION
+
+        mins_in_dec = 60
+        secs_in_min = 60
+        result = (
+            dec_float
+            + (mins_float / mins_in_dec)
+            + (secs_float / mins_in_dec / secs_in_min)
+        )
+        if hemi in ["S", "W"]:
+            result = -result
+
+        return result
+
+    def is_in_bounds_dms(self, lat: str, lon: str) -> bool:
+        lat_float = self.__convert_dms(lat)
+        if lat_float == BAD_CONVERSION:
+            return False
+
+        lon_float = self.__convert_dms(lon)
+        if lon_float == BAD_CONVERSION:
+            return False
+
+        return self.__is_in_bounds(lat_float, lon_float)
 
 
 class Filters:
