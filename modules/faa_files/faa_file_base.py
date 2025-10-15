@@ -79,12 +79,14 @@ class FAA_File_Base:
 
         if len(self.adds) > 0:
             result += "  Additions:\n"
+            self.adds.sort()
             for r in self.adds:
                 result += f"    {r.to_string(self.use_verbose)}\n"
 
         if len(self.mods) > 0:
             result += "  Modifications:\n"
             last_record = None
+            self.mods.sort()
             for r in self.mods:
                 if r.file == "1":
                     last_record = r
@@ -94,12 +96,14 @@ class FAA_File_Base:
 
         if len(self.del_adds) > 0:
             result += "  Deleted then Added:\n"
+            self.del_adds.sort()
             for r in self.del_adds:
                 last, this = r
                 result += f"    {this.to_string(self.use_verbose, last)}\n"
 
         if len(self.dels) > 0:
             result += "  Deletions:\n"
+            self.dels.sort()
             for r in self.dels:
                 result += f"    {r.to_string(self.use_verbose)}\n"
 
