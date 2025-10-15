@@ -29,6 +29,7 @@ from .hpf_chrt_file import HPF_CHRT_File
 from .hpf_rmk_file import HPF_RMK_File
 from .hpf_spd_alt_file import HPF_SPD_ALT_File
 from .ils_base_file import ILS_BASE_File
+from .ils_dme_file import ILS_DME_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -63,5 +64,6 @@ __all__ = [
     "HPF_RMK_File",
     "HPF_SPD_ALT_File",
     "ILS_BASE_File",
+    "ILS_DME_File",
     "FAA_File_Base",
 ]
