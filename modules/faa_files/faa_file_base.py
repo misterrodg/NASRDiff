@@ -46,6 +46,7 @@ class FAA_File_Base:
     dels: list[FAA_Record_Base]
     ignore: list
     filter_object: FilterObject | None
+    filterable: bool
 
     def __init__(
         self,
@@ -53,6 +54,7 @@ class FAA_File_Base:
         report_name: str,
         use_verbose: bool,
         filter_object: FilterObject | None = None,
+        filterable: bool = True,
     ) -> None:
         self.file_path = file_path
         self.report_name = report_name
@@ -63,6 +65,7 @@ class FAA_File_Base:
         self.dels = []
         self.ignore = ["file", "action", "mods"]
         self.filter_object = filter_object
+        self.filterable = filterable
 
     def get_text_report(self) -> str:
         self.__get_delete_add()
@@ -74,7 +77,11 @@ class FAA_File_Base:
             and len(self.del_adds) == 0
             and len(self.dels) == 0
         ):
-            result += "  No changes\n"
+            result += (
+                "  No changes\n"
+                if self.filterable
+                else "  This file is not filterable.\n  Use the --all flag to see results.\n"
+            )
             return result
 
         if len(self.adds) > 0:
