@@ -52,6 +52,7 @@ from .pfr_base_file import PFR_BASE_File
 from .pfr_rmt_fmt_file import PFR_RMT_FMT_File
 from .pfr_seg_file import PFR_SEG_File
 from .rdr_file import RDR_File
+from .star_apt_file import STAR_APT_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -109,5 +110,6 @@ __all__ = [
     "PFR_RMT_FMT_File",
     "PFR_SEG_File",
     "RDR_File",
+    "STAR_APT_File",
     "FAA_File_Base",
 ]
