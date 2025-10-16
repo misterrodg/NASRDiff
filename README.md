@@ -9,6 +9,8 @@ reports for the specified files, airports or heliports within those files,
 and/or a bounding box for items that are not specified by airport/heliport ID. 
 An `example_filters.json` is present in the project root as a template.
 
+![Example Report](./docs/images/main.png)
+
 ## Requirements
 
 - Python 3.11+
