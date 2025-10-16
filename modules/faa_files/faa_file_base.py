@@ -30,7 +30,8 @@ class FAA_Record_Base:
             mod_string += f"{last} -> "
             mod_string += f"{this}"
             modifications.append(mod_string)
-        return " // ".join(modifications)
+        indented_newline = "\n        "
+        return indented_newline + indented_newline.join(modifications)
 
     @abstractmethod
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
