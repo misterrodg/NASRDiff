@@ -1,0 +1,150 @@
+from .faa_file_base import FAA_Record_Base, FAA_File_Base
+from modules.action import Action
+from modules.filters import FilterObject
+from modules.record_helpers import replace_empty_string
+from modules.registry import register_faa_file
+
+from typing import Self
+
+import csv
+
+
+class STAR_BASE(FAA_Record_Base):
+    eff_date: str
+    arrival_name: str
+    amendment_no: str
+    artcc: str
+    star_amend_eff_date: str
+    rnav_flag: str
+    star_computer_code: str
+    served_arpt: str
+
+    def __init__(
+        self,
+        eff_date: str,
+        arrival_name: str,
+        amendment_no: str,
+        artcc: str,
+        star_amend_eff_date: str,
+        rnav_flag: str,
+        star_computer_code: str,
+        served_arpt: str,
+        file: str,
+        action: Action,
+        mods: str,
+    ) -> None:
+        super().__init__(file, action, mods)
+
+        self.eff_date = replace_empty_string(eff_date)
+        self.arrival_name = replace_empty_string(arrival_name)
+        self.amendment_no = replace_empty_string(amendment_no)
+        self.artcc = replace_empty_string(artcc)
+        self.star_amend_eff_date = replace_empty_string(star_amend_eff_date)
+        self.rnav_flag = replace_empty_string(rnav_flag)
+        self.star_computer_code = replace_empty_string(star_computer_code)
+        self.served_arpt = replace_empty_string(served_arpt)
+
+    def __hash__(self) -> int:
+        return hash((self.served_arpt, self.arrival_name))
+
+    def __eq__(self, other: Self) -> bool:
+        if not isinstance(other, STAR_BASE):
+            return False
+        return (
+            self.served_arpt == other.served_arpt
+            and self.arrival_name == other.arrival_name
+        )
+
+    def __lt__(self, other: Self) -> bool:
+        if not isinstance(other, STAR_BASE):
+            return False
+        return (self.served_arpt, self.arrival_name, self.file) < (
+            other.served_arpt,
+            other.arrival_name,
+            other.file,
+        )
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__} ( "
+            f"EFF_DATE={self.eff_date!r}, "
+            f"ARRIVAL_NAME={self.arrival_name!r}, "
+            f"AMENDMENT_NO={self.amendment_no!r}, "
+            f"ARTCC={self.artcc!r}, "
+            f"STAR_AMEND_EFF_DATE={self.star_amend_eff_date!r}, "
+            f"RNAV_FLAG={self.rnav_flag!r}, "
+            f"STAR_COMPUTER_CODE={self.star_computer_code!r}, "
+            f"SERVED_ARPT={self.served_arpt!r}, "
+            f"{super().__repr__()}"
+            " )"
+        )
+
+    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+        base_string = f"{self.served_arpt} :: {self.arrival_name} {self.amendment_no}"
+
+        modification_string = ""
+        if last_record:
+            modification_string = f" :: {self.get_mod_string(last_record)}"
+
+        record_string = ""
+        if use_verbose:
+            record_string = (
+                " :: [ "
+                f"EFF_DATE: {self.eff_date}, "
+                f"ARTCC: {self.artcc}, "
+                f"STAR_AMEND_EFF_DATE: {self.star_amend_eff_date}, "
+                f"RNAV_FLAG: {self.rnav_flag}, "
+                f"STAR_COMPUTER_CODE: {self.star_computer_code}"
+                " ]"
+            )
+
+        return f"{base_string}{modification_string}{record_string}"
+
+
+@register_faa_file("STAR_BASE")
+class STAR_BASE_File(FAA_File_Base):
+    def __init__(
+        self,
+        file_path: str,
+        use_verbose: bool,
+        filter_object: FilterObject | None = None,
+    ) -> None:
+        super().__init__(
+            file_path, "Arrival Procedure Base", use_verbose, filter_object
+        )
+
+        self.__load_from_csv()
+
+    def __load_from_csv(self) -> None:
+        with open(self.file_path, "r") as f:
+            reader = csv.DictReader(f)
+
+            for row in reader:
+                record = STAR_BASE(
+                    eff_date=row["EFF_DATE"],
+                    arrival_name=row["ARRIVAL_NAME"],
+                    amendment_no=row["AMENDMENT_NO"],
+                    artcc=row["ARTCC"],
+                    star_amend_eff_date=row["STAR_AMEND_EFF_DATE"],
+                    rnav_flag=row["RNAV_FLAG"],
+                    star_computer_code=row["STAR_COMPUTER_CODE"],
+                    served_arpt=row["SERVED_ARPT"],
+                    file=row["File"],
+                    action=Action(row["Action"]),
+                    mods=row["Mods"],
+                )
+
+                use_filters = True if self.filter_object else False
+                is_in_filters = False
+                if use_filters and self.filter_object is not None:
+                    is_in_filters = self.filter_object.is_in_airports_many(
+                        record.served_arpt
+                    )
+
+                if not use_filters or is_in_filters:
+                    if record.action == Action.ADDED:
+                        self.adds.append(record)
+                    if record.action == Action.MODIFIED:
+                        self.mods.append(record)
+                    if record.action == Action.DELETED:
+                        self.dels.append(record)
