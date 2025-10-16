@@ -221,9 +221,9 @@ class PFR_BASE_File(FAA_File_Base):
                 use_filters = True if self.filter_object else False
                 is_in_filters = False
                 if use_filters and self.filter_object is not None:
-                    is_in_filters = self.filter_object.is_in_airports_many(
+                    is_in_filters = self.filter_object.is_in_airports(
                         record.origin_id
-                    ) or self.filter_object.is_in_airports_many(record.dstn_id)
+                    ) or self.filter_object.is_in_airports(record.dstn_id)
 
                 if not use_filters or is_in_filters:
                     if record.action == Action.ADDED:
