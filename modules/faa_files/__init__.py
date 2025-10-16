@@ -56,6 +56,7 @@ from .star_apt_file import STAR_APT_File
 from .star_base_file import STAR_BASE_File
 from .star_rte_file import STAR_RTE_File
 from .wxl_base_file import WXL_BASE_File
+from .wxl_svc_file import WXL_SVC_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -117,5 +118,6 @@ __all__ = [
     "STAR_BASE_File",
     "STAR_RTE_File",
     "WXL_BASE_File",
+    "WXL_SVC_File",
     "FAA_File_Base",
 ]
