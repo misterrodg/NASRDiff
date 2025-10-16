@@ -47,6 +47,7 @@ from .mtr_terr_file import MTR_TERR_File
 from .mtr_wdth_file import MTR_WDTH_File
 from .nav_base_file import NAV_BASE_File
 from .nav_ckpt_file import NAV_CKPT_File
+from .nav_rmk_file import NAV_RMK_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -99,5 +100,6 @@ __all__ = [
     "MTR_WDTH_File",
     "NAV_BASE_File",
     "NAV_CKPT_File",
+    "NAV_RMK_File",
     "FAA_File_Base",
 ]
