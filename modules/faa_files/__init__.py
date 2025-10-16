@@ -49,6 +49,7 @@ from .nav_base_file import NAV_BASE_File
 from .nav_ckpt_file import NAV_CKPT_File
 from .nav_rmk_file import NAV_RMK_File
 from .pfr_base_file import PFR_BASE_File
+from .pfr_rmt_fmt_file import PFR_RMT_FMT_File
 from .faa_file_base import FAA_File_Base
 
 __all__ = [
@@ -103,5 +104,6 @@ __all__ = [
     "NAV_CKPT_File",
     "NAV_RMK_File",
     "PFR_BASE_File",
+    "PFR_RMT_FMT_File",
     "FAA_File_Base",
 ]
