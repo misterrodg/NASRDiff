@@ -9,7 +9,42 @@ reports for the specified files, airports or heliports within those files,
 and/or a bounding box for items that are not specified by airport/heliport ID. 
 An `example_filters.json` is present in the project root as a template.
 
-![Example Report](./docs/images/main.png)
+```bash
+Airport Base:
+  Modifications:
+    APH ::
+        ARPT_NAME Change: MARY WALKER LZ -> AP HILL LZ (FORT AP HILL)
+    FBG ::
+        CITY Change: FORT LIBERTY -> FORT BRAGG
+    LBT ::
+        FUEL_TYPES Change: 100LL,A1+ -> 100LL,A1+,MOGAS
+    MTN ::
+        LAT_SEC Change: 32.381 -> 32.374
+        LAT_DECIMAL Change: 39.32566138 -> 39.32565944
+        LONG_SEC Change: 49.522 -> 49.545
+        LONG_DECIMAL Change: -76.41375611 -> -76.4137625
+        ELEV Change: 21.5 -> 22.2
+        POSITION_SRC_DATE Change: 2011/04/21 -> 2024/11/22
+        ELEVATION_SRC_DATE Change: 2011/04/21 -> 2024/11/22
+    OBI ::
+        LAST_INSPECTION Change: 2024/08/27 -> 2025/09/04
+    OKV ::
+        LAST_INSPECTION Change: 2022/06/28 -> 2025/09/11
+    PHF ::
+        LAST_INSPECTION Change: 2022/03/28 -> 2025/09/08
+    PVG ::
+        LAST_INSPECTION Change: 2022/06/06 -> 2025/08/26
+    RMN ::
+        LAST_INSPECTION Change: 2022/09/26 -> 2025/07/31
+    VA39 ::
+        ARPT_NAME Change: FORT GREGG-ADAMS AHP -> FORT LEE AHP
+
+Fix Base:
+  No changes
+
+Navigation Base:
+  No changes
+```
 
 ## Requirements
 
