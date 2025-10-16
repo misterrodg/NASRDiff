@@ -52,9 +52,10 @@ class MTR_BASE(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, MTR_BASE):
             return False
-        return (self.route_type_code, self.route_id) < (
+        return (self.route_type_code, self.route_id, self.file) < (
             other.route_type_code,
             other.route_id,
+            other.file,
         )
 
     def __repr__(self):

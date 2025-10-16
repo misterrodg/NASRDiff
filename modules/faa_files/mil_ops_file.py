@@ -70,7 +70,11 @@ class MIL_OPS(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, MIL_OPS):
             return False
-        return (self.site_no, self.arpt_id) < (other.site_no, other.arpt_id)
+        return (self.site_no, self.arpt_id, self.file) < (
+            other.site_no,
+            other.arpt_id,
+            other.file,
+        )
 
     def __repr__(self):
         return (

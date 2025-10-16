@@ -46,7 +46,11 @@ class MAA_SHP(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, MAA_SHP):
             return False
-        return (self.maa_id, self.point_seq) < (other.maa_id, other.point_seq)
+        return (self.maa_id, self.point_seq, self.file) < (
+            other.maa_id,
+            other.point_seq,
+            other.file,
+        )
 
     def __repr__(self):
         return (

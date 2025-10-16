@@ -53,10 +53,11 @@ class MTR_SOP(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, MTR_SOP):
             return False
-        return (self.route_type_code, self.route_id, self.sop_seq_no) < (
+        return (self.route_type_code, self.route_id, self.sop_seq_no, self.file) < (
             other.route_type_code,
             other.route_id,
             other.sop_seq_no,
+            other.file,
         )
 
     def __repr__(self):

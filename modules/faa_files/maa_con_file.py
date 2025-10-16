@@ -58,7 +58,7 @@ class MAA_CON(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, MAA_CON):
             return False
-        return (self.maa_id) < (other.maa_id)
+        return (self.maa_id, self.file) < (other.maa_id, other.file)
 
     def __repr__(self):
         return (

@@ -51,7 +51,11 @@ class MAA_RMK(FAA_Record_Base):
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, MAA_RMK):
             return False
-        return (self.maa_id, self.ref_col_seq_no) < (other.maa_id, other.ref_col_seq_no)
+        return (self.maa_id, self.ref_col_seq_no, self.file) < (
+            other.maa_id,
+            other.ref_col_seq_no,
+            other.file,
+        )
 
     def __repr__(self):
         return (
