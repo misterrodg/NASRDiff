@@ -96,7 +96,9 @@ class HPF_CHRT_File(FAA_File_Base):
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "Holding Pattern Chart", use_verbose, filter_object)
+        super().__init__(
+            file_path, "Holding Pattern Chart", use_verbose, filter_object, False
+        )
 
         self.__load_from_csv()
 

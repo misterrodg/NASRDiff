@@ -116,7 +116,7 @@ class FIX_NAV_File(FAA_File_Base):
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(file_path, "FIX NAV", use_verbose, filter_object)
+        super().__init__(file_path, "FIX NAV", use_verbose, filter_object, False)
 
         self.__load_from_csv()
 

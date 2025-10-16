@@ -112,7 +112,7 @@ class HPF_RMK_File(FAA_File_Base):
         filter_object: FilterObject | None = None,
     ) -> None:
         super().__init__(
-            file_path, "Holding Pattern Remark", use_verbose, filter_object
+            file_path, "Holding Pattern Remark", use_verbose, filter_object, False
         )
 
         self.__load_from_csv()
