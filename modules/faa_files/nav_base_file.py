@@ -162,6 +162,7 @@ class NAV_BASE(FAA_Record_Base):
         mods: str,
     ) -> None:
         super().__init__(file, action, mods)
+
         self.eff_date = replace_empty_string(eff_date)
         self.nav_id = replace_empty_string(nav_id)
         self.nav_type = replace_empty_string(nav_type)
@@ -334,7 +335,7 @@ class NAV_BASE(FAA_Record_Base):
         )
 
     def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
-        base_string = f"{self.nav_id}"
+        base_string = f"{self.nav_id} :: {self.nav_type}"
 
         modification_string = ""
         if last_record:
@@ -345,7 +346,6 @@ class NAV_BASE(FAA_Record_Base):
             record_string = (
                 " :: [ "
                 f"EFF_DATE: {self.eff_date}, "
-                f"NAV_TYPE: {self.nav_type}, "
                 f"STATE_CODE: {self.state_code}, "
                 f"CITY: {self.city}, "
                 f"COUNTRY_CODE: {self.country_code}, "
@@ -429,9 +429,7 @@ class NAV_BASE_File(FAA_File_Base):
         use_verbose: bool,
         filter_object: FilterObject | None = None,
     ) -> None:
-        super().__init__(
-            file_path, "Misc Activity Area Base", use_verbose, filter_object
-        )
+        super().__init__(file_path, "Navigation Base", use_verbose, filter_object)
 
         self.__load_from_csv()
 
