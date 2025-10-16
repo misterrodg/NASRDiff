@@ -63,19 +63,51 @@ class DP_RTE(FAA_Record_Base):
         self.arpt_rwy_assoc = replace_empty_string(arpt_rwy_assoc)
 
     def __hash__(self) -> int:
-        return hash((self.artcc, self.dp_name))
+        return hash(
+            (
+                self.artcc,
+                self.dp_name,
+                self.route_portion_type,
+                self.route_name,
+                self.point_seq,
+                self.point,
+                self.arpt_rwy_assoc,
+            )
+        )
 
     def __eq__(self, other: Self) -> bool:
         if not isinstance(other, DP_RTE):
             return False
-        return self.artcc == other.artcc and self.dp_name == other.dp_name
+        return (
+            self.artcc == other.artcc
+            and self.dp_name == other.dp_name
+            and self.route_portion_type == other.route_portion_type
+            and self.route_name == other.route_name
+            and self.point_seq == other.point_seq
+            and self.point == other.point
+            and self.arpt_rwy_assoc == other.arpt_rwy_assoc
+        )
 
     def __lt__(self, other: Self) -> bool:
         if not isinstance(other, DP_RTE):
             return False
-        return (self.artcc, self.dp_name, self.file) < (
+        return (
+            self.artcc,
+            self.dp_name,
+            self.route_portion_type,
+            self.route_name,
+            self.point_seq,
+            self.point,
+            self.arpt_rwy_assoc,
+            self.file,
+        ) < (
             other.artcc,
             other.dp_name,
+            other.route_portion_type,
+            other.route_name,
+            other.point_seq,
+            other.point,
+            other.arpt_rwy_assoc,
             other.file,
         )
 
