@@ -5,6 +5,7 @@ from .apt_con_file import APT_CON_File
 from .apt_rmk_file import APT_RMK_File
 from .apt_rwy_end_file import APT_RWY_END_File
 from .apt_rwy_file import APT_RWY_File
+from .arb_base_file import ARB_BASE_File
 from .atc_atis_file import ATC_ATIS_File
 from .atc_base_file import ATC_BASE_File
 from .atc_rmk_file import ATC_RMK_File
@@ -67,6 +68,7 @@ __all__ = [
     "APT_RMK_File",
     "APT_RWY_END_File",
     "APT_RWY_File",
+    "ARB_BASE_File",
     "ATC_ATIS_File",
     "ATC_BASE_File",
     "ATC_RMK_File",
