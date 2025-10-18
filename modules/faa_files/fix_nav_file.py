@@ -50,7 +50,7 @@ class FIX_NAV(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.fix_id, self.nav_id, self.nav_type))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FIX_NAV):
             return False
         return (
@@ -59,7 +59,7 @@ class FIX_NAV(FAA_Record_Base):
             and self.nav_type == other.nav_type
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, FIX_NAV):
             return False
         return (self.fix_id, self.nav_id, self.nav_type, self.file) < (

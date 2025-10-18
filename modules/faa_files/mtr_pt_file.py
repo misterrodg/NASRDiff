@@ -86,14 +86,14 @@ class MTR_PT(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.route_id, self.route_pt_seq))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MTR_PT):
             return False
         return (
             self.route_id == other.route_id and self.route_pt_seq == other.route_pt_seq
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, MTR_PT):
             return False
         return (self.route_id, self.route_pt_seq, self.file) < (

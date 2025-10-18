@@ -98,12 +98,12 @@ class ILS_DME(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.arpt_id, self.ils_loc_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ILS_DME):
             return False
         return self.arpt_id == other.arpt_id and self.ils_loc_id == other.ils_loc_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, ILS_DME):
             return False
         return (self.arpt_id, self.ils_loc_id, self.file) < (

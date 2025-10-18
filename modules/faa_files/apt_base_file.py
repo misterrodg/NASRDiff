@@ -293,12 +293,12 @@ class APT_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.arpt_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, APT_BASE):
             return False
         return self.arpt_id == other.arpt_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, APT_BASE):
             return False
         return (self.arpt_id, self.file) < (other.arpt_id, other.file)

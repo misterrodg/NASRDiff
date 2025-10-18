@@ -41,12 +41,12 @@ class HPF_CHRT(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.hp_name, self.hp_no))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, HPF_CHRT):
             return False
         return self.hp_name == other.hp_name and self.hp_no == other.hp_no
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, HPF_CHRT):
             return False
         return (self.hp_name, self.hp_no, self.file) < (

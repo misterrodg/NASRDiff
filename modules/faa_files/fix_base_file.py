@@ -101,12 +101,12 @@ class FIX_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.fix_id, self.charts))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FIX_BASE):
             return False
         return self.fix_id == other.fix_id and self.charts == other.charts
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, FIX_BASE):
             return False
         return (self.fix_id, self.charts, self.file) < (

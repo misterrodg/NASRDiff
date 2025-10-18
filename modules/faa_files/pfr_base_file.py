@@ -89,7 +89,7 @@ class PFR_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.origin_id, self.dstn_id, self.route_no))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, PFR_BASE):
             return False
         return (
@@ -98,7 +98,7 @@ class PFR_BASE(FAA_Record_Base):
             and self.route_no == other.route_no
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, PFR_BASE):
             return False
         return (self.origin_id, self.dstn_id, self.route_no, self.file) < (

@@ -61,12 +61,12 @@ class CDR(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.rcode))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, CDR):
             return False
         return self.rcode == other.rcode
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, CDR):
             return False
         return (self.rcode, self.file) < (other.rcode, other.file)

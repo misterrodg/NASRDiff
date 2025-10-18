@@ -170,7 +170,7 @@ class AWY_SEG_ALT(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.awy_id, self.from_point, self.to_point))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, AWY_SEG_ALT):
             return False
         return (
@@ -179,7 +179,7 @@ class AWY_SEG_ALT(FAA_Record_Base):
             and self.to_point == other.to_point
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, AWY_SEG_ALT):
             return False
         return (self.awy_id, self.from_point, self.to_point, self.file) < (

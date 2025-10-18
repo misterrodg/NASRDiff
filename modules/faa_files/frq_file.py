@@ -88,7 +88,7 @@ class FRQ(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.facility, self.serviced_facility, self.freq))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FRQ):
             return False
         return (
@@ -97,7 +97,7 @@ class FRQ(FAA_Record_Base):
             and self.freq == other.freq
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, FRQ):
             return False
         return (self.facility, self.serviced_facility, self.freq, self.file) < (

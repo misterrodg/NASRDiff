@@ -65,12 +65,12 @@ class MTR_AGY(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.route_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MTR_AGY):
             return False
         return self.route_id == other.route_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, MTR_AGY):
             return False
         return (self.route_id, self.file) < (other.route_id, other.file)

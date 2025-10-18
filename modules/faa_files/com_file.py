@@ -107,7 +107,7 @@ class COM(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.comm_loc_id, self.facility_id, self.comm_type))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, COM):
             return False
         return (
@@ -116,7 +116,7 @@ class COM(FAA_Record_Base):
             and self.comm_type == other.comm_type
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, COM):
             return False
         return (self.facility_id, self.comm_type, self.file) < (

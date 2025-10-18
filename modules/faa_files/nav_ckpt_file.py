@@ -59,12 +59,12 @@ class NAV_CKPT(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.nav_id, self.nav_type))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, NAV_CKPT):
             return False
         return self.nav_id == other.nav_id and self.nav_type == other.nav_type
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, NAV_CKPT):
             return False
         return (self.nav_id, self.nav_type, self.file) < (

@@ -47,12 +47,12 @@ class AWY_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.awy_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, AWY_BASE):
             return False
         return self.awy_id == other.awy_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, AWY_BASE):
             return False
         return (self.awy_id, self.file) < (other.awy_id, other.file)

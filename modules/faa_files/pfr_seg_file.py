@@ -62,7 +62,7 @@ class PFR_SEG(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.origin_id, self.dstn_id, self.route_no, self.seg_value))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, PFR_SEG):
             return False
         return (
@@ -72,7 +72,7 @@ class PFR_SEG(FAA_Record_Base):
             and self.seg_value == other.seg_value
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, PFR_SEG):
             return False
         return (

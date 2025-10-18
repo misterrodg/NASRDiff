@@ -50,14 +50,14 @@ class FSS_RMK(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.fss_id, self.ref_col_seq_no))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FSS_RMK):
             return False
         return (
             self.fss_id == other.fss_id and self.ref_col_seq_no == other.ref_col_seq_no
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, FSS_RMK):
             return False
         return (self.fss_id, self.ref_col_seq_no, self.file) < (

@@ -50,12 +50,12 @@ class DP_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.served_arpt, self.dp_name))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, DP_BASE):
             return False
         return self.served_arpt == other.served_arpt and self.dp_name == other.dp_name
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, DP_BASE):
             return False
         return (self.served_arpt, self.dp_name, self.file) < (

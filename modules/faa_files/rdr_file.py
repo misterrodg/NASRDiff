@@ -50,12 +50,12 @@ class RDR(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.facility_id, self.radar_no))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, RDR):
             return False
         return self.facility_id == other.facility_id and self.radar_no == other.radar_no
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, RDR):
             return False
         return (self.facility_id, self.radar_no, self.file) < (

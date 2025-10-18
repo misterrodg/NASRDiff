@@ -113,7 +113,7 @@ class ATC_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.facility_id, self.facility_type))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ATC_BASE):
             return False
         return (
@@ -121,7 +121,7 @@ class ATC_BASE(FAA_Record_Base):
             and self.facility_type == other.facility_type
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, ATC_BASE):
             return False
         return (self.facility_id, self.facility_type, self.file) < (

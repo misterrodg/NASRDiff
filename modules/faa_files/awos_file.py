@@ -98,12 +98,12 @@ class AWOS(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.asos_awos_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, AWOS):
             return False
         return self.asos_awos_id == other.asos_awos_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, AWOS):
             return False
         return (self.asos_awos_id, self.file) < (other.asos_awos_id, other.file)

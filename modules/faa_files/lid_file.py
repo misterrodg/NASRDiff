@@ -59,12 +59,12 @@ class LID(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.loc_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, LID):
             return False
         return self.loc_id == other.loc_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, LID):
             return False
         return (self.loc_id, self.file) < (other.loc_id, other.file)

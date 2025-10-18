@@ -44,7 +44,7 @@ class WXL_SVC(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.wea_id, self.wea_svc_type_code))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, WXL_SVC):
             return False
         return (
@@ -52,7 +52,7 @@ class WXL_SVC(FAA_Record_Base):
             and self.wea_svc_type_code == other.wea_svc_type_code
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, WXL_SVC):
             return False
         return (self.wea_id, self.wea_svc_type_code, self.file) < (

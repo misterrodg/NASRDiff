@@ -41,7 +41,7 @@ class MTR_TERR(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.route_type_code, self.route_id, self.terrain_seq_no))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MTR_TERR):
             return False
         return (
@@ -50,7 +50,7 @@ class MTR_TERR(FAA_Record_Base):
             and self.terrain_seq_no == other.terrain_seq_no
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, MTR_TERR):
             return False
         return (self.route_type_code, self.route_id, self.terrain_seq_no, self.file) < (

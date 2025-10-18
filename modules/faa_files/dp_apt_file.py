@@ -47,7 +47,7 @@ class DP_APT(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.dp_name, self.artcc, self.arpt_id, self.rwy_end_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, DP_APT):
             return False
         return (
@@ -57,7 +57,7 @@ class DP_APT(FAA_Record_Base):
             and self.rwy_end_id == other.rwy_end_id
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, DP_APT):
             return False
         return (self.dp_name, self.artcc, self.arpt_id, self.rwy_end_id, self.file) < (

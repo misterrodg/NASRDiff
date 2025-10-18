@@ -80,14 +80,14 @@ class ARB_SEG(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.location_id, self.point_seq))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, ARB_SEG):
             return False
         return (
             self.location_id == other.location_id and self.point_seq == other.point_seq
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, ARB_SEG):
             return False
         return (self.location_id, self.point_seq, self.file) < (

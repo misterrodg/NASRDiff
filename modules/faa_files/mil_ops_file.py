@@ -62,12 +62,12 @@ class MIL_OPS(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.site_no, self.arpt_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, MIL_OPS):
             return False
         return self.site_no == other.site_no and self.arpt_id == other.arpt_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, MIL_OPS):
             return False
         return (self.site_no, self.arpt_id, self.file) < (

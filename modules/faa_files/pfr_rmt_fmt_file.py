@@ -61,7 +61,7 @@ class PFR_RMT_FMT(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.orig, self.dest, self.seq))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, PFR_RMT_FMT):
             return False
         return (
@@ -70,7 +70,7 @@ class PFR_RMT_FMT(FAA_Record_Base):
             and self.seq == other.seq
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, PFR_RMT_FMT):
             return False
         return (self.orig, self.dest, self.seq, self.file) < (

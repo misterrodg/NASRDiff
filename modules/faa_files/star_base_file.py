@@ -47,7 +47,7 @@ class STAR_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.served_arpt, self.arrival_name))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, STAR_BASE):
             return False
         return (
@@ -55,7 +55,7 @@ class STAR_BASE(FAA_Record_Base):
             and self.arrival_name == other.arrival_name
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, STAR_BASE):
             return False
         return (self.served_arpt, self.arrival_name, self.file) < (

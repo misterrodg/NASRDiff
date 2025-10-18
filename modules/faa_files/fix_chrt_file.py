@@ -41,7 +41,7 @@ class FIX_CHRT(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.fix_id, self.charting_type_desc))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, FIX_CHRT):
             return False
         return (
@@ -49,7 +49,7 @@ class FIX_CHRT(FAA_Record_Base):
             and self.charting_type_desc == other.charting_type_desc
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, FIX_CHRT):
             return False
         return (self.fix_id, self.charting_type_desc, self.file) < (

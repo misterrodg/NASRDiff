@@ -113,12 +113,12 @@ class PJA_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.pja_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, PJA_BASE):
             return False
         return self.pja_id == other.pja_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, PJA_BASE):
             return False
         return (self.pja_id, self.file) < (

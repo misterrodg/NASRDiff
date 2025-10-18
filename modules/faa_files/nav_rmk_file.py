@@ -53,7 +53,7 @@ class NAV_RMK(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.nav_id, self.nav_type, self.ref_col_seq_no))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, NAV_RMK):
             return False
         return (
@@ -62,7 +62,7 @@ class NAV_RMK(FAA_Record_Base):
             and self.ref_col_seq_no == other.ref_col_seq_no
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, NAV_RMK):
             return False
         return (self.nav_id, self.nav_type, self.ref_col_seq_no, self.file) < (

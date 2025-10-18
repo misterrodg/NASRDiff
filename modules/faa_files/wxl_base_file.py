@@ -74,12 +74,12 @@ class WXL_BASE(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.wea_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, WXL_BASE):
             return False
         return self.wea_id == other.wea_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, WXL_BASE):
             return False
         return (self.wea_id, self.file) < (other.wea_id, other.file)

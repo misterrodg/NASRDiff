@@ -78,7 +78,7 @@ class STAR_RTE(FAA_Record_Base):
             )
         )
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, STAR_RTE):
             return False
         return (
@@ -91,7 +91,7 @@ class STAR_RTE(FAA_Record_Base):
             and self.arpt_rwy_assoc == other.arpt_rwy_assoc
         )
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, STAR_RTE):
             return False
         return (

@@ -271,12 +271,12 @@ class APT_RWY_END(FAA_Record_Base):
     def __hash__(self) -> int:
         return hash((self.arpt_id, self.rwy_end_id))
 
-    def __eq__(self, other: Self) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, APT_RWY_END):
             return False
         return self.arpt_id == other.arpt_id and self.rwy_end_id == other.rwy_end_id
 
-    def __lt__(self, other: Self) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, APT_RWY_END):
             return False
         return (self.arpt_id, self.rwy_end_id, self.file) < (
