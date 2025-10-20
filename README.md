@@ -50,7 +50,19 @@ Navigation Base:
 
 - Python 3.11+
 
-## Use
+## Quick Start
+
+- Clone this repository to a location of your choice using:
+    - HTTPS: [https://github.com/misterrodg/NASRDiff.git](https://github.com/misterrodg/NASRDiff.git)
+    - SSH: [git@github.com:misterrodg/NASRDiff.git](git@github.com:misterrodg/NASRDiff.git)
+- Download the `28 Day Cycle CSV Change Report Files` from the `Current` or `Preview` 
+page of the [FAA NASR](https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/NASR_Subscription/) page.
+- Run with `python3 main.py -f text`
+- View the resulting report files in the `./reports` directory.
+
+For more detail and options, see [Usage](#usage).
+
+## Usage
 
 To find the NASR Change Report, go to the [FAA NASR](https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/NASR_Subscription/) page, 
 select the `Current` or `Preview` page, search for `28 Day Cycle CSV Change Report Files`, 
@@ -116,3 +128,26 @@ airports. The rest are ignored.
 airways. The rest are ignored.
 
 ![Example Boundaries](./docs/images/example.png)
+
+## Motivation
+
+Aviation data has the potential to change every 28 days. The FAA has thankfully 
+provided the files that contain only the changed between each cycle, but those 
+files contain every change across the National Airspace System (NAS). Having a 
+utility to filter those changes down to only what is relevant helps you save 
+time and stay up to date.
+
+I made this primarily for myself, but it can be used by anyone who has an 
+interest in aviation data and a basic understanding of python.
+
+## Contributing
+
+Interested in helping make this project better? It's a small project, so the 
+process is rather informal:
+
+- Clone this repo to your development machine.
+- Make your changes in a branch.
+- Open a PR with your suggested changes.
+
+Need ideas on what needs work? Have a look at the [Issues](https://github.com/misterrodg/NASRDiff/issues) page.
+
