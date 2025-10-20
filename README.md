@@ -53,8 +53,8 @@ Navigation Base:
 ## Quick Start
 
 - Clone this repository to a location of your choice using:
-    - HTTPS: [https://github.com/misterrodg/NASRDiff.git](https://github.com/misterrodg/NASRDiff.git)
-    - SSH: [git@github.com:misterrodg/NASRDiff.git](git@github.com:misterrodg/NASRDiff.git)
+    - HTTPS: https://github.com/misterrodg/NASRDiff.git
+    - SSH: git@github.com:misterrodg/NASRDiff.git
 - Download the `28 Day Cycle CSV Change Report Files` from the `Current` or `Preview` 
 page of the [FAA NASR](https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/NASR_Subscription/) page.
 - Run with `python3 main.py -f text`
