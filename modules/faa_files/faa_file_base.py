@@ -21,15 +21,25 @@ class FAA_Record_Base:
 
     def get_mod_string(self, last_record: Self) -> str:
         modifications = []
-        modification_list = self.mods.split(" ")
+        modification_list = self.mods.split()
+        if len(modification_list) == 0:
+            return ""
+
         for mod in modification_list:
             mod_lower = mod.lower()
+            if not hasattr(last_record, mod_lower) or not hasattr(self, mod_lower):
+                continue
+
             last = getattr(last_record, mod_lower)
             this = getattr(self, mod_lower)
             mod_string = f"{mod} Change: "
             mod_string += f"{last} -> "
             mod_string += f"{this}"
             modifications.append(mod_string)
+
+        if len(modifications) == 0:
+            return ""
+
         indented_newline = "\n        "
         return indented_newline + indented_newline.join(modifications)
 

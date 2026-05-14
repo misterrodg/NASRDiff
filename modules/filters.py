@@ -69,7 +69,7 @@ class FilterObject:
     def __convert_float(self, value: str) -> float:
         try:
             return float(value)
-        except:
+        except (TypeError, ValueError):
             return BAD_CONVERSION
 
     def __is_in_bounds(self, lat: float, lon: float) -> bool:
@@ -103,7 +103,7 @@ class FilterObject:
     def __convert_dms(self, value: str) -> float:
         pattern = r"^(\d{2,3})-(\d{2})-(\d{2}\.\d{4})([NSEW])$"
         m = re.match(pattern, value)
-        if not m.groups():
+        if m is None:
             return BAD_CONVERSION
 
         dec, mins, secs, hemi = m.groups()
@@ -162,13 +162,13 @@ class Filters:
         if should_show:
             print("Filtering on:")
             if self.files:
-                print(f"  Files: {", ".join(self.files)}")
+                print(f"  Files: {', '.join(self.files)}")
             if self.filter_object.artccs:
-                print(f"  ARTCCs: {", ".join(self.filter_object.artccs)}")
+                print(f"  ARTCCs: {', '.join(self.filter_object.artccs)}")
             if self.filter_object.airports:
-                print(f"  Airports: {", ".join(self.filter_object.airports)}")
+                print(f"  Airports: {', '.join(self.filter_object.airports)}")
             if self.filter_object.airways:
-                print(f"  Airways: {", ".join(self.filter_object.airways)}")
+                print(f"  Airways: {', '.join(self.filter_object.airways)}")
             if (
                 self.filter_object.n_lat != 0.0
                 and self.filter_object.s_lat != 0.0
@@ -183,7 +183,11 @@ class Filters:
         full_path = os.path.join(FILTER_DIR, FILTER_FILE)
         if os.path.exists(full_path):
             with open(full_path, "r") as f:
-                data = json.load(f)
+                try:
+                    data = json.load(f)
+                except json.JSONDecodeError:
+                    print("Filters file is not valid JSON.\n")
+                    return
 
                 self.files = data.get("files", [])
                 self.filter_object.artccs = data.get("artccs", [])
