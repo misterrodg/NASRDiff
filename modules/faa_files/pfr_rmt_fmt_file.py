@@ -99,7 +99,7 @@ class PFR_RMT_FMT(FAA_Record_Base):
             " )"
         )
 
-    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: FAA_Record_Base | None = None) -> str:
         base_string = f"{self.orig} :: {self.dest} :: {self.seq}"
 
         modification_string = ""

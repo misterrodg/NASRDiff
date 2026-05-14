@@ -137,7 +137,7 @@ class PFR_BASE(FAA_Record_Base):
             " )"
         )
 
-    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: FAA_Record_Base | None = None) -> str:
         base_string = f"{self.origin_id} :: {self.dstn_id} :: {self.route_no}"
 
         modification_string = ""

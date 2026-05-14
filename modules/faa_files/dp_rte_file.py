@@ -132,7 +132,7 @@ class DP_RTE(FAA_Record_Base):
             " )"
         )
 
-    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+    def to_string(self, use_verbose: bool, last_record: FAA_Record_Base | None = None) -> str:
         comp_code = self.transition_computer_code
         if comp_code == EMPTY_VALUE:
             comp_code = self.dp_computer_code

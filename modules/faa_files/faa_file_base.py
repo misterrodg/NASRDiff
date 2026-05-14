@@ -3,7 +3,6 @@ from modules.filters import FilterObject
 
 from abc import abstractmethod
 from copy import deepcopy
-from typing import Self
 
 
 class FAA_Record_Base:
@@ -19,7 +18,7 @@ class FAA_Record_Base:
     def __repr__(self):
         return f"FILE={self.file!r}, ACTION={self.action!r}, MODS={self.mods!r}"
 
-    def get_mod_string(self, last_record: Self) -> str:
+    def get_mod_string(self, last_record: "FAA_Record_Base") -> str:
         modifications = []
         modification_list = self.mods.split()
         if len(modification_list) == 0:
@@ -44,7 +43,13 @@ class FAA_Record_Base:
         return indented_newline + indented_newline.join(modifications)
 
     @abstractmethod
-    def to_string(self, use_verbose: bool, last_record: Self | None = None) -> str:
+    def to_string(
+        self, use_verbose: bool, last_record: "FAA_Record_Base | None" = None
+    ) -> str:
+        pass
+
+    @abstractmethod
+    def __lt__(self, other: object) -> bool:
         pass
 
 
