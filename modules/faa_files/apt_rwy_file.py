@@ -23,7 +23,8 @@ class APT_RWY(FAA_Record_Base):
     surface_type_code: str
     cond: str
     treatment_code: str
-    pcn: str
+    pavement_classification: str
+    pcn_pcr_number: str
     pavement_type_code: str
     subgrade_strength_code: str
     tire_pres_code: str
@@ -51,7 +52,8 @@ class APT_RWY(FAA_Record_Base):
         surface_type_code: str,
         cond: str,
         treatment_code: str,
-        pcn: str,
+        pavement_classification: str,
+        pcn_pcr_number: str,
         pavement_type_code: str,
         subgrade_strength_code: str,
         tire_pres_code: str,
@@ -82,7 +84,8 @@ class APT_RWY(FAA_Record_Base):
         self.surface_type_code = replace_empty_string(surface_type_code)
         self.cond = replace_empty_string(cond)
         self.treatment_code = replace_empty_string(treatment_code)
-        self.pcn = replace_empty_string(pcn)
+        self.pavement_classification = replace_empty_string(pavement_classification)
+        self.pcn_pcr_number = replace_empty_string(pcn_pcr_number)
         self.pavement_type_code = replace_empty_string(pavement_type_code)
         self.subgrade_strength_code = replace_empty_string(subgrade_strength_code)
         self.tire_pres_code = replace_empty_string(tire_pres_code)
@@ -128,7 +131,8 @@ class APT_RWY(FAA_Record_Base):
             f"SURFACE_TYPE_CODE={self.surface_type_code!r}, "
             f"COND={self.cond!r}, "
             f"TREATMENT_CODE={self.treatment_code!r}, "
-            f"PCN={self.pcn!r}, "
+            f"PAVEMENT_CLASSIFICATION={self.pavement_classification!r}, "
+            f"PCN_PCR_NUMBER={self.pcn_pcr_number!r}, "
             f"PAVEMENT_TYPE_CODE={self.pavement_type_code!r}, "
             f"SUBGRADE_STRENGTH_CODE={self.subgrade_strength_code!r}, "
             f"TIRE_PRES_CODE={self.tire_pres_code!r}, "
@@ -144,7 +148,9 @@ class APT_RWY(FAA_Record_Base):
             " )"
         )
 
-    def to_string(self, use_verbose: bool, last_record: FAA_Record_Base | None = None) -> str:
+    def to_string(
+        self, use_verbose: bool, last_record: FAA_Record_Base | None = None
+    ) -> str:
         base_string = f"{self.arpt_id} :: {self.rwy_id}"
 
         modification_string = ""
@@ -166,7 +172,8 @@ class APT_RWY(FAA_Record_Base):
                 f"SURFACE_TYPE_CODE: {self.surface_type_code}, "
                 f"COND: {self.cond}, "
                 f"TREATMENT_CODE: {self.treatment_code}, "
-                f"PCN: {self.pcn}, "
+                f"PAVEMENT_CLASSIFICATION: {self.pavement_classification}, "
+                f"PCN_PCR_NUMBER: {self.pcn_pcr_number}, "
                 f"PAVEMENT_TYPE_CODE: {self.pavement_type_code}, "
                 f"SUBGRADE_STRENGTH_CODE: {self.subgrade_strength_code}, "
                 f"TIRE_PRES_CODE: {self.tire_pres_code}, "
@@ -215,7 +222,8 @@ class APT_RWY_File(FAA_File_Base):
                     surface_type_code=row["SURFACE_TYPE_CODE"],
                     cond=row["COND"],
                     treatment_code=row["TREATMENT_CODE"],
-                    pcn=row["PCN"],
+                    pavement_classification=row["PAVEMENT_CLASSIFICATION"],
+                    pcn_pcr_number=row["PCN_PCR_NUMBER"],
                     pavement_type_code=row["PAVEMENT_TYPE_CODE"],
                     subgrade_strength_code=row["SUBGRADE_STRENGTH_CODE"],
                     tire_pres_code=row["TIRE_PRES_CODE"],
